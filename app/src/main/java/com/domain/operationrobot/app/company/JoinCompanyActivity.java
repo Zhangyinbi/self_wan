@@ -66,7 +66,7 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
             }
         });
         companyList = new ArrayList<>();
-        adapter = new CompanyAdapter(this, companyList, presenter, "当前用户名称");
+        adapter = new CompanyAdapter(this, companyList, presenter);
         recyclerView = findViewById(R.id.rlv_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -94,6 +94,7 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
     private void updateIvSearchStatus(boolean focused) {
         if (autoSearchCompany.getValue().isEmpty() && !focused) {
             ivSearch.setVisibility(View.VISIBLE);
+            adapter.updateData(this.companyList, targetName);
         } else {
             ivSearch.setVisibility(View.GONE);
         }

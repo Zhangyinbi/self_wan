@@ -62,7 +62,6 @@ public class LoginPresenterImpl extends LoginContract.LoginPresenter<LoginContra
                 if (mView == null) return;
                 hideProgress();
                 mView.LoginSuss();
-
             }
         });
     }

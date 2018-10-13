@@ -20,6 +20,7 @@
             android:background="@null"
             android:gravity="center_vertical"
             android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@color/edit_value_color"
             android:textColorHint="@color/edit_value_hint_color"
             android:textSize="@dimen/edit_size"
@@ -33,8 +34,8 @@
 
             <Button
                 android:id="@+id/btn_delete"
-                android:layout_width="@dimen/dimens_20"
-                android:layout_height="@dimen/dimens_20"
+                android:layout_width="@dimen/dimens_15"
+                android:layout_height="@dimen/dimens_15"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/register_cancel_icon"

@@ -235,7 +235,7 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
         check = b;
         if (check) {
             ivIcon.setImageResource(R.drawable.icon_choose);
-            if (accountPhone.getValue().length() == PHONE_LENGTH) {
+            if (accountPhone.getInputValue().length() == PHONE_LENGTH) {
                 btnCommit.setBackground(getResources().getDrawable(R.drawable.login_blue_round_click_bg));
                 btnCommit.setClickable(true);
             }

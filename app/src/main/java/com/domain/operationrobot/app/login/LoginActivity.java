@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.domain.library.base.AbsActivity;
 import com.domain.library.base.BasePresenter;
@@ -160,6 +164,20 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
 
     @Override
     public void LoginSuss() {
-
+        ToastLoginSussMessage();
     }
+
+    /**
+     * Toast 提示登陆成功
+     */
+    private void ToastLoginSussMessage() {
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.toast_style, null);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(view);
+        toast.show();
+    }
+
 }

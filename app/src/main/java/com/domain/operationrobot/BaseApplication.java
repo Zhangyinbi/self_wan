@@ -8,9 +8,11 @@ import com.domain.library.exception.SdcardConfig;
 import com.domain.library.http.RetrofitHelper;
 import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.http.api.ApiProviderImp;
+import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.env.EnvManager;
 
 import static com.domain.operationrobot.http.Constant.BASE_API;
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 
 /**
@@ -23,12 +25,21 @@ import static com.domain.operationrobot.http.Constant.BASE_API;
 public class BaseApplication extends Application {
 
     private static BaseApplication mInstance = null;
+    private User user;
 
     public static BaseApplication getInstance() {
         if (mInstance == null) {
             throw new IllegalStateException("Application is not created.");
         }
         return mInstance;
+    }
+
+    public User getUser() {
+        return user == null ? SpUtils.get(USER_SP_KEY, User.class) : user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

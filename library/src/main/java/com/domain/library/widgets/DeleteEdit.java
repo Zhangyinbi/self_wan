@@ -97,6 +97,10 @@ public class DeleteEdit extends LinearLayout implements TextWatcher, View.OnClic
         return value;
     }
 
+    public String getInputValue() {
+         return etValue.getText().toString().trim();
+    }
+
     /**
      * 设置value
      *

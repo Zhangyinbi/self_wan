@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alpha="0.8"
+    android:background="@drawable/bg_black_round"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="@dimen/dimens_30"
+        android:layout_height="@dimen/dimens_30"
+        android:layout_marginTop="@dimen/dimens_17"
+        android:src="@drawable/img_cg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimens_26"
+        android:layout_marginVertical="@dimen/dimens_13"
+        android:text="登录成功"
+        android:textColor="#FFF"
+        android:textSize="13sp" />
+</LinearLayout>

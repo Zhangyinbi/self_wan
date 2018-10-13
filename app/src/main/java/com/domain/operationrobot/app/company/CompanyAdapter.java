@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
@@ -34,11 +35,11 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.MyViewHo
 
     private String currentUserName;
 
-    public CompanyAdapter(Context context, ArrayList<Company> companyList, JoinCompanyContract.JoinCompanyPresenter presenter, String currentUserName) {
+    public CompanyAdapter(Context context, ArrayList<Company> companyList, JoinCompanyContract.JoinCompanyPresenter presenter) {
         this.data = companyList;
         this.context = context;
         this.presenter = presenter;
-        this.currentUserName = currentUserName;
+        this.currentUserName = BaseApplication.getInstance().getUser() != null ? BaseApplication.getInstance().getUser().getName() : "请输入姓名";
     }
 
     public void updateData(ArrayList<Company> data, String targetName) {

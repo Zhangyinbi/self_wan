@@ -50,7 +50,7 @@ public class JoinCompanyDialog extends AppCompatDialog {
     private TextView tvCompanyName;
 
     public JoinCompanyDialog(@NonNull Context context, Company company, String accountName, JoinCompanyContract.JoinCompanyPresenter presenter) {
-        super(context,R.style.ROBOT_Dialog);
+        super(context, R.style.ROBOT_Dialog);
         this.accountName = accountName;
         this.presenter = presenter;
         this.company = company;
@@ -58,8 +58,8 @@ public class JoinCompanyDialog extends AppCompatDialog {
     }
 
     private void init() {
-        setContentView(R.layout.join_company_dialog);
-        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+        setContentView(R.layout.default_hint_join);
+        getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT);
         tvAdminName = findViewById(R.id.tv_admin_name);
         tvCompanyName = findViewById(R.id.tv_company_name);

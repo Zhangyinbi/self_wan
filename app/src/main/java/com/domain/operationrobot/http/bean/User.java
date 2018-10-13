@@ -8,4 +8,10 @@ package com.domain.operationrobot.http.bean;
  * Create at : 2018/10/13 01:37
  */
 public class User {
+    private String name;
+
+    public String getName() {
+        return name == null ? "" : name;
+    }
+
 }
