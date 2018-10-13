@@ -4,7 +4,6 @@ package com.domain.operationrobot.app.company;
 import com.domain.library.base.BasePresenter;
 import com.domain.library.base.BaseView;
 import com.domain.operationrobot.http.bean.Company;
-import com.domain.operationrobot.http.bean.User;
 
 import java.util.ArrayList;
 
@@ -23,5 +22,7 @@ public interface JoinCompanyContract {
     public abstract class JoinCompanyPresenter<T extends JoinCompanyView> extends BasePresenter<T> {
 
         public abstract void getCompanyList(String value);
+
+        public abstract void join(long companyId);
     }
 }

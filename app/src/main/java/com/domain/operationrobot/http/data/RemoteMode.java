@@ -69,6 +69,10 @@ public class RemoteMode implements BaseMode {
         return RetrofitHelper.getInstance().create(Api.class).getCompanyList(companyName);
     }
 
+    public Observable<BaseEntry<String>> joinCompany(long companyId) {
+        return RetrofitHelper.getInstance().create(Api.class).joinCompany(companyId);
+    }
+
     private static class SingletonHolder {
         private static final RemoteMode INSTANCE = new RemoteMode();
     }

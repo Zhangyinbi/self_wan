@@ -5,6 +5,7 @@
     <!--<color name="colorAccent">#40a6ff</color>'-->
 
     <color name="blue">#9AD5C9</color>
+    <color name="text_333">#333333</color>
     <color name="login_background">#ECEFF1</color>
     <color name="line_color">#DEDEDE</color>
     <color name="login_forget_and_create">#1ABC9C</color>

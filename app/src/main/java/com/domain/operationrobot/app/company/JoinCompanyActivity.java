@@ -1,5 +1,7 @@
 package com.domain.operationrobot.app.company;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +24,9 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
                 case R.id.iv_back:
                     finish();
                     break;
+                case R.id.btn_create:
+                    //TODO 创建公司
+                    break;
                 default:
                     break;
             }
@@ -30,6 +35,11 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
     private ImageView ivSearch;
     private DeleteEdit autoSearchCompany;
     private JoinCompanyContract.JoinCompanyPresenter presenter;
+    private RecyclerView recyclerView;
+    private ArrayList<Company> companyList;
+    private CompanyAdapter adapter;
+
+    private String targetName;
 
     @Override
     protected int getLayoutId() {
@@ -44,6 +54,7 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
     @Override
     protected void initView() {
         findViewById(R.id.iv_back).setOnClickListener(listener);
+        findViewById(R.id.btn_create).setOnClickListener(listener);
         ivSearch = findViewById(R.id.iv_search);
         autoSearchCompany = findViewById(R.id.auto_search_company);
         autoSearchCompany.setTextAfterChange(this);
@@ -54,6 +65,11 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
                 view.requestFocus();
             }
         });
+        companyList = new ArrayList<>();
+        adapter = new CompanyAdapter(this, companyList, presenter, "当前用户名称");
+        recyclerView = findViewById(R.id.rlv_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -70,7 +86,8 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
     public void afterTextChanged(Editable editable) {
         updateIvSearchStatus(autoSearchCompany.isFocused());
         if (!autoSearchCompany.getValue().isEmpty()) {
-            presenter.getCompanyList(autoSearchCompany.getValue());
+            targetName = autoSearchCompany.getValue();
+            presenter.getCompanyList(targetName);
         }
     }
 
@@ -94,6 +111,8 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
      */
     @Override
     public void setCompanyList(ArrayList<Company> companyList) {
-
+//        if (companyList == null) return;
+        this.companyList.add(new Company("成都云图什么名字2", "占隐蔽2", 89825));
+        adapter.updateData(this.companyList, targetName);
     }
 }

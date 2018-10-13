@@ -50,7 +50,6 @@ public class LoginPresenterImpl extends LoginContract.LoginPresenter<LoginContra
         RemoteMode.getInstance().login(phone, pwd).subscribe(new BaseObserver<String>(getCompositeDisposable()) {
             @Override
             public void onError(BaseException e) {
-                hideProgress();
                 if (mView == null) {
                     return;
                 }

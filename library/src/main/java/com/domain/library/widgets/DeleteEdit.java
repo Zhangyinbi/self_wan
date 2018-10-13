@@ -231,6 +231,10 @@ public class DeleteEdit extends LinearLayout implements TextWatcher, View.OnClic
         }
     }
 
+    public void setSelection(int index) {
+        etValue.setSelection(index);
+    }
+
     public interface TextAfterChange {
         void afterTextChanged(Editable editable);
     }

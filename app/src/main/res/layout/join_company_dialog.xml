@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="48dp"
+    android:layout_marginRight="48dp"
+    android:background="@drawable/bg_white_big_round"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_12"
+        android:text="是否要加入"
+        android:textColor="#999"
+        android:textSize="@dimen/dimens_12sp" />
+
+    <TextView
+        android:id="@+id/tv_company_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_20"
+        android:text="成都云图瑞赞科技有限公司"
+        android:textColor="#000"
+        android:textSize="@dimen/dimens_16sp" />
+
+    <TextView
+        android:id="@+id/tv_admin_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_20"
+        android:text="管理员："
+        android:textColor="#999"
+        android:textSize="@dimen/dimens_12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginTop="@dimen/dimens_20"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/dimens_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="申请人"
+            android:textColor="@color/text_333"
+            android:textSize="@dimen/dimens_14sp" />
+
+        <com.domain.library.widgets.DeleteEdit
+            android:id="@+id/de_account_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimens_20"
+            app:hint_color="#999"
+            app:text_color="#999"
+            app:value_hint="请输入用户名" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="取消"
+            android:textColor="@color/text_333"
+            android:textSize="@dimen/dimens_12sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/line_color" />
+
+        <Button
+            android:id="@+id/btn_join"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="确定"
+            android:textColor="@color/code_blue"
+            android:textSize="@dimen/dimens_12sp" />
+    </LinearLayout>
+</LinearLayout>

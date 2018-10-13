@@ -35,4 +35,8 @@ public interface Api {
     @FormUrlEncoded
     @POST("/getCompanyList")
     Observable<BaseEntry<ArrayList<Company>>> getCompanyList(@Field("companyName") String companyName);
+
+    @FormUrlEncoded
+    @POST("/joinCompany")
+    Observable<BaseEntry<String>> joinCompany(@Field("companyId") long companyId);
 }
