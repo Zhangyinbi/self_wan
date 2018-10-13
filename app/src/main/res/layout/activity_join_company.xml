@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDEEF2"
+    android:gravity="center_horizontal"
+    android:focusable="true"
+    android:id="@+id/root_view"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/code_blue"
+        android:paddingTop="@dimen/dimens_20">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/dimens_17"
+            android:src="@drawable/back_icon_white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加入公司"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimens_10"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="91dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="没找到你的公司？点击"
+            android:textColor="#999"
+            android:textSize="@dimen/dimens_14sp" />
+
+        <Button
+            android:layout_width="78dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="@dimen/dimens_3"
+            android:background="@drawable/blue_border_press"
+            android:text="创建公司"
+            android:textColor="@color/code_blue"
+            android:textSize="@dimen/dimens_14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimens_18"
+        android:layout_marginTop="@dimen/dimens_27"
+        android:background="@drawable/bg_white_round_black_border"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="@dimen/dimens_7"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="@dimen/dimens_20"
+            android:layout_height="@dimen/dimens_20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dimens_5"
+            android:src="@drawable/icon_search" />
+
+
+        <com.domain.library.widgets.DeleteEdit
+            android:id="@+id/auto_search_company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dimens_10"
+            android:paddingRight="@dimen/dimens_13"
+            app:hint_color="#C5C5C5"
+            app:text_color="#333333"
+            app:value_hint="请输入公司名称" />
+    </LinearLayout>
+
+</LinearLayout>

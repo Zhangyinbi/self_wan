@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <dimen name="edit_bottom">@dimen/dimens_17</dimen>
+    <dimen name="edit_top">@dimen/dimens_17</dimen>
+    <dimen name="edit_size">@dimen/dimens_15sp</dimen>
+
+
+    <dimen name="dimens_0">0dp</dimen>
+    <dimen name="dimens_1">1dp</dimen>
+    <dimen name="dimens_2">2dp</dimen>
+    <dimen name="dimens_3">3dp</dimen>
+    <dimen name="dimens_4">4dp</dimen>
+    <dimen name="dimens_5">5dp</dimen>
+    <dimen name="dimens_6">6dp</dimen>
+    <dimen name="dimens_7">7dp</dimen>
+    <dimen name="dimens_8">8dp</dimen>
+    <dimen name="dimens_9">9dp</dimen>
+    <dimen name="dimens_10">10dp</dimen>
+    <dimen name="dimens_11">11dp</dimen>
+    <dimen name="dimens_12">12dp</dimen>
+    <dimen name="dimens_13">13dp</dimen>
+    <dimen name="dimens_14">14dp</dimen>
+    <dimen name="dimens_15">15dp</dimen>
+    <dimen name="dimens_16">16dp</dimen>
+    <dimen name="dimens_17">17dp</dimen>
+    <dimen name="dimens_18">18dp</dimen>
+    <dimen name="dimens_19">19dp</dimen>
+    <dimen name="dimens_20">20dp</dimen>
+    <dimen name="dimens_21">21dp</dimen>
+    <dimen name="dimens_22">22dp</dimen>
+    <dimen name="dimens_23">23dp</dimen>
+    <dimen name="dimens_24">24dp</dimen>
+    <dimen name="dimens_25">25dp</dimen>
+    <dimen name="dimens_26">26dp</dimen>
+    <dimen name="dimens_27">27dp</dimen>
+    <dimen name="dimens_28">28dp</dimen>
+    <dimen name="dimens_29">29dp</dimen>
+    <dimen name="dimens_30">30dp</dimen>
+    <dimen name="dimens_35">35dp</dimen>
+    <dimen name="dimens_40">40dp</dimen>
+    <dimen name="dimens_45">45dp</dimen>
+    <dimen name="dimens_52">52dp</dimen>
+    <dimen name="dimens_53">53dp</dimen>
+    <dimen name="dimens_80">80dp</dimen>
+
+    <dimen name="title_default_size">30sp</dimen>
+    <dimen name="dimens_16sp">16sp</dimen>
+    <dimen name="dimens_15sp">15sp</dimen>
+    <dimen name="dimens_14sp">14sp</dimen>
+    <dimen name="dimens_12sp">12sp</dimen>
+    <dimen name="dimens_10sp">10sp</dimen>
+    <dimen name="normal_size">16sp</dimen>
+
+</resources>

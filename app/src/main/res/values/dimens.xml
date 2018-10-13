@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <dimen name="login_icon_top">90dp</dimen>
+    <dimen name="login_icon_size">74dp</dimen>
+    <dimen name="login_bg_round_radius">4dip</dimen>
+    <dimen name="login_margin_top_icon">43dp</dimen>
+
+    <dimen name="line_height">1dp</dimen>
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Library</string>
+
+    <string name="input_error">不可以输入表情和颜文字</string>
+
+
+    <string name="unKnow_error">服务繁忙，请稍后再试</string>
+    <string name="code_1005_host_exception">请求的IP地址有问题</string>
+    <string name="code_1007_error_exception">网络出错，请检查网络</string>
+    <string name="code_1004_socket_time_out">网络链接超时</string>
+    <string name="code_1003_connect_fail">网路链接失败</string>
+    <string name="code_1001_json_parse">数据解析失败</string>
+    <string name="code_1006_json_syntax">数据格式异常</string>
+    <string name="http_exception">Http请求发生了异常</string>
+</resources>

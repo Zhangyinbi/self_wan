@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/dimens_18"
+    tools:context=".app.login.LoginActivity">
+
+
+    <ImageView
+        android:layout_width="@dimen/login_icon_size"
+        android:layout_height="@dimen/login_icon_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/login_icon_top"
+        android:src="@drawable/login_icon" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/login_margin_top_icon"
+        android:background="@drawable/bg_white_round"
+        android:orientation="vertical"
+        >
+
+        <com.domain.library.widgets.DeleteEdit
+            android:id="@+id/login_main_phone"
+            android:layout_width="match_parent"
+            android:paddingHorizontal="@dimen/dimens_15"
+            android:layout_height="wrap_content"
+            app:toast_hint="@string/login_phone_toast"
+            app:value_hint="@string/login_phone_hint" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_height"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/dimens_15"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_pwd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="71.5"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/login_pwd_hint"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingBottom="@dimen/edit_bottom"
+                android:paddingTop="@dimen/edit_top"
+                android:textColor="@color/edit_value_color"
+                android:textColorHint="@color/edit_value_hint_color"
+                android:textSize="@dimen/edit_size" />
+
+            <RelativeLayout
+                android:id="@+id/rl_toggle"
+                android:layout_width="@dimen/dimens_30"
+                android:layout_height="match_parent"
+                android:gravity="right">
+
+                <Button
+                    android:id="@+id/btn_toggle"
+                    android:layout_width="@dimen/dimens_20"
+                    android:layout_height="@dimen/dimens_10"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/img_by" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_forget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/dimens_14"
+        android:text="@string/login_forget_pwd"
+        android:textColor="@color/login_forget_and_create"
+        android:textSize="@dimen/dimens_14sp" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_53"
+        android:background="@drawable/login_blue_round_not_click_bg"
+        android:paddingBottom="@dimen/dimens_17"
+        android:paddingTop="@dimen/dimens_15"
+        android:text="@string/login"
+        android:layout_marginHorizontal="@dimen/dimens_3"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimens_18" />
+
+    <TextView
+        android:id="@+id/tv_create_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dimens_23"
+        android:text="@string/login_create_accound"
+        android:textColor="@color/login_forget_and_create"
+        android:textSize="@dimen/dimens_15sp" />
+</LinearLayout>

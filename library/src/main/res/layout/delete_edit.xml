@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/edit_bottom"
+        android:paddingTop="@dimen/edit_top">
+
+        <EditText
+            android:id="@+id/et_value"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="71.5"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/edit_value_color"
+            android:textColorHint="@color/edit_value_hint_color"
+            android:textSize="@dimen/edit_size"
+            tools:hint="手机号码" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:ignore="Suspicious0dp">
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="@dimen/dimens_20"
+                android:layout_height="@dimen/dimens_20"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/register_cancel_icon"
+                android:visibility="invisible" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
