@@ -22,7 +22,12 @@
         <activity android:name=".app.password.AccountActivity" />
         <activity android:name=".app.UserServiceProtocolActivity" />
         <activity android:name=".app.company.RegisterSussActivity" />
-        <activity android:name=".app.company.JoinCompanyActivity"></activity>
+        <activity android:name=".app.company.JoinCompanyActivity" />
+        <activity android:name=".app.password.ForgetPwdActivity" />
+        <activity android:name=".app.password.ModifyPwdActivity" />
+        <activity android:name=".app.password.ModifyPhoneActivity" />
+        <activity android:name=".app.password.ModifyUserNameActivity" />
+        <activity android:name=".app.password.VerifyPwdActivity"></activity>
     </application>
 
 </manifest>

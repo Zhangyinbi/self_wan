@@ -9,6 +9,11 @@ package com.domain.operationrobot.http.bean;
  */
 public class User {
     private String name;
+    private String userId;
+
+    public String getUserId() {
+        return userId == null ? "" : userId;
+    }
 
     public String getName() {
         return name == null ? "" : name;

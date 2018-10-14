@@ -1,5 +1,6 @@
 package com.domain.library.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import com.domain.library.R;
@@ -38,6 +40,7 @@ public abstract class AbsActivity extends AppCompatActivity implements BaseView 
     public BasePresenter<BaseView> p;
     public boolean mEnableStatusBarDarkText = true;
     public boolean mEnableFitWindowSystem = true;
+    public CompositeDisposable compositeDisposable;
     private View mLoadingContainer;
     private ViewGroup mRootView;
 
@@ -46,6 +49,7 @@ public abstract class AbsActivity extends AppCompatActivity implements BaseView 
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         statusBarSetting();
+        compositeDisposable = new CompositeDisposable();
         mLoadingContainer = LayoutInflater.from(this).inflate(R.layout.invoice_loading_layout, null);
         mRootView = findViewById(android.R.id.content);
         newInstancePresenter();
@@ -147,11 +151,31 @@ public abstract class AbsActivity extends AppCompatActivity implements BaseView 
         if (null != p) {
             p.destroy();
         }
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
+        }
         super.onDestroy();
 
     }
 
     public boolean isEmpty(String str) {
         return TextUtils.isEmpty(str);
+    }
+
+    @Override
+    protected void onStop() {
+        hideInput();
+        super.onStop();
+
+    }
+
+    public boolean hideInput() {
+        View view = getWindow().peekDecorView();
+        if (view != null) {
+            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            return inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        return false;
     }
 }

@@ -39,4 +39,24 @@ public interface Api {
     @FormUrlEncoded
     @POST("/joinCompany")
     Observable<BaseEntry<String>> joinCompany(@Field("companyId") long companyId);
+
+    @FormUrlEncoded
+    @POST("/forgetPwd")
+    Observable<BaseEntry<String>> forgetPwd(@Field("phone") String phone, @Field("password") String pwd, @Field("code") String code);
+
+    @FormUrlEncoded
+    @POST("/modifyPwd")
+    Observable<BaseEntry<String>> modifyPwd(@Field("oldPwd") String old, @Field("newPwd") String newP, @Field("newPwdAgain") String again);
+
+    @FormUrlEncoded
+    @POST("/modifyPhone")
+    Observable<BaseEntry<String>> modifyPhone(@Field("phone") String phone, @Field("code") String code);
+
+    @FormUrlEncoded
+    @POST("/verifyPwd")
+    Observable<BaseEntry<String>> verifyPwd(@Field("pwd") String pwd, @Field("userId") String userId);
+
+    @FormUrlEncoded
+    @POST("/modifyUserName")
+    Observable<BaseEntry<String>> modifyUserName(@Field("name") String name, @Field("userId") String userId);
 }

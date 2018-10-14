@@ -23,6 +23,7 @@ import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.login.LoginContract.LoginView;
 import com.domain.operationrobot.app.password.AccountActivity;
+import com.domain.operationrobot.app.password.ForgetPwdActivity;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
 import static com.domain.operationrobot.util.Constant.PHONE_LENGTH;
@@ -58,7 +59,7 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
                     break;
                 case R.id.tv_forget:
                     //忘记密码
-                    ToastUtils.showToast("忘记密码");
+                    startActivity(new Intent(LoginActivity.this, ForgetPwdActivity.class));
                     break;
                 case R.id.tv_create_account:
                     //创建账户

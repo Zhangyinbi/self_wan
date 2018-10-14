@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".app.password.ModifyPwdActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/code_blue"
+        android:paddingTop="@dimen/dimens_20">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/dimens_17"
+            android:src="@drawable/back_icon_white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimens_10"
+            android:text="修改密码"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/dimens_14"
+            android:text="完成"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/dimens_14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dimens_17">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:paddingVertical="@dimen/dimens_19"
+            android:text="旧密码"
+            android:textColor="#666"
+            android:textSize="@dimen/dimens_15sp" />
+
+        <com.domain.library.widgets.DeleteEdit
+            android:id="@+id/de_old_pwd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimens_19"
+            android:layout_weight="4"
+            app:toast_hint="请输入旧密码"
+            app:value_hint="请输入旧密码" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginHorizontal="@dimen/dimens_17"
+        android:background="@color/line_color" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dimens_17">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:paddingVertical="@dimen/dimens_19"
+            android:text="新密码"
+            android:textColor="#666"
+            android:textSize="@dimen/dimens_15sp" />
+
+        <com.domain.library.widgets.DeleteEdit
+            android:id="@+id/de_new_pwd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimens_19"
+            android:layout_weight="4"
+            app:toast_hint="请输入新密码"
+            app:value_hint="请输入新密码" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginHorizontal="@dimen/dimens_17"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dimens_17">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:paddingVertical="@dimen/dimens_19"
+            android:text="确认密码"
+            android:textColor="#666"
+            android:textSize="@dimen/dimens_15sp" />
+
+        <com.domain.library.widgets.DeleteEdit
+            android:id="@+id/de_new_pwd_again"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimens_19"
+            android:layout_weight="4"
+            app:toast_hint="确认密码不可为空"
+            app:value_hint="请再次输入密码" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:layout_marginHorizontal="@dimen/dimens_17"
+        android:background="@color/line_color" />
+
+</LinearLayout>

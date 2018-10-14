@@ -3,6 +3,7 @@ package com.domain.operationrobot.http.data;
 import com.domain.library.base.BaseMode;
 import com.domain.library.http.RetrofitHelper;
 import com.domain.library.http.entry.BaseEntry;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.User;
 
@@ -69,9 +70,72 @@ public class RemoteMode implements BaseMode {
         return RetrofitHelper.getInstance().create(Api.class).getCompanyList(companyName);
     }
 
+    /**
+     * 加入公司
+     *
+     * @param companyId
+     * @return
+     */
     public Observable<BaseEntry<String>> joinCompany(long companyId) {
         return RetrofitHelper.getInstance().create(Api.class).joinCompany(companyId);
     }
+
+    /**
+     * 忘记密码
+     *
+     * @param phone
+     * @param pwd
+     * @param code
+     * @return
+     */
+    public Observable<BaseEntry<String>> foegetPwd(String phone, String pwd, String code) {
+        return RetrofitHelper.getInstance().create(Api.class).forgetPwd(phone, pwd, code);
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param old
+     * @param newP
+     * @param again
+     * @return
+     */
+    public Observable<BaseEntry<String>> modifyPwd(String old, String newP, String again) {
+        return RetrofitHelper.getInstance().create(Api.class).modifyPwd(old, newP, again);
+    }
+
+    /**
+     * 修改手机号码
+     *
+     * @param phone
+     * @param code
+     * @return
+     */
+    public Observable<BaseEntry<String>> modifyPhone(String phone, String code) {
+        return RetrofitHelper.getInstance().create(Api.class).modifyPhone(phone, code);
+    }
+
+    /**
+     * 验证密码
+     *
+     * @param pwd
+     * @return
+     */
+    public Observable<BaseEntry<String>> verifyPwd(String pwd) {
+        String userId = BaseApplication.getInstance().getUser().getUserId();
+        return RetrofitHelper.getInstance().create(Api.class).verifyPwd(pwd, userId);
+    }
+    /**
+     * 验证密码
+     *
+     * @param name
+     * @return
+     */
+    public Observable<BaseEntry<String>> modifyUserName(String name) {
+        String userId = BaseApplication.getInstance().getUser().getUserId();
+        return RetrofitHelper.getInstance().create(Api.class).modifyUserName(name, userId);
+    }
+
 
     private static class SingletonHolder {
         private static final RemoteMode INSTANCE = new RemoteMode();
