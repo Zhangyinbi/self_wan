@@ -97,10 +97,6 @@ public class DeleteEdit extends LinearLayout implements TextWatcher, View.OnClic
         return value;
     }
 
-    public String getInputValue() {
-         return etValue.getText().toString().trim();
-    }
-
     /**
      * 设置value
      *
@@ -109,6 +105,10 @@ public class DeleteEdit extends LinearLayout implements TextWatcher, View.OnClic
     public void setValue(String value) {
         if (null == etValue) return;
         etValue.setText(value);
+    }
+
+    public String getInputValue() {
+        return etValue.getText().toString().trim();
     }
 
     public void setKeyListener(String digits) {
@@ -230,6 +230,13 @@ public class DeleteEdit extends LinearLayout implements TextWatcher, View.OnClic
 
     @Override
     public void onFocusChange(View view, boolean b) {
+        if (!b) {
+            btnDelete.setVisibility(INVISIBLE);
+        } else {
+            if (!TextUtils.isEmpty(etValue.getText().toString().trim())) {
+                btnDelete.setVisibility(VISIBLE);
+            }
+        }
         if (onFocusChangeListener != null) {
             onFocusChangeListener.onFocusChange(view, b);
         }

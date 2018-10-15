@@ -14,4 +14,6 @@ public class Constant {
     public static final int PHONE_LENGTH = 11;
 
     public static final String USER_SP_KEY = "robot_user";
+
+    public static final int OPERATION_REQUEST_CODE = 00001;
 }

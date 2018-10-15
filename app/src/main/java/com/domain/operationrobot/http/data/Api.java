@@ -59,4 +59,16 @@ public interface Api {
     @FormUrlEncoded
     @POST("/modifyUserName")
     Observable<BaseEntry<String>> modifyUserName(@Field("name") String name, @Field("userId") String userId);
+
+    @FormUrlEncoded
+    @POST("/createCompany")
+    Observable<BaseEntry<String>> createCompany(@Field("companyName") String companyName, @Field("email") String email, @Field("name") String name);
+
+    @FormUrlEncoded
+    @POST("/editOperation")
+    Observable<BaseEntry<String>> editOperation(@Field("phone") String phone, @Field("name") String name, @Field("id") String id);
+
+    @FormUrlEncoded
+    @POST("/addOperation")
+    Observable<BaseEntry<String>> addOperation(@Field("phone") String phone, @Field("name") String name);
 }

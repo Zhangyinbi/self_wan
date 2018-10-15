@@ -12,13 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".app.login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".app.login.LoginActivity" />
         <activity android:name=".app.password.AccountActivity" />
         <activity android:name=".app.UserServiceProtocolActivity" />
         <activity android:name=".app.company.RegisterSussActivity" />
@@ -27,7 +21,17 @@
         <activity android:name=".app.password.ModifyPwdActivity" />
         <activity android:name=".app.password.ModifyPhoneActivity" />
         <activity android:name=".app.password.ModifyUserNameActivity" />
-        <activity android:name=".app.password.VerifyPwdActivity"></activity>
+        <activity android:name=".app.password.VerifyPwdActivity" />
+        <activity android:name=".app.company.ApplyActivity" />
+        <activity android:name=".app.company.CreateCompanyActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".app.operation.OperationActivity" />
+        <activity android:name=".app.setting.UserInfoActivity"></activity>
     </application>
 
 </manifest>

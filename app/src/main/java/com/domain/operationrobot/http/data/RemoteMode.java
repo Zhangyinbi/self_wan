@@ -125,8 +125,9 @@ public class RemoteMode implements BaseMode {
         String userId = BaseApplication.getInstance().getUser().getUserId();
         return RetrofitHelper.getInstance().create(Api.class).verifyPwd(pwd, userId);
     }
+
     /**
-     * 验证密码
+     * 修改用户名称
      *
      * @param name
      * @return
@@ -134,6 +135,41 @@ public class RemoteMode implements BaseMode {
     public Observable<BaseEntry<String>> modifyUserName(String name) {
         String userId = BaseApplication.getInstance().getUser().getUserId();
         return RetrofitHelper.getInstance().create(Api.class).modifyUserName(name, userId);
+    }
+
+    /**
+     * 创建公司
+     *
+     * @param companyName
+     * @param email
+     * @param name
+     * @return
+     */
+    public Observable<BaseEntry<String>> createCompany(String companyName, String email, String name) {
+        return RetrofitHelper.getInstance().create(Api.class).createCompany(companyName, email, name);
+    }
+
+    /**
+     * 编辑运维账户
+     *
+     * @param phone
+     * @param name
+     * @param id
+     * @return
+     */
+    public Observable<BaseEntry<String>> editOperation(String phone, String name, String id) {
+        return RetrofitHelper.getInstance().create(Api.class).editOperation(phone, name, id);
+    }
+
+    /**
+     * 添加运维账户
+     *
+     * @param phone
+     * @param name
+     * @return
+     */
+    public Observable<BaseEntry<String>> addOperation(String phone, String name) {
+        return RetrofitHelper.getInstance().create(Api.class).addOperation(phone, name);
     }
 
 
