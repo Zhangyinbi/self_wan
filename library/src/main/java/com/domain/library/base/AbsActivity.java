@@ -18,11 +18,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import com.domain.library.R;
+import com.domain.library.utils.ActivityStackManager;
 import com.domain.library.utils.bar.LightStatusBarCompat;
 import com.domain.library.utils.bar.StatusBarCompat;
 import com.domain.library.utils.ToastUtils;
 import com.domain.library.utils.bar.TransStatusBarHelper;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -48,6 +50,7 @@ public abstract class AbsActivity extends AppCompatActivity implements BaseView 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        ActivityStackManager.getInstance().addActivity(new WeakReference(this));
         statusBarSetting();
         compositeDisposable = new CompositeDisposable();
         mLoadingContainer = LayoutInflater.from(this).inflate(R.layout.invoice_loading_layout, null);
@@ -68,7 +71,7 @@ public abstract class AbsActivity extends AppCompatActivity implements BaseView 
         LightStatusBarCompat.setLightStatusBar(getWindow(), false);
     }
 
-    private void statusBarSetting() {
+    public void statusBarSetting() {
         //关闭原先的设置
         mEnableFitWindowSystem = false;
         mEnableStatusBarDarkText = false;

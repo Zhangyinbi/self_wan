@@ -52,20 +52,24 @@ public class ModifyPwdActivity extends AbsActivity {
      */
     public void complete(String old, String newP, String again) {
         showProgress();
-        RemoteMode.getInstance().modifyPwd(old, newP, again).subscribe(new BaseObserver<String>(compositeDisposable) {
-            @Override
-            public void onError(BaseException e) {
-                hideProgress();
-                showToast(e.getMsg());
-            }
-
-            @Override
-            public void onSuss(BaseEntry<String> userBaseEntry) {
-                hideProgress();
-                showToast("修改密码成功");
-                finish();
-            }
-        });
+        //RemoteMode.getInstance().modifyPwd(old, newP, again).subscribe(new BaseObserver<String>(compositeDisposable) {
+        //    @Override
+        //    public void onError(BaseException e) {
+        //        hideProgress();
+        //        showToast(e.getMsg());
+        //    }
+        //
+        //    @Override
+        //    public void onSuss(String userBaseEntry) {
+        //        hideProgress();
+        //        showToast("修改密码成功");
+        //        finish();
+        //    } @Override
+        //    public void onComplete() {
+        //        super.onComplete();
+        //        hideProgress();
+        //    }
+        //});
     }
 
     @Override

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:layout_marginTop="-25dp"
+    tools:context=".app.home.MainActivity"
+    >
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/rlv_recycler"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:background="#ededed"
+      android:layout_weight="1"
+      />
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      >
+
+    <EditText
+        android:id="@+id/et_msg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:imeActionId="@+id/send"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:maxLines="1"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="send"
+        android:src="@android:drawable/ic_menu_send"
+        />
+
+  </LinearLayout>
+
+</LinearLayout>

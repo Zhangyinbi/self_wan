@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".app.home.MainActivity"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="64dp"
+      android:background="@color/code_blue"
+      android:paddingTop="@dimen/dimens_20"
+      >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dimens_17"
+        android:paddingRight="17dp"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/icon_nav"
+          />
+
+      <ImageView
+          android:id="@+id/iv_red_yuan"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="13dp"
+          android:layout_marginTop="-5dp"
+          android:src="@drawable/yuan"
+          />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_fragment2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimens_10"
+        android:text="首页"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_fragment1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="@dimen/dimens_17"
+        android:layout_marginTop="@dimen/dimens_12"
+        android:text="服务器监控"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        />
+  </RelativeLayout>
+
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="#F1E3D4"
+      android:gravity="center"
+      android:paddingBottom="@dimen/dimens_13"
+      android:paddingTop="@dimen/dimens_12"
+      android:text="升级成为正式用户，享受一站式运维 >"
+      android:textColor="#FEB240"
+      android:textSize="@dimen/dimens_14sp"
+      android:translationZ="@dimen/dimens_1"
+      />
+
+
+  <FrameLayout
+      android:id="@+id/fl_content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/transparent"
+      />
+</LinearLayout>

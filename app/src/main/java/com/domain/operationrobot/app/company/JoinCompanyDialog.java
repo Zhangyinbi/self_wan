@@ -1,22 +1,17 @@
 package com.domain.operationrobot.app.company;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
-
-import org.w3c.dom.Text;
 
 /**
  * Project Name : OperationRobot
@@ -66,8 +61,8 @@ public class JoinCompanyDialog extends AppCompatDialog {
         deAccountName = findViewById(R.id.de_account_name);
         findViewById(R.id.btn_cancel).setOnClickListener(listener);
         findViewById(R.id.btn_join).setOnClickListener(listener);
-        tvCompanyName.setText(company != null ? company.getCompanyName() : "数据有误");
-        String adminName = company != null ? company.getAdminName() : "";
+        tvCompanyName.setText(company != null ? company.getCompany() : "数据有误");
+        String adminName = company != null ? company.getAdmin() : "";
         if (!TextUtils.isEmpty(adminName)) {
             int length = adminName.length();
             String pref = "";

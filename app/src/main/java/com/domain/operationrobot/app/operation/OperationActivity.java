@@ -74,38 +74,50 @@ public class OperationActivity extends AbsActivity {
 
     private void editOperation(String phone, String name, String id) {
         showProgress();
-        RemoteMode.getInstance().editOperation(phone, name, id).subscribe(new BaseObserver<String>(compositeDisposable) {
-            @Override
-            public void onError(BaseException e) {
-                hideProgress();
-                showToast(e.getMsg());
-            }
-
-            @Override
-            public void onSuss(BaseEntry<String> baseEntryBaseEntry) {
-                hideProgress();
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
+        //RemoteMode.getInstance().editOperation(phone, name, id).subscribe(new BaseObserver<String>(compositeDisposable) {
+        //    @Override
+        //    public void onError(BaseException e) {
+        //        hideProgress();
+        //        showToast(e.getMsg());
+        //    }
+        //
+        //    @Override
+        //    public void onSuss(String baseEntryBaseEntry) {
+        //        hideProgress();
+        //        setResult(RESULT_OK);
+        //        finish();
+        //    }
+        //
+        //    @Override
+        //    public void onComplete() {
+        //        super.onComplete();
+        //        hideProgress();
+        //    }
+        //});
     }
 
     private void addOperation(String phone, String name) {
         showProgress();
-        RemoteMode.getInstance().addOperation(phone, name).subscribe(new BaseObserver<String>(compositeDisposable) {
-            @Override
-            public void onError(BaseException e) {
-                hideProgress();
-                showToast(e.getMsg());
-            }
-
-            @Override
-            public void onSuss(BaseEntry<String> baseEntryBaseEntry) {
-                hideProgress();
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
+        //RemoteMode.getInstance().addOperation(phone, name).subscribe(new BaseObserver<String>(compositeDisposable) {
+        //    @Override
+        //    public void onError(BaseException e) {
+        //        hideProgress();
+        //        showToast(e.getMsg());
+        //    }
+        //
+        //    @Override
+        //    public void onSuss(String baseEntryBaseEntry) {
+        //        hideProgress();
+        //        setResult(RESULT_OK);
+        //        finish();
+        //    }
+        //
+        //    @Override
+        //    public void onComplete() {
+        //        super.onComplete();
+        //        hideProgress();
+        //    }
+        //});
     }
 
     @Override

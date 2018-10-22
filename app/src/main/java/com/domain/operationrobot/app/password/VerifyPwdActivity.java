@@ -47,19 +47,23 @@ public class VerifyPwdActivity extends AbsActivity {
 
     private void verifyPwd(String pwd) {
         showProgress();
-        RemoteMode.getInstance().verifyPwd(pwd).subscribe(new BaseObserver<String>(compositeDisposable) {
-            @Override
-            public void onError(BaseException e) {
-                hideProgress();
-                showToast(e.getMsg());
-            }
-
-            @Override
-            public void onSuss(BaseEntry<String> userBaseEntry) {
-                hideProgress();
-                next();
-            }
-        });
+        //RemoteMode.getInstance().verifyPwd(pwd).subscribe(new BaseObserver<String>(compositeDisposable) {
+        //    @Override
+        //    public void onError(BaseException e) {
+        //        hideProgress();
+        //        showToast(e.getMsg());
+        //    }
+        //
+        //    @Override
+        //    public void onSuss(String userBaseEntry) {
+        //        hideProgress();
+        //        next();
+        //    } @Override
+        //    public void onComplete() {
+        //        super.onComplete();
+        //        hideProgress();
+        //    }
+        //});
     }
 
     private void next() {

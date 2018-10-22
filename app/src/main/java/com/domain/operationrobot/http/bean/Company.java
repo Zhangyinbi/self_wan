@@ -8,13 +8,13 @@ package com.domain.operationrobot.http.bean;
  * Create at : 2018/10/13 05:21
  */
 public class Company {
-    private String companyName;
-    private String adminName;
+    private String company;
+    private String admin;
     private long companyId = -1;
 
     public Company(String companyName, String adminName, long companyId) {
-        this.companyName = companyName;
-        this.adminName = adminName;
+        this.company = companyName;
+        this.admin = adminName;
         this.companyId = companyId;
     }
 
@@ -22,11 +22,11 @@ public class Company {
         return companyId;
     }
 
-    public String getAdminName() {
-        return adminName == null ? "" : adminName;
+    public String getAdmin() {
+        return admin == null ? "" : admin;
     }
 
-    public String getCompanyName() {
-        return companyName == null ? "" : companyName;
+    public String getCompany() {
+        return company == null ? "" : company;
     }
 }

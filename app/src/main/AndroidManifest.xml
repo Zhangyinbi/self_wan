@@ -2,36 +2,75 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.domain.operationrobot">
 
-    <uses-permission android:name="android.permission.INTERNET" />
 
-    <application
-        android:name=".BaseApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/robot_app_icon"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".app.login.LoginActivity" />
-        <activity android:name=".app.password.AccountActivity" />
-        <activity android:name=".app.UserServiceProtocolActivity" />
-        <activity android:name=".app.company.RegisterSussActivity" />
-        <activity android:name=".app.company.JoinCompanyActivity" />
-        <activity android:name=".app.password.ForgetPwdActivity" />
-        <activity android:name=".app.password.ModifyPwdActivity" />
-        <activity android:name=".app.password.ModifyPhoneActivity" />
-        <activity android:name=".app.password.ModifyUserNameActivity" />
-        <activity android:name=".app.password.VerifyPwdActivity" />
-        <activity android:name=".app.company.ApplyActivity" />
-        <activity android:name=".app.company.CreateCompanyActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".app.operation.OperationActivity" />
-        <activity android:name=".app.setting.UserInfoActivity"></activity>
-    </application>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+
+
+  <application
+      android:name=".BaseApplication"
+      android:allowBackup="true"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/app_name"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:supportsRtl="true"
+      android:theme="@style/AppTheme">
+    <activity android:name=".app.login.LoginActivity">
+
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+
+
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    //创建用户
+    <activity android:name=".app.password.AccountActivity"/>
+    //用户协议
+    <activity android:name=".app.UserServiceProtocolActivity"/>
+    //注册成功
+    <activity android:name=".app.company.RegisterSussActivity"/>
+    //加入公司
+    <activity android:name=".app.company.JoinCompanyActivity"/>
+    //忘记密码
+    <activity android:name=".app.password.ForgetPwdActivity"/>
+    //修改密码
+    <activity android:name=".app.password.ModifyPwdActivity"/>
+    //修改手机号
+    <activity android:name=".app.password.ModifyPhoneActivity"/>
+    //修改用户姓名
+    <activity android:name=".app.password.ModifyUserNameActivity"/>
+    //验证密码
+    <activity android:name=".app.password.VerifyPwdActivity"/>
+    //加入公司
+    <activity android:name=".app.company.ApplyActivity"/>
+    //完善企业资料
+    <activity android:name=".app.company.CreateCompanyActivity"/>
+    //编辑运维用户和添加运维用户
+    <activity android:name=".app.operation.OperationActivity"/>
+    //用户个人资料
+    <activity android:name=".app.setting.UserInfoActivity">
+
+    </activity>
+
+    //用户申请页面
+    <activity android:name=".app.company.UserApplyActivity"></activity>
+
+    //首页
+    <activity
+        android:name=".app.home.MainActivity"
+        android:configChanges="orientation|screenSize|keyboardHidden"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="stateHidden|adjustResize">
+
+    </activity>
+  </application>
 
 </manifest>

@@ -39,7 +39,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.MyViewHo
         this.data = companyList;
         this.context = context;
         this.presenter = presenter;
-        this.currentUserName = BaseApplication.getInstance().getUser() != null ? BaseApplication.getInstance().getUser().getName() : "请输入姓名";
+        this.currentUserName = BaseApplication.getInstance().getUser() != null ? BaseApplication.getInstance().getUser().getUsername() : "请输入姓名";
     }
 
     public void updateData(ArrayList<Company> data, String targetName) {
@@ -57,7 +57,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        String currentItemName = data.get(position).getCompanyName();
+        String currentItemName = data.get(position).getCompany();
         holder.tvCompanyName.setText(currentItemName);
         if (null != targetName && currentItemName.contains(targetName)) {
             int length = targetName.length();

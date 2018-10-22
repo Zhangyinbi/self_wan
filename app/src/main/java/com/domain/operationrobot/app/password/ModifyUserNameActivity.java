@@ -35,20 +35,24 @@ public class ModifyUserNameActivity extends AbsActivity {
 
     private void modifyUserName(String name) {
         showProgress();
-        RemoteMode.getInstance().modifyUserName(name).subscribe(new BaseObserver<String>(compositeDisposable) {
-            @Override
-            public void onError(BaseException e) {
-                hideProgress();
-                showToast(e.getMsg());
-            }
-
-            @Override
-            public void onSuss(BaseEntry<String> userBaseEntry) {
-                hideProgress();
-                showToast("用户名修改成功");
-                finish();
-            }
-        });
+        //RemoteMode.getInstance().modifyUserName(name).subscribe(new BaseObserver<String>(compositeDisposable) {
+        //    @Override
+        //    public void onError(BaseException e) {
+        //        hideProgress();
+        //        showToast(e.getMsg());
+        //    }
+        //
+        //    @Override
+        //    public void onSuss(String userBaseEntry) {
+        //        hideProgress();
+        //        showToast("用户名修改成功");
+        //        finish();
+        //    } @Override
+        //    public void onComplete() {
+        //        super.onComplete();
+        //        hideProgress();
+        //    }
+        //});
     }
 
 

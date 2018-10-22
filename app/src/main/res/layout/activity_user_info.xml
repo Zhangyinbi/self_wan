@@ -30,4 +30,157 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_10"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/dimens_14"
+        android:paddingLeft="@dimen/dimens_16"
+        android:paddingRight="@dimen/dimens_16"
+        android:paddingTop="@dimen/dimens_14">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="用户头像"
+            android:textColor="#666"
+            android:textSize="@dimen/dimens_16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/grzl_tx" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimens_9"
+            android:src="@drawable/grzl_icon_jr" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_10"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dimens_16"
+        android:paddingRight="@dimen/dimens_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/dimens_24"
+            android:paddingTop="@dimen/dimens_24">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/grzl_img_toux"
+                android:drawablePadding="@dimen/dimens_11"
+                android:text="用户头像"
+                android:textColor="#666"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="刘德华"
+                android:textColor="#C6C6C6"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimens_9"
+                android:src="@drawable/grzl_icon_jr" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_height"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/dimens_24"
+            android:paddingTop="@dimen/dimens_24">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/grzl_img_shouji"
+                android:drawablePadding="@dimen/dimens_13"
+                android:text="修改手机号码"
+                android:textColor="#666"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15256328965"
+                android:textColor="#C6C6C6"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimens_9"
+                android:src="@drawable/grzl_icon_jr" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_10"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dimens_16"
+            android:paddingRight="@dimen/dimens_18"
+            android:paddingTop="@dimen/dimens_23">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="当前公司"
+                android:textColor="#666"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="成都云图控股股份有限公司"
+                android:textColor="#C6C6C6"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="38dp"
+            android:layout_gravity="end"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="@dimen/dimens_18"
+            android:layout_marginTop="31dp"
+            android:background="@drawable/blue_shape_gray"
+            android:text="退出该公司"
+            android:textColor="#1ABC9C"
+            android:textSize="@dimen/dimens_14sp" />
+    </LinearLayout>
 </LinearLayout>
