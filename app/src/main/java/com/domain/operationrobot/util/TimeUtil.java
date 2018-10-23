@@ -23,6 +23,10 @@ public class TimeUtil {
     if (timeStamp == 0) {
       return "";
     }
+    if (((System.currentTimeMillis()) - timeStamp) < 60000) {
+      return "刚刚";
+    }
+    timeStamp = timeStamp / 1000;
     Calendar inputTime = Calendar.getInstance();
     inputTime.setTimeInMillis(timeStamp * 1000);
     Date currenTimeZone = inputTime.getTime();
@@ -36,7 +40,8 @@ public class TimeUtil {
                                                                           .getString(R.string.time_year) + "MM" + BaseApplication.getInstance()
                                                                                                                                  .getResources()
                                                                                                                                  .getString(
-                                                                                                                                   R.string.time_month) + "dd" + BaseApplication.getInstance()
+                                                                                                                                   R.string.time_month)
+        + "dd" + BaseApplication.getInstance()
                                 .getResources()
                                 .getString(R.string.time_day));
       return sdf.format(currenTimeZone);
@@ -51,9 +56,11 @@ public class TimeUtil {
     }
     calendar.add(Calendar.DAY_OF_MONTH, -1);
     if (calendar.before(inputTime)) {
+      SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
       return BaseApplication.getInstance()
                             .getResources()
-                            .getString(R.string.time_yesterday);
+                            .getString(R.string.time_yesterday) + " " + sdf.format(currenTimeZone);
     } else {
       calendar.set(Calendar.DAY_OF_MONTH, 1);
       calendar.set(Calendar.MONTH, Calendar.JANUARY);
@@ -71,9 +78,10 @@ public class TimeUtil {
                                                                             .getString(R.string.time_year) + "MM" + BaseApplication.getInstance()
                                                                                                                                    .getResources()
                                                                                                                                    .getString(
-                                                                                                                                     R.string.time_month) + "dd" +  BaseApplication.getInstance()
-                                       .getResources()
-                                       .getString(R.string.time_day));
+                                                                                                                                     R.string.time_month)
+          + "dd" + BaseApplication.getInstance()
+                                  .getResources()
+                                  .getString(R.string.time_day));
         return sdf.format(currenTimeZone);
       }
     }
@@ -99,9 +107,10 @@ public class TimeUtil {
                                                                           .getString(R.string.time_year) + "MM" + BaseApplication.getInstance()
                                                                                                                                  .getResources()
                                                                                                                                  .getString(
-                                                                                                                                   R.string.time_month) + "dd" +  BaseApplication.getInstance()
-                                     .getResources()
-                                     .getString(R.string.time_day));
+                                                                                                                                   R.string.time_month)
+        + "dd" + BaseApplication.getInstance()
+                                .getResources()
+                                .getString(R.string.time_day));
       return sdf.format(currenTimeZone);
     }
     calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -127,7 +136,8 @@ public class TimeUtil {
                                                                          .getString(R.string.time_month) + "d" + BaseApplication.getInstance()
                                                                                                                                 .getResources()
                                                                                                                                 .getString(
-                                                                                                                                  R.string.time_day) + " HH:mm");
+                                                                                                                                  R.string.time_day)
+          + " HH:mm");
         return sdf.format(currenTimeZone);
       } else {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy" + BaseApplication.getInstance()
@@ -135,9 +145,10 @@ public class TimeUtil {
                                                                             .getString(R.string.time_year) + "MM" + BaseApplication.getInstance()
                                                                                                                                    .getResources()
                                                                                                                                    .getString(
-                                                                                                                                     R.string.time_month) + "dd" +  BaseApplication.getInstance()
-                                       .getResources()
-                                       .getString(R.string.time_day) + " HH:mm");
+                                                                                                                                     R.string.time_month)
+          + "dd" + BaseApplication.getInstance()
+                                  .getResources()
+                                  .getString(R.string.time_day) + " HH:mm");
         return sdf.format(currenTimeZone);
       }
     }

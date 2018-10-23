@@ -48,7 +48,7 @@ public class AccountPresenterImpl extends AccountContract.AccountPresenter<Accou
   }
 
   /**
-   * 发送验证码
+   * 发送验证码 TODO  暂无api
    */
   @Override
   public void sendCode(String accountPhone) {
@@ -134,7 +134,6 @@ public class AccountPresenterImpl extends AccountContract.AccountPresenter<Accou
                     return;
                   }
                   hideProgress();
-
                   mView.createSuss(user);
                 }
 

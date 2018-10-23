@@ -1,11 +1,16 @@
 package com.domain.operationrobot.im.chatroom;
 
 import android.util.Log;
+import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
+import com.domain.operationrobot.im.bean.RootMessage1;
+import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.listener.IChatRoom;
 import com.domain.operationrobot.im.listener.IConstants;
 import com.domain.operationrobot.im.listener.IEventType;
 import com.domain.operationrobot.im.socket.AppSocket;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
 import java.util.Observable;
@@ -19,10 +24,11 @@ import org.json.JSONObject;
  */
 public class BaseChatRoom extends Observable implements IChatRoom {
 
+  private final Gson mGson;
   private String TAG = "---------";
 
   BaseChatRoom() {
-
+    mGson = new Gson();
   }
 
   private void login(int numUsers) {
@@ -77,14 +83,58 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     notifyObservers(model);
   }
 
+  /**
+   * 更新普通信息
+   */
   private void upData(JSONObject content) {
     setChanged();
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.NEW_MESSAGE);
-    ObserverModel.NewMessage newMessage = new ObserverModel.NewMessage();
-    newMessage.setContent(content);
+    JSONObject jsonObject = content.optJSONObject("data");
+    NewMessage newMessage = mGson.fromJson(jsonObject.toString(), NewMessage.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setNewMessage(newMessage);
+    notifyObservers(model);
+  }
+
+  /**
+   * 更新机器人消息
+   */
+  private void upDataRoot(JSONObject jsonObject) {
+    setChanged();
+    int type = jsonObject.optInt("type");
+    JSONObject rootBean = jsonObject.optJSONObject("rootbean");
+    switch (type) {
+      case 1:
+        parse_type_1(rootBean);
+        break;
+      case 2:
+        parse_type_2(rootBean);
+        break;
+    }
+  }
+
+  /**
+   * 解析第二种数据类型
+   */
+  private void parse_type_2(JSONObject rootBean) {
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.ROOT_MESSAGE_TYPE_2);
+    RootMessage2 newMessage = mGson.fromJson(rootBean.toString(), RootMessage2.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setRootMessage2(newMessage);
+    notifyObservers(model);
+  }
+
+  /**
+   * 机器人普通消息
+   */
+  private void parse_type_1(JSONObject rootBean) {
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.ROOT_MESSAGE_TYPE_1);
+    RootMessage1 newMessage = mGson.fromJson(rootBean.toString(), RootMessage1.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setRootMessage1(newMessage);
     notifyObservers(model);
   }
 
@@ -108,20 +158,27 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         JSONObject content = (JSONObject) args[0];
         upData(content);
         break;
+      case IConstants.CHAT_BOT_STATUS:
+        JSONObject rootData = (JSONObject) args[0];
+        JSONObject jsonObject = rootData.optJSONObject("data");
+        upDataRoot(jsonObject);
+        break;
+
       case IConstants.CONNECT_STATUS:
         JSONObject data = (JSONObject) args[0];
         try {
           String data1 = data.getString("data");
-          Log.e(TAG, "emitterListenerResut: "+data1);
+          Log.e(TAG, "emitterListenerResut: " + data1);
         } catch (JSONException e) {
           e.printStackTrace();
-        } break;
+        }
+        break;
 
       // Socket连接成功
       case Socket.EVENT_CONNECT:
         Log.e(TAG, "链接成功");
         AppSocket.getInstance()
-                 .addUser("nihao");
+                 .connTest();
         break;
       // Socket断开连接
       case Socket.EVENT_DISCONNECT:

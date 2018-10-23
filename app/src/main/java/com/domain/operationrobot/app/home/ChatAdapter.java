@@ -1,7 +1,8 @@
 package com.domain.operationrobot.app.home;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,12 @@ import com.bumptech.glide.Glide;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
-import com.domain.operationrobot.im.bean.MessageRecord;
+import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.util.TimeUtil;
 import java.util.ArrayList;
+
+import static com.domain.operationrobot.util.Constant.MESSAGE_OTHER;
+import static com.domain.operationrobot.util.Constant.MESSAGE_SELF;
 
 /**
  * Project Name : OperationRobot
@@ -37,54 +41,77 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
   @Override
   public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
     View layout = null;
-    if (type == 0) {//自己
+    if (type == MESSAGE_SELF) {//自己
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.chat_item_self, viewGroup, false);
-    } else if (type == 1) {//别人
+    } else if (type == MESSAGE_OTHER) {//别人
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.chat_item, viewGroup, false);
-    } /*else if (type == 2) {
+    } else if (type == 1) {
       layout = LayoutInflater.from(viewGroup.getContext())
-                             .inflate(R.layout.time_item, viewGroup, false);
-    }*/
-
+                             .inflate(R.layout.root_item_1, viewGroup, false);
+    } else if (type == 2) {
+      layout = LayoutInflater.from(viewGroup.getContext())
+                             .inflate(R.layout.root_item_2, viewGroup, false);
+    }
     return new MyViewHolder(layout);
   }
 
   @Override
   public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
     ChatBean chatBean = mList.get(position);
-    holder.tv_content.setText(chatBean.getContent());
-    holder.tv_name.setText(chatBean.getUserName() );
-
-    Glide.with(holder.itemView.getContext())
-         .load(chatBean.getUrl())
-         .into(holder.iv_user_img);
-    long time = chatBean.getTime() / 1000;
+    int type = chatBean.getType();
+    long time = chatBean.getTime() ;
     if (position == 0) {
       holder.tv_time.setVisibility(View.VISIBLE);
       holder.tv_time.setText(TimeUtil.getTimeStr(time));
     } else {
       ChatBean pre = mList.get(position - 1);
-      long preTime = pre.getTime() / 1000;
-      if (time - preTime < 5*60) {
+      long preTime = pre.getTime();
+      if (time - preTime < 5 * 60*1000) {
         holder.tv_time.setVisibility(View.GONE);
       } else {
         holder.tv_time.setVisibility(View.VISIBLE);
         holder.tv_time.setText(TimeUtil.getTimeStr(time));
       }
     }
+    holder.tv_name.setText(chatBean.getUserName());
+
+    if (type == -1) {
+      Glide.with(holder.itemView.getContext())
+           .load(chatBean.getUrl())
+           .into(holder.iv_user_img);
+    } else {
+      holder.iv_user_img.setImageResource(R.drawable.root_40);
+    }
+    if (holder.tv_content != null) {
+      holder.tv_content.setText(chatBean.getContent());
+    }
+    //以上是公共处理部分
+    if (type == 2) {
+      holder.rlv_recycler.setLayoutManager(new GridLayoutManager(holder.itemView.getContext(), 2) {
+        @Override
+        public boolean canScrollVertically() {
+          return false;
+        }
+      });
+      ArrayList<RootMessage2.Action> actions = chatBean.getActions();
+      holder.rlv_recycler.setAdapter(new RootBean2Adapter(actions));
+    }
   }
 
   @Override
   public int getItemViewType(int position) {
-
+    if (mList.get(position)
+             .getType() != -1) {
+      return mList.get(position)
+                  .getType();
+    }
     return mList.get(position)
                 .getUserName()
                 .equals(BaseApplication.getInstance()
                                        .getUser()
-                                       .getUsername()) ? 0 : 1;
+                                       .getUsername()) ? MESSAGE_SELF : MESSAGE_OTHER;
   }
 
   public ArrayList<ChatBean> getList() {
@@ -117,18 +144,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
   }
 
   public class MyViewHolder extends RecyclerView.ViewHolder {
-    private TextView  tv_name;
-    private TextView  tv_content;
-    private TextView  tv_time;
-    private ImageView iv_user_img;
+    private TextView     tv_name;
+    private TextView     tv_content;
+    private TextView     tv_time;
+    private ImageView    iv_user_img;
+    private RecyclerView rlv_recycler;
 
     public MyViewHolder(@NonNull View itemView) {
       super(itemView);
-
       tv_name = itemView.findViewById(R.id.tv_name);
       tv_content = itemView.findViewById(R.id.tv_content);
       tv_time = itemView.findViewById(R.id.tv_time);
       iv_user_img = itemView.findViewById(R.id.iv_user_img);
+      rlv_recycler = itemView.findViewById(R.id.rlv_recycler);
     }
   }
 }

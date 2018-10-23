@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.domain.library.base.AbsActivity;
 import com.domain.library.base.BasePresenter;
+import com.domain.library.utils.ActivityStackManager;
 import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
@@ -29,7 +32,6 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
           finish();
           break;
         case R.id.btn_create:
-          //TODO 创建公司
           createCompany();
           break;
         default:
@@ -93,29 +95,22 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
 
   @Override
   public void afterTextChanged(Editable editable) {
-    updateIvSearchStatus(autoSearchCompany.isFocused());
-    if (!autoSearchCompany.getValue()
-                          .isEmpty()) {
-      targetName = autoSearchCompany.getValue();
-      presenter.getCompanyList(targetName);
-    } else {
-      presenter.getCompanyList("");
-    }
-  }
-
-  private void updateIvSearchStatus(boolean focused) {
-    if (autoSearchCompany.getValue()
-                         .isEmpty() && !focused) {
-      ivSearch.setVisibility(View.VISIBLE);
-      adapter.updateData(this.companyList, targetName);
-    } else {
-      ivSearch.setVisibility(View.GONE);
-    }
+    targetName = autoSearchCompany.getValue();
+    presenter.getCompanyList(targetName);
   }
 
   @Override
-  public void onFocusChange(View view, boolean b) {
-    updateIvSearchStatus(b);
+  public void onFocusChange(View view, boolean focused) {
+    if (!focused) {
+      ivSearch.setVisibility(View.VISIBLE);
+      adapter.updateData(this.companyList, targetName);
+    } else {
+      if (autoSearchCompany.getValue()
+                           .isEmpty()) {
+        presenter.getCompanyList("");
+      }
+      ivSearch.setVisibility(View.GONE);
+    }
   }
 
   /**
@@ -126,7 +121,19 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
     if (companyList == null) {
       return;
     }
-    //this.companyList.add(new Company("成都云图什么名字2", "占隐蔽2", 89825));
-    adapter.updateData(this.companyList, targetName);
+    adapter.updateData(companyList, targetName);
+  }
+
+  /**
+   * 加入公司成功
+   */
+  @Override
+  public void joinSuss() {
+    startActivity(new Intent(this, MainActivity.class));
+    startActivity(new Intent(this, MainActivity.class));
+    ActivityStackManager.getInstance()
+                        .killActivity(RegisterSussActivity.class);
+
+    finish();
   }
 }

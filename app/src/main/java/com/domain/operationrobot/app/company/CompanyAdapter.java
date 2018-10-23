@@ -27,68 +27,73 @@ import java.util.ArrayList;
  */
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.MyViewHolder> {
 
-    private ArrayList<Company> data;
-    private Context context;
+  private ArrayList<Company> data;
+  private Context            context;
 
-    private String targetName;
-    private JoinCompanyContract.JoinCompanyPresenter presenter;
+  private String                                   targetName;
+  private JoinCompanyContract.JoinCompanyPresenter presenter;
 
-    private String currentUserName;
+  private String currentUserName;
 
-    public CompanyAdapter(Context context, ArrayList<Company> companyList, JoinCompanyContract.JoinCompanyPresenter presenter) {
-        this.data = companyList;
-        this.context = context;
-        this.presenter = presenter;
-        this.currentUserName = BaseApplication.getInstance().getUser() != null ? BaseApplication.getInstance().getUser().getUsername() : "请输入姓名";
+  public CompanyAdapter(Context context, ArrayList<Company> companyList, JoinCompanyContract.JoinCompanyPresenter presenter) {
+    this.data = companyList;
+    this.context = context;
+    this.presenter = presenter;
+    this.currentUserName = BaseApplication.getInstance()
+                                          .getUser()
+                                          .getUsername();
+  }
+
+  public void updateData(ArrayList<Company> data, String targetName) {
+    this.data = data;
+    this.targetName = targetName;
+    this.notifyDataSetChanged();
+  }
+
+  @NonNull
+  @Override
+  public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    View inflate = LayoutInflater.from(context)
+                                 .inflate(R.layout.company_item, null);
+    return new MyViewHolder(inflate);
+  }
+
+  @Override
+  public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+    String currentItemName = data.get(position)
+                                 .getCompany();
+    holder.tvCompanyName.setText(currentItemName);
+    if (null != targetName && currentItemName.contains(targetName)) {
+      int length = targetName.length();
+      int start = currentItemName.indexOf(targetName);
+      int end = start + length;
+      ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(context.getResources()
+                                                                               .getColor(R.color.text_333));
+      SpannableString spannableString = new SpannableString(currentItemName);
+      spannableString.setSpan(foregroundColorSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      holder.tvCompanyName.setText(spannableString);
     }
 
-    public void updateData(ArrayList<Company> data, String targetName) {
-        this.data = data;
-        this.targetName = targetName;
-        this.notifyDataSetChanged();
+    holder.itemView.setOnClickListener(new ThrottleLastClickListener() {
+      @Override
+      public void onViewClick(View v) {
+        new JoinCompanyDialog(context, data.get(position), currentUserName, presenter).show();
+      }
+    });
+  }
+
+  @Override
+  public int getItemCount() {
+    return data == null ? 0 : data.size();
+  }
+
+  class MyViewHolder extends RecyclerView.ViewHolder {
+
+    public TextView tvCompanyName;
+
+    public MyViewHolder(@NonNull View itemView) {
+      super(itemView);
+      tvCompanyName = itemView.findViewById(R.id.tv_company_name);
     }
-
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View inflate = LayoutInflater.from(context).inflate(R.layout.company_item, null);
-        return new MyViewHolder(inflate);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        String currentItemName = data.get(position).getCompany();
-        holder.tvCompanyName.setText(currentItemName);
-        if (null != targetName && currentItemName.contains(targetName)) {
-            int length = targetName.length();
-            int start = currentItemName.indexOf(targetName);
-            int end = start + length;
-            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(context.getResources().getColor(R.color.text_333));
-            SpannableString spannableString = new SpannableString(currentItemName);
-            spannableString.setSpan(foregroundColorSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.tvCompanyName.setText(spannableString);
-        }
-
-        holder.itemView.setOnClickListener(new ThrottleLastClickListener() {
-            @Override
-            public void onViewClick(View v) {
-                new JoinCompanyDialog(context, data.get(position), currentUserName, presenter).show();
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return data == null ? 0 : data.size();
-    }
-
-    class MyViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView tvCompanyName;
-
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvCompanyName = itemView.findViewById(R.id.tv_company_name);
-        }
-    }
+  }
 }

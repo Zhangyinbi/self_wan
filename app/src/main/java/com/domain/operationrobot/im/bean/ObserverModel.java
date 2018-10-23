@@ -8,20 +8,37 @@ import org.json.JSONObject;
  * @description 观察者实体类
  */
 public class ObserverModel {
-
+  //有效的
   private String mEventType;
-
-  private Login mLogin;
 
   private NewMessage mNewMessage;
 
+  private RootMessage1 mRootMessage1;
+
+  private RootMessage2 mRootMessage2;
+
+  //      无效的
+  private Login      mLogin;
   private UserJoined mUserJoined;
-
-  private UserLeft mUserLeft;
-
-  private Typing mTyping;
-
+  private UserLeft   mUserLeft;
+  private Typing     mTyping;
   private StopTyping mStopTyping;
+
+  public RootMessage2 getRootMessage2() {
+    return mRootMessage2;
+  }
+
+  public void setRootMessage2(RootMessage2 rootMessage2) {
+    mRootMessage2 = rootMessage2;
+  }
+
+  public RootMessage1 getRootMessage1() {
+    return mRootMessage1;
+  }
+
+  public void setRootMessage1(RootMessage1 rootMessage1) {
+    mRootMessage1 = rootMessage1;
+  }
 
   public String getEventType() {
     return mEventType;
@@ -88,27 +105,6 @@ public class ObserverModel {
 
     public void setNumUsers(int numUsers) {
       this.numUsers = numUsers;
-    }
-  }
-
-  public static class NewMessage {
-    private JSONObject content;
-    private long time;
-
-    public long getTime() {
-      return time;
-    }
-
-    public void setTime(long time) {
-      this.time = time;
-    }
-
-    public void setContent(JSONObject content) {
-      this.content = content;
-    }
-
-    public JSONObject getContent() {
-      return content == null ? null : content;
     }
   }
 

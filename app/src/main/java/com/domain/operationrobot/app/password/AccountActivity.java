@@ -30,6 +30,7 @@ import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 import java.lang.ref.WeakReference;
 
+import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.PHONE_LENGTH;
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 import static com.domain.operationrobot.util.Constant.VERITY_CODE_LENGTH;
@@ -160,7 +161,7 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
     tvUserServiceProtocol = findViewById(R.id.tv_user_service_protocol);
     tvSendCode = findViewById(R.id.tv_send_code);
     ivIcon = findViewById(R.id.iv_icon);
-
+    findViewById(R.id.iv_back).setOnClickListener(listener);
     btnCommit.setOnClickListener(listener);
     btnCommit.setClickable(false);
     tvUserServiceProtocol.setOnClickListener(listener);
@@ -217,10 +218,13 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
   @Override
   public void createSuss(User user) {
     SpUtils.setObject(USER_SP_KEY, user);
-    BaseApplication.getInstance().setUser(user);
+    BaseApplication.getInstance()
+                   .setUser(user);
     startActivity(new Intent(this, RegisterSussActivity.class));
+    SpUtils.putBoolean(IS_LOGIN, true);
     finish();
-    ActivityStackManager.getInstance().killActivity(LoginActivity.class);
+    ActivityStackManager.getInstance()
+                        .killActivity(LoginActivity.class);
   }
 
   /**

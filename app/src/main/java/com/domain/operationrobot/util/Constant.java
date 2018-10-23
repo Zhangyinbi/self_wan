@@ -12,6 +12,8 @@ public class Constant {
 
   public static final int VERITY_CODE_LENGTH = 5;
   public static final int PHONE_LENGTH       = 11;
+  public static final int MESSAGE_SELF = 100;
+  public static final int MESSAGE_OTHER = MESSAGE_SELF+1;
 
   public static final String USER_SP_KEY = "robot_user";
 

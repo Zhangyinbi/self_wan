@@ -7,12 +7,15 @@ package com.domain.operationrobot.im.listener;
  */
 public interface IEventType {
   String NEW_MESSAGE = "newMessage";
+  //普通模式
+  String ROOT_MESSAGE_TYPE_1 = "root_message_type_1";
+  String ROOT_MESSAGE_TYPE_2 = "root_message_type_2";
 
 
 
   /*** ****************    无效的    ***********************/
   String LOGIN       = "login";
-  String ADD_USER    = "addUser";
+  String ADD_USER    = "connTest";
   String USER_JOINED = "userJoined";
   String USER_LEFT   = "userLeft";
   String TYPING      = "typing";

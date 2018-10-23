@@ -1,5 +1,8 @@
 package com.domain.operationrobot.http.bean;
 
+import com.domain.operationrobot.im.bean.RootMessage2;
+import java.util.ArrayList;
+
 /**
  * Project Name : OperationRobot
  * description:null
@@ -8,10 +11,28 @@ package com.domain.operationrobot.http.bean;
  * Create at : 2018/10/21 16:40
  */
 public class ChatBean {
-  public  long   time;
+  public long   time;
   public String userName;
   public String content;
   public String url;
+  private int type = -1;//默认正常聊天信息  1-> 机器人消息 2
+  private ArrayList<RootMessage2.Action> actions;
+
+  public ArrayList<RootMessage2.Action> getActions() {
+    return actions;
+  }
+
+  public void setActions(ArrayList<RootMessage2.Action> actions) {
+    this.actions = actions;
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public void setType(int type) {
+    this.type = type;
+  }
 
   public long getTime() {
     return time;

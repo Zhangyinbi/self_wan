@@ -81,35 +81,36 @@ public class JoinCompanyPresenterImpl extends JoinCompanyContract.JoinCompanyPre
    * 加入公司 当前用户id可以本地获取或者传名字出去
    */
   @Override
-  public void join(long companyId) {
+  public void join(String admin,String companyName) {
     showProgress();
-    //RemoteMode.getInstance()
-    //          .joinCompany(companyId)
-    //          .subscribe(new BaseObserver<String>(getCompositeDisposable()) {
-    //            @Override
-    //            public void onError(BaseException e) {
-    //              if (mView == null) {
-    //                return;
-    //              }
-    //              hideProgress();
-    //              mView.showToast(e.getMsg());
-    //            }
-    //
-    //            @Override
-    //            public void onSuss(String companyList) {
-    //              if (mView == null) {
-    //                return;
-    //              }
-    //            }
-    //
-    //            @Override
-    //            public void onComplete() {
-    //              super.onComplete();
-    //              if (mView == null) {
-    //                return;
-    //              }
-    //              hideProgress();
-    //            }
-    //          });
+    RemoteMode.getInstance()
+              .joinCompany(admin,companyName)
+              .subscribe(new BaseObserver<Company>(getCompositeDisposable()) {
+                @Override
+                public void onError(BaseException e) {
+                  if (mView == null) {
+                    return;
+                  }
+                  hideProgress();
+                  mView.showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(Company companyList) {
+                  if (mView == null) {
+                    return;
+                  }
+                  mView.joinSuss();
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  if (mView == null) {
+                    return;
+                  }
+                  hideProgress();
+                }
+              });
   }
 }

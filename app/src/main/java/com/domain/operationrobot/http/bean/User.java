@@ -20,7 +20,7 @@ public class User extends BaseEntry implements Serializable {
   private String image;
 
   public String getImage() {
-    return image == null ? "https://www.baidu.com/img/bd_logo1.png" : image;
+    return image == null ? "" : image;
   }
 
   public void setImage(String image) {

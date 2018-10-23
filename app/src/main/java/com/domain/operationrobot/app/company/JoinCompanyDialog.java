@@ -35,7 +35,7 @@ public class JoinCompanyDialog extends AppCompatDialog {
                     break;
                 case R.id.btn_join:
                     dismiss();
-                    presenter.join(company.getCompanyId());
+                    presenter.join(company.getAdmin(),company.getCompany());
                     break;
                 default:
                     break;

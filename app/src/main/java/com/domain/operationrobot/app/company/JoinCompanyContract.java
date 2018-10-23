@@ -17,12 +17,14 @@ import java.util.ArrayList;
 public interface JoinCompanyContract {
     interface JoinCompanyView<L extends BasePresenter> extends BaseView {
         void setCompanyList(ArrayList<Company> companyList);
+
+        void joinSuss();
     }
 
     public abstract class JoinCompanyPresenter<T extends JoinCompanyView> extends BasePresenter<T> {
 
         public abstract void getCompanyList(String value);
 
-        public abstract void join(long companyId);
+        public abstract void join(String admin,String companyName);
     }
 }

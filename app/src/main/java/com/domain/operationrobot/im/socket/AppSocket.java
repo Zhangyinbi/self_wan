@@ -33,8 +33,17 @@ public class AppSocket extends BaseSocket {
   /**
    * 增加用户
    */
-  public void addUser(String username) {
-    mSocket.emit(IConstants.ADD_USER, username);
+  public void sendMessage(int type) {
+    try {
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("token", BaseApplication.getInstance()
+                                             .getUser()
+                                             .getToken());
+      jsonObject.put("type", type);
+      mSocket.emit(IConstants.CHAT_BOT, jsonObject);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -43,18 +52,21 @@ public class AppSocket extends BaseSocket {
   public void sendMessage(String content) {
     try {
       JSONObject jsonObject = new JSONObject();
-      jsonObject.put("username", BaseApplication.getInstance()
-                                                .getUser()
-                                                .getUsername());
-      jsonObject.put("room", "chat");
-      jsonObject.put("imageUrl", BaseApplication.getInstance()
-                                                .getUser()
-                                                .getImage());
+      jsonObject.put("token", BaseApplication.getInstance()
+                                             .getUser()
+                                             .getToken());
       jsonObject.put("msg", content);
       mSocket.emit(IConstants.TALK, jsonObject);
     } catch (JSONException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * 发送给机器人消息
+   */
+  public void connTest() {
+    mSocket.emit(IConstants.CONN, "...");
   }
 
   /**

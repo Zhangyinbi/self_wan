@@ -8,11 +8,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import com.domain.library.base.AbsFragment;
+import com.domain.library.utils.App;
 import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
+import com.domain.operationrobot.http.bean.RootBean;
+import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
+import com.domain.operationrobot.im.bean.RootMessage1;
+import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.chatroom.BaseChatRoom;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.im.listener.IEventType;
@@ -24,6 +29,9 @@ import java.util.Observable;
 import java.util.Observer;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_1;
+import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_2;
 
 /**
  * Project Name : OperationRobot
@@ -72,11 +80,12 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
     mRecycler.setAdapter(mAdapter);
     String list = SpUtils.getDataList("chat_data");
-    if (!TextUtils.isEmpty(list)){
+    if (!TextUtils.isEmpty(list)) {
       Gson gson = new Gson();
       ArrayList<ChatBean> chatBeans = gson.fromJson(list, new TypeToken<ArrayList<ChatBean>>() {}.getType());
       mAdapter.addAll(chatBeans);
     }
+
     mBtnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -87,8 +96,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
                                           .getUser()
                                           .getUsername();
         String url = BaseApplication.getInstance()
-                                          .getUser()
-                                          .getImage();
+                                    .getUser()
+                                    .getImage();
         if (null == mUsername) {
           return;
         }
@@ -102,7 +111,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
           return;
         }
 
-        addBeanToRecycler( mUsername, url,msg,System.currentTimeMillis());
+        addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis());
         mEtMsg.setText("");
         AppSocket.getInstance()
                  .sendMessage(msg);
@@ -143,28 +152,63 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
           final ObserverModel model = (ObserverModel) o;
           switch (model.getEventType()) {
             case IEventType.NEW_MESSAGE:
-              ObserverModel.NewMessage newMessage = model.getNewMessage();
-              JSONObject content = newMessage.getContent();
-              long time = newMessage.getTime();
-              try {
-                String username = content.getString("username");
-                String url = content.getString("imageUrl");
-                String msg = content.getString("msg");
-                if (BaseApplication.getInstance()
-                                   .getUser()
-                                   .getUsername()
-                                   .equals(username)) {
-                  return;
-                }
-                addBeanToRecycler(username,url, msg, time);
-              } catch (JSONException e) {
-                e.printStackTrace();
+              NewMessage newMessage = model.getNewMessage();
+              if (isSelfMsg(newMessage.getToken())) {
+                return;
               }
+              String username = newMessage.getUsername()
+                                          .isEmpty() ? newMessage.getMobile()
+                                                                 .isEmpty() ? "未知" : newMessage.getMobile() : newMessage.getUsername();
+              String url = newMessage.getImageUrl();
+              String msg = newMessage.getMsg();
+              long time = newMessage.getTime();
+              addBeanToRecycler(username, url, msg, time);
+              break;
+            case ROOT_MESSAGE_TYPE_1:
+              rootMsg1(model);
+              break;
+            case ROOT_MESSAGE_TYPE_2:
+              rootMsg2(model);
               break;
           }
         }
       }
     });
+  }
+
+  private void rootMsg2(ObserverModel model) {
+    ChatBean chatBean = new ChatBean();
+    chatBean.setType(2);
+    RootMessage2 rootMessage = model.getRootMessage2();
+    chatBean.setUserName("机器人");
+    chatBean.setTime(rootMessage.getTime());
+    chatBean.setContent(rootMessage.getMsg());
+    ArrayList<RootMessage2.Action> actions = rootMessage.getActions();
+    chatBean.setActions(actions);
+    mAdapter.addBeanToEnd(chatBean);
+  }
+
+  /**
+   * 更新机器人普通消息
+   */
+  private void rootMsg1(ObserverModel model) {
+    ChatBean chatBean = new ChatBean();
+    chatBean.setType(1);
+    RootMessage1 rootMessage = model.getRootMessage1();
+    chatBean.setUserName("机器人");
+    chatBean.setTime(rootMessage.getTime());
+    chatBean.setContent(rootMessage.getMsg());
+    mAdapter.addBeanToEnd(chatBean);
+  }
+
+  /**
+   * 是不是自己消息
+   */
+  private boolean isSelfMsg(String token) {
+    return BaseApplication.getInstance()
+                          .getUser()
+                          .getToken()
+                          .equals(token);
   }
 
   @Override

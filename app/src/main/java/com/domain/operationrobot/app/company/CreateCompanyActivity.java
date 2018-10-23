@@ -1,5 +1,6 @@
 package com.domain.operationrobot.app.company;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,10 +14,13 @@ import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.library.utils.ActivityStackManager;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.utils.ToastUtils;
 import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.app.home.MainActivity;
+import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
@@ -56,32 +60,42 @@ public class CreateCompanyActivity extends AbsActivity {
   };
 
   /**
-   * 创建公司
+   * 创建公司 TODO  创建公司成功 暂无api
    */
-  private void createCompany(String companyName, String email, String name) {
+  private void createCompany(final String companyName, String email, String name) {
     showProgress();
-    //RemoteMode.getInstance()
-    //          .createCompany(companyName, email, name)
-    //          .subscribe(new BaseObserver<String>(compositeDisposable) {
-    //            @Override
-    //            public void onError(BaseException e) {
-    //              hideProgress();
-    //              showToast(e.getMsg());
-    //            }
-    //
-    //            @Override
-    //            public void onSuss(String baseEntryBaseEntry) {
-    //              hideProgress();
-    //              //TODO  创建公司成功
-    //              finish();
-    //            }
-    //
-    //            @Override
-    //            public void onComplete() {
-    //              super.onComplete();
-    //              hideProgress();
-    //            }
-    //          });
+    RemoteMode.getInstance()
+              .createCompany(companyName, email, name)
+              .subscribe(new BaseObserver<Company>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(Company company) {
+                  hideProgress();
+                  ToastUtils.showToast(company.getMsg());
+                  startMain();
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
+  }
+
+  private void startMain() {
+    startActivity(new Intent(this, MainActivity.class));
+    ActivityStackManager.getInstance()
+                        .killActivity(RegisterSussActivity.class);
+    ActivityStackManager.getInstance()
+                        .killActivity(JoinCompanyActivity.class);
+
+    finish();
   }
 
   @Override

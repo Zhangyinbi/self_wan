@@ -45,16 +45,16 @@ public interface Api {
   Observable<String> sendCode(@Field("phone") String phone);
 
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
-  @GET("/api/v1/company")
-  Observable<CompanyList> getCompanyList(@Query("companyname") String companyName,@Query("token") String token);
+  @GET("/api/v1/companys")
+  Observable<CompanyList> getCompanyList(@Query("companyname") String companyName, @Query("token") String token);
 
-  @FormUrlEncoded
-  @POST("/joinCompany")
-  Observable<String> joinCompany(@Field("companyId") long companyId);
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @POST("/api/v1/member")
+  Observable<Company> joinCompany(@Body RequestBody requestBody);
 
-  @FormUrlEncoded
-  @POST("/forgetPwd")
-  Observable<String> forgetPwd(@Field("phone") String phone, @Field("password") String pwd, @Field("code") String code);
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @POST("/api/v1/user")
+  Observable<BaseEntry> forgetPwd(@Body RequestBody requestBody);
 
   @FormUrlEncoded
   @POST("/modifyPwd")
@@ -77,7 +77,7 @@ public interface Api {
    */
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @POST("/api/v1/company")
-  Observable<String> createCompany(@Body RequestBody requestBody);
+  Observable<Company> createCompany(@Body RequestBody requestBody);
 
   @FormUrlEncoded
   @POST("/editOperation")

@@ -11,8 +11,8 @@ import java.util.ArrayList;
  * @author : yinbi.zhang.o
  * Create at : 2018/10/21 00:54
  */
-public class CompanyList extends BaseEntry{
-    private ArrayList<Company> companys;
+public class CompanyList extends BaseEntry {
+  private ArrayList<Company> companys;
 
   public ArrayList<Company> getCompanys() {
     return companys == null ? new ArrayList<Company>() : companys;

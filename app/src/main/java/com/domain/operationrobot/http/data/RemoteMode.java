@@ -90,19 +90,43 @@ public class RemoteMode implements BaseMode {
   /**
    * 加入公司
    */
-  public Observable<String> joinCompany(long companyId) {
+  public Observable<Company> joinCompany(String admin, String companyName) {
+
+    JSONObject root = new JSONObject();
+    try {
+      root.put("username", admin);
+      root.put("companyname", companyName);
+      root.put("token", BaseApplication.getInstance()
+                                       .getUser()
+                                       .getToken());
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .joinCompany(companyId);
+                         .joinCompany(requestBody);
   }
 
   /**
    * 忘记密码
    */
-  public Observable<String> forgetPwd(String phone, String pwd, String code) {
+  public Observable<BaseEntry> forgetPwd(String phone, String pwd, String code) {
+
+    JSONObject root = new JSONObject();
+    try {
+      root.put("smsvc", code);
+      root.put("newpassword", pwd);
+      root.put("mobile", phone);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .forgetPwd(phone, pwd, code);
+                         .forgetPwd(requestBody);
   }
 
   /**
@@ -150,7 +174,7 @@ public class RemoteMode implements BaseMode {
   /**
    * 创建公司
    */
-  public Observable<String> createCompany(String companyName, String email, String name) {
+  public Observable<Company> createCompany(String companyName, String email, String name) {
     JSONObject root = new JSONObject();
     try {
       root.put("email", email);

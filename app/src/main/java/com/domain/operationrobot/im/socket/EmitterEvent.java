@@ -32,6 +32,7 @@ public class EmitterEvent {
         emitterEventMap.put(Socket.EVENT_RECONNECTING, null);
         emitterEventMap.put(IConstants.TALK_STATUS, null);
         emitterEventMap.put(IConstants.CONNECT_STATUS, null);
+        emitterEventMap.put(IConstants.CHAT_BOT_STATUS, null);
 
 
 

@@ -33,6 +33,7 @@ public class RegisterSussActivity extends AbsActivity implements JoinCompanyCont
           createCompany();
           break;
         case R.id.btn_look_around:
+          onBackPressed();
           break;
         default:
           break;
@@ -65,6 +66,8 @@ public class RegisterSussActivity extends AbsActivity implements JoinCompanyCont
     findViewById(R.id.btn_join_company).setOnClickListener(listener);
     findViewById(R.id.btn_create_company).setOnClickListener(listener);
     findViewById(R.id.btn_look_around).setOnClickListener(listener);
+
+    //TODO  注册成功要不要弹出一个默认的公司
     //String name = BaseApplication.getInstance()
     //                             .getUser() != null ? BaseApplication.getInstance()
     //                                                                 .getUser()
@@ -84,6 +87,11 @@ public class RegisterSussActivity extends AbsActivity implements JoinCompanyCont
 
   @Override
   public void setCompanyList(ArrayList<Company> companyList) {
+
+  }
+
+  @Override
+  public void joinSuss() {
 
   }
 

@@ -1,5 +1,7 @@
 package com.domain.operationrobot.http.bean;
 
+import com.domain.library.http.entry.BaseEntry;
+
 /**
  * Project Name : OperationRobot
  * description:null
@@ -7,26 +9,34 @@ package com.domain.operationrobot.http.bean;
  * @author : yinbi.zhang.o
  * Create at : 2018/10/13 05:21
  */
-public class Company {
-    private String company;
-    private String admin;
-    private long companyId = -1;
+public class Company extends BaseEntry {
+  private String companyname;
+  private String username;
+  private String email;
+  private int    role;
 
-    public Company(String companyName, String adminName, long companyId) {
-        this.company = companyName;
-        this.admin = adminName;
-        this.companyId = companyId;
-    }
+  private String admin;
+  private String company;
 
-    public long getCompanyId() {
-        return companyId;
-    }
+  public Company(String companyName, String adminName) {
+    this.companyname = companyName;
+    this.username = adminName;
+  }
 
-    public String getAdmin() {
-        return admin == null ? "" : admin;
-    }
+  public String getEmail() {
+    return email == null ? "" : email;
+  }
 
-    public String getCompany() {
-        return company == null ? "" : company;
-    }
+  public int getRole() {
+    return role;
+  }
+
+
+  public String getAdmin() {
+    return username == null ? admin : username;
+  }
+
+  public String getCompany() {
+    return companyname == null ? company : companyname;
+  }
 }

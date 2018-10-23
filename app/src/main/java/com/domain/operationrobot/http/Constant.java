@@ -9,5 +9,5 @@ package com.domain.operationrobot.http;
  */
 public class Constant {
     public static final String BASE_API = "139.196.07.14";
-    public static final String BASE_API_QA = "vom-api-qa.nio.com";
+    public static final String BASE_API_QA = "139.196.07.14";
 }

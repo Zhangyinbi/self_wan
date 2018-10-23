@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
+import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.utils.ToastUtils;
@@ -163,26 +164,27 @@ public class ForgetPwdActivity extends AbsActivity {
    */
   private void commit(String phone, String pwd, String code) {
     showProgress();
-    //RemoteMode.getInstance()
-    //          .forgetPwd(phone, pwd, code)
-    //          .subscribe(new BaseObserver<String>(compositeDisposable) {
-    //            @Override
-    //            public void onError(BaseException e) {
-    //              hideProgress();
-    //              showToast(e.getMsg());
-    //            }
-    //
-    //            @Override
-    //            public void onSuss(String userBaseEntry) {
-    //              hideProgress();
-    //              createSuss();
-    //            }
-    //            @Override
-    //            public void onComplete() {
-    //              super.onComplete();
-    //              hideProgress();
-    //            }
-    //          });
+    RemoteMode.getInstance()
+              .forgetPwd(phone, pwd, code)
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(BaseEntry baseEntry) {
+                  hideProgress();
+                  resetPwdSuss();
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
   }
 
   public void sendCode(String accountPhone) {
@@ -224,7 +226,8 @@ public class ForgetPwdActivity extends AbsActivity {
   /**
    * 修改密码成功
    */
-  private void createSuss() {
+  private void resetPwdSuss() {
+    finish();
   }
 
   @Override
