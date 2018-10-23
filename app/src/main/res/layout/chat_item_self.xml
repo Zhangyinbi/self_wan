@@ -21,8 +21,8 @@
         android:textSize="@dimen/dimens_12sp"
         android:visibility="gone"
         />
-    <TextView
-        android:id="@+id/tv_content"
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimens_18"
@@ -30,14 +30,21 @@
         android:layout_weight="1"
         android:background="@drawable/bg_white_big_round"
         android:gravity="end"
-        android:lineSpacingExtra="5dp"
-        android:paddingBottom="14dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="@dimen/dimens_12"
-        android:textColor="#020202"
-        android:textSize="@dimen/dimens_16sp"
-        />
+        >
+      <TextView
+          android:id="@+id/tv_content"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:lineSpacingExtra="5dp"
+          android:paddingBottom="14dp"
+          android:paddingLeft="12dp"
+          android:paddingRight="12dp"
+          android:paddingTop="@dimen/dimens_12"
+          android:textColor="#020202"
+          android:textSize="@dimen/dimens_16sp"
+          />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/iv_user_img"
         android:layout_width="@dimen/dimens_40"

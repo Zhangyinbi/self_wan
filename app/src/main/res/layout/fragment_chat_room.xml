@@ -32,11 +32,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:ellipsize="end"
-        android:imeActionId="@+id/send"
         android:imeOptions="actionSend"
         android:inputType="text"
-        android:maxLines="1"
+        android:maxLines="4"
         />
 
     <ImageButton
