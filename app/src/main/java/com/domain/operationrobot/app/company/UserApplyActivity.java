@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import android.view.View;
 import com.domain.library.base.AbsActivity;
 import com.domain.operationrobot.R;
 
@@ -27,6 +28,12 @@ public class UserApplyActivity extends AbsActivity {
 
     @Override
     protected void initView() {
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         rlv_recycler = findViewById(R.id.rlv_recycler);
         UserApplyAdapter userApplyAdapter = new UserApplyAdapter(this);
         rlv_recycler.setLayoutManager(new LinearLayoutManager(this));

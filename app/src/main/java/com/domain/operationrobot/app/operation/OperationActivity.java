@@ -29,8 +29,8 @@ import static com.domain.operationrobot.util.Constant.OPERATION_REQUEST_CODE;
 import static com.domain.operationrobot.util.Constant.PHONE_LENGTH;
 
 public class OperationActivity extends AbsActivity {
-    private static final int ADD_OPERATION = 0x132;
-    private static final int EDIT_OPERATION = ADD_OPERATION + 1;
+    public static final int ADD_OPERATION = 0x132;
+    public static final int EDIT_OPERATION = ADD_OPERATION + 1;
     private static String TYPE = "type";
     private static String EXTRA_BEAN = "operationBean";
     private int type = 0;

@@ -27,7 +27,7 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 28
     versionCode = 1
-    versionName = "1.0"
+    versionName = "1.0.0"
 
 
     rxjava2_versions = "2.1.9"

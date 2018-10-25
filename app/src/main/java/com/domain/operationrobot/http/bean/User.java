@@ -15,7 +15,7 @@ public class User extends BaseEntry implements Serializable {
   private String token;
   private String company;
   private String email;
-  private String role;
+  private int    role;
   private String username;
   private String image;
 
@@ -43,8 +43,8 @@ public class User extends BaseEntry implements Serializable {
     return email == null ? "" : email;
   }
 
-  public String getRole() {
-    return role == null ? "" : role;
+  public int getRole() {
+    return role;
   }
 
   public String getUsername() {
