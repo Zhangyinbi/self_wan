@@ -98,6 +98,9 @@ public class MainActivity extends AbsActivity {
           openOrCloseDrawer();
           break;
         case R.id.tv_top:
+          if (drawer.isDrawerOpen(GravityCompat.START)) {
+            return;
+          }
           if (mRole == 1) {
             startActivity(new Intent(MainActivity.this, ApplyActivity.class));
           } else if (mRole == 2) {

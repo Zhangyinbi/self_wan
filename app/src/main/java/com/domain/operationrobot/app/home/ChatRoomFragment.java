@@ -3,21 +3,26 @@ package com.domain.operationrobot.app.home;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.domain.library.base.AbsFragment;
-import com.domain.library.utils.App;
 import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
-import com.domain.operationrobot.http.bean.RootBean;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
 import com.domain.operationrobot.im.bean.RootMessage2;
+import com.domain.operationrobot.im.bean.RootMessage34;
+import com.domain.operationrobot.im.bean.RootMessage6;
 import com.domain.operationrobot.im.chatroom.BaseChatRoom;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.im.listener.IEventType;
@@ -27,11 +32,11 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_1;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_2;
+import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_34;
+import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_6;
 
 /**
  * Project Name : OperationRobot
@@ -41,10 +46,12 @@ import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE
  * Create at : 2018/10/21 13:51
  */
 public class ChatRoomFragment extends AbsFragment implements Observer {
-  private ImageButton  mBtnSend;
+  boolean clear = false;
+  private TextView     mBtnSend;
   private EditText     mEtMsg;
   private RecyclerView mRecycler;
   private ChatAdapter  mAdapter;
+  private ImageView    mIvRobot;
 
   public static ChatRoomFragment newInstance() {
     ChatRoomFragment fragment = new ChatRoomFragment();
@@ -74,7 +81,56 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mEtMsg = view.findViewById(R.id.et_msg);
     mBtnSend = view.findViewById(R.id.btn_send);
     mRecycler = view.findViewById(R.id.rlv_recycler);
+    mIvRobot = view.findViewById(R.id.iv_robot);
+    mIvRobot.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        String s = mEtMsg.getText()
+                         .toString();
+        s += "@机器人";
+        mEtMsg.setText(s);
+        mEtMsg.setSelection(s.length());
+      }
+    });
+    mEtMsg.setOnKeyListener(new View.OnKeyListener() {
+      @Override
+      public boolean onKey(View view, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+          if ("@机器人".contains(mEtMsg.getText()
+                                    .toString()) && clear) {
+            mEtMsg.setText("");
+            clear = false;
+            return true;
+          }
+        }
+        return false;
+      }
+    });
+    mEtMsg.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (charSequence.toString()
+                        .equals("@机器人")) {
+          clear = true;
+        }
+      }
 
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+        if (mEtMsg.getText()
+                  .toString()
+                  .isEmpty()) {
+          mBtnSend.setVisibility(View.INVISIBLE);
+        } else {
+          mBtnSend.setVisibility(View.VISIBLE);
+        }
+      }
+    });
     mAdapter = new ChatAdapter(new ArrayList<ChatBean>());
     mAdapter.setRecycler(mRecycler);
     mRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -89,42 +145,62 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mBtnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        String msg = mEtMsg.getText()
-                           .toString()
-                           .trim();
-        String mUsername = BaseApplication.getInstance()
-                                          .getUser()
-                                          .getUsername();
-        String url = BaseApplication.getInstance()
-                                    .getUser()
-                                    .getImage();
-        if (null == mUsername) {
-          return;
-        }
-
-        if (TextUtils.isEmpty(msg)) {
-          return;
-        }
-        if (!AppSocket.getInstance()
-                      .isConnected()) {
-          MainChatRoom.init();
-          return;
-        }
-
-        addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis());
-        mEtMsg.setText("");
-        AppSocket.getInstance()
-                 .sendMessage(msg);
+        sendMsg();
       }
     });
   }
 
-  private void addBeanToRecycler(String username, String url, String content, long l) {
+  /**
+   * 发送消息
+   */
+  private void sendMsg() {
+    String msg = mEtMsg.getText()
+                       .toString()
+                       .trim();
+    String mUsername = BaseApplication.getInstance()
+                                      .getUser()
+                                      .getUsername();
+    String url = BaseApplication.getInstance()
+                                .getUser()
+                                .getImage();
+    if (null == mUsername) {
+      return;
+    }
+
+    if (TextUtils.isEmpty(msg)) {
+      return;
+    }
+    if (!AppSocket.getInstance()
+                  .isConnected()) {
+      MainChatRoom.init();
+      return;
+    }
+
+    addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), BaseApplication.getInstance()
+                                                                                      .getUser()
+                                                                                      .getToken());
+    mEtMsg.setText("");
+    if (msg.contains("@机器人")) {
+      AppSocket.getInstance()
+               .sendMessage(2, msg);
+      //TODO 测试代码
+      String json
+        = "{\"data\":{\"type\":2,\"rootbean\":{\"msg\":\"小机器人，你赶紧学习呀\",\"actions\":[{\"name\":\"查看主机cpu\",\"type\":\"3\"},{\"name\":\"查看主机内存\",\"type\":\"4\"},{\"name\":\"查看主机监控\",\"type\":\"5\"},{\"name\":\"查看磁盘状态\",\"type\":\"6\"},{\"name\":\"查看CPU温度\",\"type\":\"7\"},{\"name\":\"查看流量状态\",\"type\":\"8\"}]}}}";
+      MainChatRoom.getInstance()
+                  .moni(json);
+    } else {
+      AppSocket.getInstance()
+               .sendMessage(msg);
+    }
+  }
+
+  private void addBeanToRecycler(String username, String url, String content, long l, String token) {
     ChatBean message = new ChatBean();
     message.setUserName(username);
     message.setContent(content);
     message.setUrl(url);
     message.setTime(l);
+    message.setToken(token);
     mAdapter.addBeanToEnd(message);
   }
 
@@ -162,7 +238,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               String url = newMessage.getImageUrl();
               String msg = newMessage.getMsg();
               long time = newMessage.getTime();
-              addBeanToRecycler(username, url, msg, time);
+              String token = newMessage.getToken();
+              addBeanToRecycler(username, url, msg, time, token);
               break;
             case ROOT_MESSAGE_TYPE_1:
               rootMsg1(model);
@@ -170,10 +247,46 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
             case ROOT_MESSAGE_TYPE_2:
               rootMsg2(model);
               break;
+            case ROOT_MESSAGE_TYPE_6:
+              rootMsg6(model);
+              break;
+            case ROOT_MESSAGE_TYPE_34:
+              rootMsg34(model);
+              break;
           }
         }
       }
     });
+  }
+
+  /**
+   * cpu 和 内存
+   */
+  private void rootMsg34(ObserverModel model) {
+    ChatBean chatBean = new ChatBean();
+    chatBean.setType(34);
+    RootMessage34 rootMessage = model.getRootMessage34();
+    chatBean.setUserName("机器人");
+    chatBean.setTime(rootMessage.getTime());
+    chatBean.setContent(rootMessage.getMsg());
+    ArrayList<RootMessage34.Action> actions = rootMessage.getActions();
+    chatBean.setActions34(actions);
+    mAdapter.addBeanToEnd(chatBean);
+  }
+
+  /**
+   * 磁盘使用情狂
+   */
+  private void rootMsg6(ObserverModel model) {
+    ChatBean chatBean = new ChatBean();
+    chatBean.setType(6);
+    RootMessage6 rootMessage = model.getRootMessage6();
+    chatBean.setUserName("机器人");
+    chatBean.setTime(rootMessage.getTime());
+    chatBean.setContent(rootMessage.getMsg());
+    ArrayList<RootMessage6.Action> actions = rootMessage.getActions();
+    chatBean.setActions6(actions);
+    mAdapter.addBeanToEnd(chatBean);
   }
 
   private void rootMsg2(ObserverModel model) {

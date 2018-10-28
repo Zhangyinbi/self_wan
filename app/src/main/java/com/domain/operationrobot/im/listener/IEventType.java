@@ -6,12 +6,17 @@ package com.domain.operationrobot.im.listener;
  * @description
  */
 public interface IEventType {
-  String NEW_MESSAGE = "newMessage";
+  String NEW_MESSAGE         = "newMessage";
   //普通模式
   String ROOT_MESSAGE_TYPE_1 = "root_message_type_1";
+
   String ROOT_MESSAGE_TYPE_2 = "root_message_type_2";
 
+  //磁盘
+  String ROOT_MESSAGE_TYPE_6 = "root_message_type_6";
 
+  //内存  和 cpu
+  String ROOT_MESSAGE_TYPE_34 = "root_message_type_34";
 
   /*** ****************    无效的    ***********************/
   String LOGIN       = "login";

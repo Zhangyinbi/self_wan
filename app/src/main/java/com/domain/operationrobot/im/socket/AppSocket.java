@@ -33,13 +33,17 @@ public class AppSocket extends BaseSocket {
   /**
    * 增加用户
    */
-  public void sendMessage(int type) {
+  public void sendMessage(int type, String content) {
     try {
       JSONObject jsonObject = new JSONObject();
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
+      jsonObject.put("token", BaseApplication.getInstance()
+                                             .getUser()
+                                             .getToken());
       jsonObject.put("type", type);
+      jsonObject.put("msg", content);
       mSocket.emit(IConstants.CHAT_BOT, jsonObject);
     } catch (JSONException e) {
       e.printStackTrace();

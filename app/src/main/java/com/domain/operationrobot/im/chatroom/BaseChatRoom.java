@@ -5,6 +5,8 @@ import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
 import com.domain.operationrobot.im.bean.RootMessage2;
+import com.domain.operationrobot.im.bean.RootMessage34;
+import com.domain.operationrobot.im.bean.RootMessage6;
 import com.domain.operationrobot.im.listener.IChatRoom;
 import com.domain.operationrobot.im.listener.IConstants;
 import com.domain.operationrobot.im.listener.IEventType;
@@ -111,6 +113,37 @@ public class BaseChatRoom extends Observable implements IChatRoom {
       case 2:
         parse_type_2(rootBean);
         break;
+      case 3://cpu
+        parse_type_34(rootBean);
+        break;
+      case 4:
+        parse_type_34(rootBean);
+        break;
+      case 5:
+        parse_type_2(rootBean);
+        break;
+      case 6://磁盘
+        parse_type_6(rootBean);
+        break;
+      case 7:
+        parse_type_2(rootBean);
+        break;
+      case 8:
+        parse_type_2(rootBean);
+        break;
+    }
+  }
+
+
+
+  public void moni(String json) {
+    JSONObject rootData = null;
+    try {
+      rootData = new JSONObject(json);
+      JSONObject jsonObject = rootData.optJSONObject("data");
+      upDataRoot(jsonObject);
+    } catch (JSONException e) {
+      e.printStackTrace();
     }
   }
 
@@ -123,6 +156,29 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     RootMessage2 newMessage = mGson.fromJson(rootBean.toString(), RootMessage2.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setRootMessage2(newMessage);
+    notifyObservers(model);
+  }
+  /**
+   * cpu  内存
+   */
+  private void parse_type_34(JSONObject rootBean) {
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.ROOT_MESSAGE_TYPE_34);
+    RootMessage34 newMessage = mGson.fromJson(rootBean.toString(), RootMessage34.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setRootMessage34(newMessage);
+    notifyObservers(model);
+  }
+
+  /**
+   * 磁盘使用状况
+   */
+  private void parse_type_6(JSONObject rootBean) {
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.ROOT_MESSAGE_TYPE_6);
+    RootMessage6 newMessage = mGson.fromJson(rootBean.toString(), RootMessage6.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setRootMessage6(newMessage);
     notifyObservers(model);
   }
 

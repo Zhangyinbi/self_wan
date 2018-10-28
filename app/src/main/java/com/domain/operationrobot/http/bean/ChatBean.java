@@ -1,6 +1,9 @@
 package com.domain.operationrobot.http.bean;
 
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.im.bean.RootMessage2;
+import com.domain.operationrobot.im.bean.RootMessage34;
+import com.domain.operationrobot.im.bean.RootMessage6;
 import java.util.ArrayList;
 
 /**
@@ -11,12 +14,34 @@ import java.util.ArrayList;
  * Create at : 2018/10/21 16:40
  */
 public class ChatBean {
-  public long   time;
-  public String userName;
-  public String content;
-  public String url;
+  public  long   time;
+  public  String userName;
+  public  String content;
+  public  String url;
+  private String token;
   private int type = -1;//默认正常聊天信息  1-> 机器人消息 2
   private ArrayList<RootMessage2.Action> actions;
+
+  /**
+   * 磁盘
+   */
+  private ArrayList<RootMessage6.Action>  actions6;
+  /**
+   * cpu 和 内存
+   */
+  private ArrayList<RootMessage34.Action> actions34;
+
+  public ArrayList<RootMessage34.Action> getActions34() {
+    return  actions34;
+  }
+
+  public ArrayList<RootMessage6.Action> getActions6() {
+    return actions6;
+  }
+
+  public void setActions6(ArrayList<RootMessage6.Action> actions6) {
+    this.actions6 = actions6;
+  }
 
   public ArrayList<RootMessage2.Action> getActions() {
     return actions;
@@ -24,6 +49,18 @@ public class ChatBean {
 
   public void setActions(ArrayList<RootMessage2.Action> actions) {
     this.actions = actions;
+  }
+
+  public void setActions34(ArrayList<RootMessage34.Action> actions34) {
+    this.actions34 = actions34;
+  }
+
+  public String getToken() {
+    return token == null ? "" : token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
   }
 
   public int getType() {

@@ -9,6 +9,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:gravity="right"
       android:orientation="horizontal"
       >
     <TextView
@@ -23,11 +24,10 @@
         />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimens_18"
         android:layout_marginRight="@dimen/dimens_6"
-        android:layout_weight="1"
         android:background="@drawable/bg_white_big_round"
         android:gravity="end"
         >

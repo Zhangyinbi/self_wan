@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 /**
  * Project Name : OperationRobot
- * description:null
+ * description:cpu he 内存
  *
  * @author : yinbi.zhang.o
  * Create at : 2018/10/23 22:34
  */
-public class RootMessage2 {
+public class RootMessage34 {
   private long              time;
   private String            msg;
   private ArrayList<Action> actions;
@@ -31,41 +31,31 @@ public class RootMessage2 {
   }
 
   public ArrayList<Action> getActions() {
-    return actions;
+    return actions == null ? new ArrayList<Action>() : actions;
   }
 
   public void setActions(ArrayList<Action> actions) {
     this.actions = actions;
   }
 
-  @Override
-  public String toString() {
-    return "RootMessage2{" + "time=" + time + ", msg='" + msg + '\'' + ", actions=" + actions + '}';
-  }
-
   public class Action {
-    private String name;
-    private String type;
+    private String title;
+    private int ratio;
 
-    public String getName() {
-      return name == null ? "" : name;
+    public String getTitle() {
+      return title == null ? "" : title;
     }
 
-    public void setName(String name) {
-      this.name = name;
+    public void setTitle(String title) {
+      this.title = title;
     }
 
-    public String getType() {
-      return type == null ? "-1" : type;
+    public int getRatio() {
+      return  ratio;
     }
 
-    public void setId(String id) {
-      this.type = id;
-    }
-
-    @Override
-    public String toString() {
-      return "Action{" + "name='" + name + '\'' + ", id='" + type + '\'' + '}';
+    public void setRatio(int ratio) {
+      this.ratio = ratio;
     }
   }
 }

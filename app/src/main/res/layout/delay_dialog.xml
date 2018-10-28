@@ -9,8 +9,8 @@
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="147dp"
-      android:layout_marginLeft="48dp"
-      android:layout_marginRight="48dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
       android:background="@drawable/tc_bg_first"
       android:orientation="vertical"
       >
@@ -61,8 +61,8 @@
   <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="48dp"
-      android:layout_marginRight="48dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
       android:background="@color/white"
       android:gravity="center"
       android:paddingLeft="@dimen/dimens_22"
@@ -75,8 +75,8 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="48dp"
-      android:layout_marginRight="48dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
       android:background="@color/white"
       >
     <LinearLayout

@@ -27,7 +27,7 @@ public class DelayDialog extends AppCompatDialog {
   }
 
   private void init() {
-    setContentView(R.layout.apply_dialog);
+    setContentView(R.layout.delay_dialog);
     getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
     findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
       @Override

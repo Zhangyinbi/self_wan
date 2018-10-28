@@ -16,6 +16,10 @@ public class ObserverModel {
   private RootMessage1 mRootMessage1;
 
   private RootMessage2 mRootMessage2;
+  //磁盘使用
+  private RootMessage6 mRootMessage6;
+  //cpu 和 内存
+  private RootMessage34 mRootMessage34;
 
   //      无效的
   private Login      mLogin;
@@ -23,6 +27,14 @@ public class ObserverModel {
   private UserLeft   mUserLeft;
   private Typing     mTyping;
   private StopTyping mStopTyping;
+
+  public RootMessage34 getRootMessage34() {
+    return  mRootMessage34;
+  }
+
+  public void setRootMessage34(RootMessage34 rootMessage34) {
+    mRootMessage34 = rootMessage34;
+  }
 
   public RootMessage2 getRootMessage2() {
     return mRootMessage2;
@@ -94,6 +106,14 @@ public class ObserverModel {
 
   public void setStopTyping(StopTyping stopTyping) {
     mStopTyping = stopTyping;
+  }
+
+  public RootMessage6 getRootMessage6() {
+    return mRootMessage6;
+  }
+
+  public void setRootMessage6(RootMessage6 rootMessage6) {
+    mRootMessage6 = rootMessage6;
   }
 
   public static class Login {

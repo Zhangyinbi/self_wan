@@ -14,6 +14,8 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
 import com.domain.operationrobot.im.bean.RootMessage2;
+import com.domain.operationrobot.im.bean.RootMessage34;
+import com.domain.operationrobot.im.bean.RootMessage6;
 import com.domain.operationrobot.util.TimeUtil;
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     } else if (type == 1) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_1, viewGroup, false);
-    } else if (type == 2) {
+    } else if (type == 2 || type == 6 || type == 34) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_2, viewGroup, false);
     }
@@ -61,14 +63,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
   public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
     ChatBean chatBean = mList.get(position);
     int type = chatBean.getType();
-    long time = chatBean.getTime() ;
+    long time = chatBean.getTime();
     if (position == 0) {
       holder.tv_time.setVisibility(View.VISIBLE);
       holder.tv_time.setText(TimeUtil.getTimeStr(time));
     } else {
       ChatBean pre = mList.get(position - 1);
       long preTime = pre.getTime();
-      if (time - preTime < 5 * 60*1000) {
+      if (time - preTime < 5 * 60 * 1000) {
         holder.tv_time.setVisibility(View.GONE);
       } else {
         holder.tv_time.setVisibility(View.VISIBLE);
@@ -97,6 +99,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
       });
       ArrayList<RootMessage2.Action> actions = chatBean.getActions();
       holder.rlv_recycler.setAdapter(new RootBean2Adapter(actions));
+    } else if (type == 6) {
+      holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
+        @Override
+        public boolean canScrollVertically() {
+          return false;
+        }
+      });
+      ArrayList<RootMessage6.Action> actions = chatBean.getActions6();
+      holder.rlv_recycler.setAdapter(new RootBean6Adapter(actions));
+    }
+    if (type == 34) {
+      holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
+        @Override
+        public boolean canScrollVertically() {
+          return false;
+        }
+      });
+      ArrayList<RootMessage34.Action> actions = chatBean.getActions34();
+      holder.rlv_recycler.setAdapter(new RootBean34Adapter(actions));
     }
   }
 
@@ -108,10 +129,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                   .getType();
     }
     return mList.get(position)
-                .getUserName()
+                .getToken()
                 .equals(BaseApplication.getInstance()
                                        .getUser()
-                                       .getUsername()) ? MESSAGE_SELF : MESSAGE_OTHER;
+                                       .getToken()) ? MESSAGE_SELF : MESSAGE_OTHER;
   }
 
   public ArrayList<ChatBean> getList() {
