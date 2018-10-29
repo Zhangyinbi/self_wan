@@ -195,7 +195,7 @@ public class MainActivity extends AbsActivity {
       } else {
         transaction.show(targetFragment);
       }
-      transaction.commitNowAllowingStateLoss();
+      transaction.commit();
       mCurrentFragment = targetFragment;
     } catch (Exception e) {
       e.printStackTrace();

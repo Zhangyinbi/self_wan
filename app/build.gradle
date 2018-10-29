@@ -11,6 +11,17 @@ android {
     versionCode rootProject.ext.versionCode
     versionName rootProject.ext.versionName
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+
+
+    multiDexEnabled true
+  }
+
+  lintOptions {
+    checkReleaseBuilds false
+    // Or, if you prefer, you can continue to check for errors in release builds,
+    // but continue the build even when errors are found:
+    abortOnError false
   }
   buildTypes {
     release {
@@ -41,7 +52,11 @@ dependencies {
   implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.2'
   implementation 'io.socket:socket.io-client:0.8.3'
 
-
   implementation 'com.github.bumptech.glide:glide:4.6.1'
   annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+  implementation 'com.android.support:multidex:1.0.1'
+
+
+
+  implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 }

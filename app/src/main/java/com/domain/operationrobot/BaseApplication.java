@@ -3,23 +3,18 @@ package com.domain.operationrobot;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import android.support.multidex.MultiDex;
 import com.domain.library.BaseApplicationController;
 import com.domain.library.exception.AppUncaughtExceptionHandler;
 import com.domain.library.exception.SdcardConfig;
 import com.domain.library.http.RetrofitHelper;
-import com.domain.library.utils.ActivityStackManager;
 import com.domain.library.utils.SpUtils;
-import com.domain.operationrobot.http.api.ApiProviderImp;
-import com.domain.operationrobot.http.bean.ChatBean;
 import com.domain.operationrobot.http.bean.User;
-import com.domain.operationrobot.http.env.EnvManager;
-import com.domain.operationrobot.im.chatroom.MainChatRoom;
-import java.util.ArrayList;
 
-import static com.domain.operationrobot.http.Constant.BASE_API;
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
@@ -68,6 +63,7 @@ public class BaseApplication extends Application {
     super.onCreate();
     BaseApplicationController.init(this, BuildConfig.DEBUG);
     SpUtils.init(this);
+    galleryInit();
     mInstance = this;
     initRetrofit();
     // 初始化文件目录
@@ -77,6 +73,17 @@ public class BaseApplication extends Application {
     AppUncaughtExceptionHandler crashHandler = AppUncaughtExceptionHandler.getInstance();
     crashHandler.init(getApplicationContext());
     createNotificationChannel();
+  }
+
+  private void galleryInit() {
+
+
+  }
+
+  @Override
+  protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    MultiDex.install(this);
   }
 
   private void initRetrofit() {

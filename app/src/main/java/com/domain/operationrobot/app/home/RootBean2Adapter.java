@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
@@ -49,16 +50,19 @@ public class RootBean2Adapter extends RecyclerView.Adapter<RootBean2Adapter.MyVi
         //TODO 测试代码
         switch (Integer.parseInt(type)) {
           case 3://cpu
-            String s3="{\"data\":{\"type\":3,\"rootbean\":{\"msg\":\"当前温江机房大数据中心服务器003 (ip:201.20.103.36）CPU运行情况：\",\"actions\":[{\"title\":\"CPU\",\"ratio\":\"35\"}]}}}";
+            String s3
+              = "{\"data\":{\"type\":3,\"rootbean\":{\"msg\":\"当前温江机房大数据中心服务器003 (ip:201.20.103.36）CPU运行情况：\",\"actions\":[{\"title\":\"CPU\",\"ratio\":\"35\"}]}}}";
             MainChatRoom.getInstance()
                         .moni(s3);
             break;
           case 4://内存
-            String s4="{\"data\":{\"type\":4,\"rootbean\":{\"msg\":\"当前温江机房大数据中心服务器003（ip:201.20.103.36）内存运行情况 12G/15G:\",\"actions\":[{\"title\":\"内存\",\"ratio\":\"85\"}]}}}";
+            String s4
+              = "{\"data\":{\"type\":4,\"rootbean\":{\"msg\":\"当前温江机房大数据中心服务器003（ip:201.20.103.36）内存运行情况 12G/15G:\",\"actions\":[{\"title\":\"内存\",\"ratio\":\"85\"}]}}}";
             MainChatRoom.getInstance()
                         .moni(s4);
             break;
           case 5:
+            ToastUtils.showToast("sorry,暂时还没有功能");
             break;
           case 6://磁盘
             String s6
@@ -67,8 +71,10 @@ public class RootBean2Adapter extends RecyclerView.Adapter<RootBean2Adapter.MyVi
                         .moni(s6);
             break;
           case 7:
+            ToastUtils.showToast("sorry,暂时还没有功能");
             break;
           case 8:
+            ToastUtils.showToast("sorry,暂时还没有功能");
             break;
         }
       }
