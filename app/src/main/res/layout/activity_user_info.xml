@@ -35,6 +35,7 @@
   </RelativeLayout>
 
   <LinearLayout
+      android:id="@+id/ll_modify_header_image"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/dimens_10"
@@ -56,8 +57,9 @@
         />
 
     <com.domain.operationrobot.glide.CircleImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/civ_user_img"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
         android:src="@drawable/grzl_tx"
         />
 
@@ -82,6 +84,7 @@
       >
 
     <LinearLayout
+        android:id="@+id/ll_modify_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -101,6 +104,7 @@
           />
 
       <TextView
+          android:id="@+id/tv_user_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="刘德华"
@@ -123,6 +127,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/ll_modify_mobile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -142,6 +147,7 @@
           />
 
       <TextView
+          android:id="@+id/tv_mobile"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="15256328965"
@@ -159,6 +165,8 @@
   </LinearLayout>
 
   <LinearLayout
+      android:id="@+id/ll_company"
+      android:visibility="gone"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/dimens_10"
@@ -185,6 +193,7 @@
           />
 
       <TextView
+          android:id="@+id/tv_company_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="成都云图控股股份有限公司"
@@ -194,6 +203,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_out_company"
         android:layout_width="100dp"
         android:layout_height="38dp"
         android:layout_gravity="end"

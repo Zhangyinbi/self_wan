@@ -16,6 +16,11 @@ public class NewMessage {
   private String imageUrl;
   private String mobile;
   private String username;
+  private String    userid;
+
+  public String getTargetId() {
+    return  userid;
+  }
 
   @Override
   public String toString() {

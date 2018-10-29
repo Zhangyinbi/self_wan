@@ -11,24 +11,42 @@ import java.io.Serializable;
  * Create at : 2018/10/13 01:37
  */
 public class User extends BaseEntry implements Serializable {
-  private String userId;
+  private String userid;
   private String token;
-  private String company;
+  private String companyname;
   private String email;
   private int    role;
   private String username;
-  private String image;
+  private String imageUrl;
+  private String companyid;
+  private String mobile;
+
+  public void setRole(int role) {
+    this.role = role;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getMobile() {
+    return mobile == null ? "" : mobile;
+  }
 
   public String getImage() {
-    return image == null ? "" : image;
+    return imageUrl == null ? "" : imageUrl;
   }
 
   public void setImage(String image) {
-    this.image = image;
+    this.imageUrl = image;
   }
 
   public String getUserId() {
-    return userId == null ? "" : userId;
+    return  userid;
   }
 
   public String getToken() {
@@ -36,7 +54,7 @@ public class User extends BaseEntry implements Serializable {
   }
 
   public String getCompany() {
-    return company == null ? "" : company;
+    return companyname == null ? "" : companyname;
   }
 
   public String getEmail() {
@@ -48,12 +66,14 @@ public class User extends BaseEntry implements Serializable {
   }
 
   public String getUsername() {
-    return username == null ? "张隐蔽" : username;
+    return username == null ? mobile : username;
   }
 
-  @Override
-  public String toString() {
-    return "User{" + "userId='" + userId + '\'' + ", token='" + token + '\'' + ", company='" + company + '\'' + ", email='" + email + '\''
-      + ", role='" + role + '\'' + ", username='" + username + '\'' + ", msg='" + msg + '\'' + ", status=" + status + '}';
+  public String getCompanyid() {
+    return companyid == null ? "" : companyid;
   }
+
+  //public void setUpUser(User user) {
+  //
+  //}
 }

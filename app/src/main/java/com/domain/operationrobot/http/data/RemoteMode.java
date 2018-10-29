@@ -11,6 +11,8 @@ import com.domain.operationrobot.http.bean.User;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import java.util.HashMap;
+import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import org.json.JSONException;
@@ -80,11 +82,25 @@ public class RemoteMode implements BaseMode {
    * 获取公司列表
    */
   public Observable<CompanyList> getCompanyList(String companyName) {
+
+    //JSONObject root = new JSONObject();
+    //try {
+    //  root.put("companyname", companyName);
+    //  root.put("token", BaseApplication.getInstance()
+    //                                   .getUser()
+    //                                   .getToken());
+    //} catch (JSONException e) {
+    //  e.printStackTrace();
+    //}
+    //RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    Map<String,String > map = new HashMap<>();
+    map.put("companyname",companyName);
+    map.put("token",BaseApplication.getInstance()
+                                   .getUser()
+                                   .getToken());
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .getCompanyList(companyName, BaseApplication.getInstance()
-                                                                     .getUser()
-                                                                     .getToken());
+                         .getCompanyList(map);
   }
 
   /**
@@ -119,6 +135,7 @@ public class RemoteMode implements BaseMode {
       root.put("smsvc", code);
       root.put("newpassword", pwd);
       root.put("mobile", phone);
+      root.put("action", "password");
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -132,43 +149,90 @@ public class RemoteMode implements BaseMode {
   /**
    * 修改密码
    */
-  public Observable<String> modifyPwd(String old, String newP, String again) {
+  public Observable<BaseEntry> modifyPwd(String old, String newP) {
+
+    JSONObject root = new JSONObject();
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String token = user.getToken();
+    try {
+      root.put("newpassword", newP);
+      root.put("oldpassword", old);
+      root.put("token", token);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+
+
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .modifyPwd(old, newP, again);
+                         .modifyPwd(requestBody);
   }
 
   /**
    * 修改手机号码
    */
-  public Observable<String> modifyPhone(String phone, String code) {
+  public Observable<BaseEntry> modifyPhone(String phone, String code) {
+    /*{"action": "mobile", "token":"uQiewOeF8JPPo0AXY6CdfEqGf-11111", "newmobile":"18816954595", "smsvc":"11111"}*/
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String token = user.getToken();
+    JSONObject root = new JSONObject();
+    try {
+      root.put("newmobile", phone);
+      root.put("smsvc", code);
+      root.put("token", token);
+      root.put("action", "mobile");
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .modifyPhone(phone, code);
+                         .modifyPhone(requestBody);
   }
 
   /**
    * 验证密码
    */
-  public Observable<String> verifyPwd(String pwd) {
-    String userId = BaseApplication.getInstance()
-                                   .getUser()
-                                   .getUserId();
+  public Observable<BaseEntry> verifyPwd(String pwd) {
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String token = user.getToken();
+    JSONObject root = new JSONObject();
+    try {
+      root.put("password", pwd);
+      root.put("token", token);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .verifyPwd(pwd, userId);
+                         .verifyPwd(requestBody);
   }
 
   /**
    * 修改用户名称
    */
-  public Observable<String> modifyUserName(String name) {
-    String userId = BaseApplication.getInstance()
-                                   .getUser()
-                                   .getUserId();
+  public Observable<BaseEntry> modifyUserName(String name) {
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String token = user.getToken();
+    JSONObject root = new JSONObject();
+    try {
+      root.put("newusername", name);
+      root.put("token", token);
+      root.put("action", "username");
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .modifyUserName(name, userId);
+                         .modifyUserName(requestBody);
   }
 
   /**

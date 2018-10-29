@@ -18,62 +18,68 @@ import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
 public class VerifyPwdActivity extends AbsActivity {
 
-    public static final int FROM_USER_NAME_MODIFY = 0x111;
-    public static final int FROM_USER_PHONE_MODIFY = FROM_USER_NAME_MODIFY + 1;
-    private static final String SOURCE = "source";
-    private int source;
-    private DeleteEdit de_pwd;
-    ThrottleLastClickListener listener = new ThrottleLastClickListener() {
-        @Override
-        public void onViewClick(View v) {
-            switch (v.getId()) {
-                case R.id.iv_back:
-                    finish();
-                    break;
-                case R.id.btn_next:
-                    String pwd = de_pwd.getValue();
-                    if (isEmpty(pwd)) return;
-                    verifyPwd(pwd);
-                    break;
-            }
-        }
-    };
-
-    public static void start(Activity activity, int source) {
-        Intent intent = new Intent(activity, VerifyPwdActivity.class);
-        intent.putExtra(SOURCE, source);
-        activity.startActivity(intent);
+  public static final  int    FROM_USER_NAME_MODIFY  = 0x111;
+  public static final  int    FROM_USER_PHONE_MODIFY = FROM_USER_NAME_MODIFY + 1;
+  private static final String SOURCE                 = "source";
+  private int        source;
+  private DeleteEdit de_pwd;
+  ThrottleLastClickListener listener = new ThrottleLastClickListener() {
+    @Override
+    public void onViewClick(View v) {
+      switch (v.getId()) {
+        case R.id.iv_back:
+          finish();
+          break;
+        case R.id.btn_next:
+          String pwd = de_pwd.getValue();
+          if (isEmpty(pwd)) {
+            return;
+          }
+          verifyPwd(pwd);
+          break;
+      }
     }
+  };
 
-    private void verifyPwd(String pwd) {
-        showProgress();
-        //RemoteMode.getInstance().verifyPwd(pwd).subscribe(new BaseObserver<String>(compositeDisposable) {
-        //    @Override
-        //    public void onError(BaseException e) {
-        //        hideProgress();
-        //        showToast(e.getMsg());
-        //    }
-        //
-        //    @Override
-        //    public void onSuss(String userBaseEntry) {
-        //        hideProgress();
-        //        next();
-        //    } @Override
-        //    public void onComplete() {
-        //        super.onComplete();
-        //        hideProgress();
-        //    }
-        //});
-    }
+  public static void start(Activity activity, int source) {
+    Intent intent = new Intent(activity, VerifyPwdActivity.class);
+    intent.putExtra(SOURCE, source);
+    activity.startActivity(intent);
+  }
 
-    private void next() {
-        if (source == FROM_USER_NAME_MODIFY) {
-            startActivity(new Intent(this, ModifyUserNameActivity.class));
-        } else if (source == FROM_USER_PHONE_MODIFY) {
-            startActivity(new Intent(this, ModifyPhoneActivity.class));
-        }
-        finish();
+  private void verifyPwd(String pwd) {
+    showProgress();
+    RemoteMode.getInstance()
+              .verifyPwd(pwd)
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(BaseEntry userBaseEntry) {
+                  hideProgress();
+                  next();
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
+  }
+
+  private void next() {
+    if (source == FROM_USER_NAME_MODIFY) {
+      startActivity(new Intent(this, ModifyUserNameActivity.class));
+    } else if (source == FROM_USER_PHONE_MODIFY) {
+      startActivity(new Intent(this, ModifyPhoneActivity.class));
     }
+    finish();
+  }
 
 //    public static void start(Activity activity, String name) {
 //        Intent intent = new Intent(activity, VerifyPwdActivity.class);
@@ -81,36 +87,37 @@ public class VerifyPwdActivity extends AbsActivity {
 //        activity.startActivity(intent);
 //    }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_verify_pwd;
+  @Override
+  protected int getLayoutId() {
+    return R.layout.activity_verify_pwd;
+  }
+
+  @Override
+  protected void newInstancePresenter() {
+    Intent intent = getIntent();
+    int intExtra = intent.getIntExtra(SOURCE, -1);
+    if (intExtra == -1) {
+      finish();
+      return;
     }
+    source = intExtra;
+  }
 
-    @Override
-    protected void newInstancePresenter() {
-        Intent intent = getIntent();
-        int intExtra = intent.getIntExtra(SOURCE, -1);
-        if (intExtra == -1) {
-            finish();
-            return;
-        }
-        source = intExtra;
-    }
+  @Override
+  protected void initView() {
+    findViewById(R.id.iv_back).setOnClickListener(listener);
+    findViewById(R.id.btn_next).setOnClickListener(listener);
+    de_pwd = findViewById(R.id.de_pwd);
+    de_pwd.setInputType(129);
+  }
 
-    @Override
-    protected void initView() {
-        findViewById(R.id.iv_back).setOnClickListener(listener);
-        findViewById(R.id.btn_next).setOnClickListener(listener);
-        de_pwd = findViewById(R.id.de_pwd);
-    }
+  @Override
+  protected void initData() {
 
-    @Override
-    protected void initData() {
+  }
 
-    }
+  @Override
+  public void showEmptyView() {
 
-    @Override
-    public void showEmptyView() {
-
-    }
+  }
 }

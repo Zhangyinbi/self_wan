@@ -16,13 +16,17 @@ import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
 import com.domain.library.utils.InputUtils;
+import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
 import com.domain.library.widgets.DeleteEdit;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
 import static com.domain.operationrobot.util.Constant.PHONE_LENGTH;
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 import static com.domain.operationrobot.util.Constant.VERITY_CODE_LENGTH;
 
 public class ModifyPhoneActivity extends AbsActivity {
@@ -85,32 +89,38 @@ public class ModifyPhoneActivity extends AbsActivity {
       }
     }
   };
+  private TextView mTvUserMobile;
 
   /**
    * 修改手机号码
    */
-  private void complete(String phone, String code) {
+  private void complete(final String phone, String code) {
     showProgress();
-    //RemoteMode.getInstance()
-    //          .modifyPhone(phone, code)
-    //          .subscribe(new BaseObserver<String>(compositeDisposable) {
-    //            @Override
-    //            public void onError(BaseException e) {
-    //              hideProgress();
-    //              showToast(e.getMsg());
-    //            }
-    //
-    //            @Override
-    //            public void onSuss(String userBaseEntry) {
-    //              hideProgress();
-    //              showToast("修改手机号码成功");
-    //              finish();
-    //            } @Override
-    //            public void onComplete() {
-    //              super.onComplete();
-    //              hideProgress();
-    //            }
-    //          });
+    RemoteMode.getInstance()
+              .modifyPhone(phone, code)
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(BaseEntry baseEntry) {
+                  hideProgress();
+                  showToast(baseEntry.msg);
+                  BaseApplication.getInstance()
+                                 .getUser()
+                                 .setMobile(phone);
+                  SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
+                                                                .getUser());
+                  finish();
+                } @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
   }
 
   public void sendCode(String accountPhone) {
@@ -164,7 +174,9 @@ public class ModifyPhoneActivity extends AbsActivity {
     btnComplete = findViewById(R.id.btn_sure);
     btnComplete.setOnClickListener(listener);
     findViewById(R.id.iv_back).setOnClickListener(listener);
-
+    mTvUserMobile = findViewById(R.id.tv_user_mobile);
+    User user = BaseApplication.getInstance().getUser();
+    mTvUserMobile.setText(user.getMobile());
     deNewPhone.setTextAfterChange(new DeleteEdit.TextAfterChange() {
       @Override
       public void afterTextChanged(Editable editable) {

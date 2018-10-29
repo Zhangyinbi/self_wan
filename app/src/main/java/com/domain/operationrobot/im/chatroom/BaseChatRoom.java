@@ -92,8 +92,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     setChanged();
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.NEW_MESSAGE);
-    JSONObject jsonObject = content.optJSONObject("data");
-    NewMessage newMessage = mGson.fromJson(jsonObject.toString(), NewMessage.class);
+    NewMessage newMessage = mGson.fromJson(content.toString(), NewMessage.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setNewMessage(newMessage);
     notifyObservers(model);
@@ -106,6 +105,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     setChanged();
     int type = jsonObject.optInt("type");
     JSONObject rootBean = jsonObject.optJSONObject("rootbean");
+    if (rootBean == null) {
+      upData(jsonObject);
+      return;
+    }
     switch (type) {
       case 1:
         parse_type_1(rootBean);
@@ -134,8 +137,6 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     }
   }
 
-
-
   public void moni(String json) {
     JSONObject rootData = null;
     try {
@@ -158,6 +159,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     model.setRootMessage2(newMessage);
     notifyObservers(model);
   }
+
   /**
    * cpu  内存
    */
@@ -212,7 +214,8 @@ public class BaseChatRoom extends Observable implements IChatRoom {
 
       case IConstants.TALK_STATUS:
         JSONObject content = (JSONObject) args[0];
-        upData(content);
+        JSONObject jsonObject1 = content.optJSONObject("data");
+        upData(jsonObject1);
         break;
       case IConstants.CHAT_BOT_STATUS:
         JSONObject rootData = (JSONObject) args[0];
@@ -229,7 +232,6 @@ public class BaseChatRoom extends Observable implements IChatRoom {
           e.printStackTrace();
         }
         break;
-
       // Socket连接成功
       case Socket.EVENT_CONNECT:
         Log.e(TAG, "链接成功");

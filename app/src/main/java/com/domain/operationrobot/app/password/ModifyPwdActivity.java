@@ -31,11 +31,11 @@ public class ModifyPwdActivity extends AbsActivity {
                     String again = de_new_pwd_again.getValue();
 
                     if (!(isEmpty(old) || isEmpty(newP) || isEmpty(again))) {
-                        if (newP.equals(again)) {
+                        if (!newP.equals(again)) {
                             showToast("两次密码输入不一致");
                             return;
                         }
-                        complete(old, newP, again);
+                        complete(old, newP);
                     }
                     break;
 
@@ -48,28 +48,27 @@ public class ModifyPwdActivity extends AbsActivity {
      *
      * @param old
      * @param newP
-     * @param again
      */
-    public void complete(String old, String newP, String again) {
+    public void complete(String old, String newP) {
         showProgress();
-        //RemoteMode.getInstance().modifyPwd(old, newP, again).subscribe(new BaseObserver<String>(compositeDisposable) {
-        //    @Override
-        //    public void onError(BaseException e) {
-        //        hideProgress();
-        //        showToast(e.getMsg());
-        //    }
-        //
-        //    @Override
-        //    public void onSuss(String userBaseEntry) {
-        //        hideProgress();
-        //        showToast("修改密码成功");
-        //        finish();
-        //    } @Override
-        //    public void onComplete() {
-        //        super.onComplete();
-        //        hideProgress();
-        //    }
-        //});
+        RemoteMode.getInstance().modifyPwd(old, newP).subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+            @Override
+            public void onError(BaseException e) {
+                hideProgress();
+                showToast(e.getMsg());
+            }
+
+            @Override
+            public void onSuss(BaseEntry userBaseEntry) {
+                hideProgress();
+                showToast("修改密码成功");
+                finish();
+            } @Override
+            public void onComplete() {
+                super.onComplete();
+                hideProgress();
+            }
+        });
     }
 
     @Override

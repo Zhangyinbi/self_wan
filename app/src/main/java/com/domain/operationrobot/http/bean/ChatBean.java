@@ -19,8 +19,17 @@ public class ChatBean {
   public  String content;
   public  String url;
   private String token;
+  private String targetId;
   private int type = -1;//默认正常聊天信息  1-> 机器人消息 2
   private ArrayList<RootMessage2.Action> actions;
+
+  public String getTargetId() {
+    return  targetId;
+  }
+
+  public void setTargetId(String targetId) {
+    this.targetId = targetId;
+  }
 
   /**
    * 磁盘

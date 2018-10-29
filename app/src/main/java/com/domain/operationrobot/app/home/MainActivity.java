@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +29,7 @@ import com.domain.operationrobot.app.company.UserApplyActivity;
 import com.domain.operationrobot.app.login.LoginActivity;
 import com.domain.operationrobot.app.operation.OperationActivity;
 import com.domain.operationrobot.app.password.ModifyPwdActivity;
+import com.domain.operationrobot.app.setting.UserInfoActivity;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
@@ -111,6 +113,15 @@ public class MainActivity extends AbsActivity {
             new DelayDialog(MainActivity.this).show();
           }
           break;
+        case R.id.iv_user_header:
+          openOrCloseDrawer();
+          drawer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+            }
+          }, 300);
+          break;
       }
     }
   };
@@ -162,6 +173,7 @@ public class MainActivity extends AbsActivity {
     tv_top = findViewById(R.id.tv_top);
     rl_drawer.setOnClickListener(listener);
     iv_user_header = findViewById(R.id.iv_user_header);
+    iv_user_header.setOnClickListener(listener);
     ll_sq = findViewById(R.id.ll_sq);
     ll_yunwei = findViewById(R.id.ll_yunwei);
     ll_forget = findViewById(R.id.ll_forget);
@@ -217,39 +229,41 @@ public class MainActivity extends AbsActivity {
         finish();
       }
     });
-    mUser = BaseApplication.getInstance()
-                           .getUser();
-    mRole = mUser.getRole();
-    switch (mRole) {
-      case 1://游客
-        tv_top.setText("加入/创建公司，享受一站式运维 >");
-        break;
-      case 2://申请待同意用户
-        tv_top.setText("已申请公司，请等待公司管理员审核");
-        break;
-      case 3://普通公司用户
-        tv_top.setText("升级成为正式用户，请等待公司管理员审核 >");
-        break;
-      case 4://公司管理员
-        tv_top.setText("还有18天就要过期了，请续费 >");
-        break;
-    }
     tv_top.setOnClickListener(listener);
-    mTvUserName.setText(mUser.getUsername());
-    if (!TextUtils.isEmpty(mUser.getCompany())) {
-      tv_company_name.setVisibility(View.VISIBLE);
-      tv_company_name.setText(mUser.getCompany());
-    }
-    tv_app_version.setText("版本：V" + App.getVersionName(this));
-    GlideApp.with(this)
-            .load(BaseApplication.getInstance()
-                                 .getUser()
-                                 .getImage())
-            .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片
-            .error(R.drawable.round_88)//图片加载失败后，显示的图片
-            .transition(withCrossFade())
-            .apply(bitmapTransform(new CircleCrop()))
-            .into(iv_user_header);
+
+    tv_app_version.setText("版本：V" + App.getVersionName(MainActivity.this));
+    drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+      @Override
+      public void onDrawerSlide(View drawerView, float slideOffset) {
+      }
+
+      @Override
+      public void onDrawerOpened(View drawerView) {
+        if (!TextUtils.isEmpty(mUser.getCompany())) {
+          tv_company_name.setVisibility(View.VISIBLE);
+          tv_company_name.setText(mUser.getCompany());
+        } else {
+          tv_company_name.setVisibility(View.GONE);
+        }
+        GlideApp.with(MainActivity.this)
+                .load(BaseApplication.getInstance()
+                                     .getUser()
+                                     .getImage())
+                .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片
+                .error(R.drawable.round_88)//图片加载失败后，显示的图片
+                .transition(withCrossFade())
+                .apply(bitmapTransform(new CircleCrop()))
+                .into(iv_user_header);
+      }
+
+      @Override
+      public void onDrawerClosed(View drawerView) {
+      }
+
+      @Override
+      public void onDrawerStateChanged(int newState) {
+      }
+    });
   }
 
   @Override
@@ -274,6 +288,29 @@ public class MainActivity extends AbsActivity {
       } else {
         super.onBackPressed();
       }
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    mUser = BaseApplication.getInstance()
+                           .getUser();
+    mRole = mUser.getRole();
+    mTvUserName.setText(mUser.getUsername());
+    switch (mRole) {
+      case 1://游客
+        tv_top.setText("加入/创建公司，享受一站式运维 >");
+        break;
+      case 2://申请待同意用户
+        tv_top.setText("已申请公司，请等待公司管理员审核");
+        break;
+      case 3://普通公司用户
+        tv_top.setText("升级成为正式用户，请等待公司管理员审核 >");
+        break;
+      case 4://公司管理员
+        tv_top.setText("还有18天就要过期了，请续费 >");
+        break;
     }
   }
 }

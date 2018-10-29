@@ -129,10 +129,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                   .getType();
     }
     return mList.get(position)
-                .getToken()
+                .getTargetId()
                 .equals(BaseApplication.getInstance()
                                        .getUser()
-                                       .getToken()) ? MESSAGE_SELF : MESSAGE_OTHER;
+                                       .getUserId()) ? MESSAGE_SELF : MESSAGE_OTHER;
   }
 
   public ArrayList<ChatBean> getList() {

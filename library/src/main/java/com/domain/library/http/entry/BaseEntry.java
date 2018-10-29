@@ -1,6 +1,7 @@
 package com.domain.library.http.entry;
 
 import java.io.Serializable;
+import java.util.Observable;
 
 /**
  * Project Name : DO-Feidian-Core-Android
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * Create at : 2018/5/17 11:42
  */
 
-public class BaseEntry{
+public class BaseEntry extends Observable{
   public String msg;
   public int status = -1;
 

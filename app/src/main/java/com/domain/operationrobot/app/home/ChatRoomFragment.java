@@ -211,29 +211,29 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
     addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), BaseApplication.getInstance()
                                                                                       .getUser()
-                                                                                      .getToken());
+                                                                                      .getUserId());
     mEtMsg.setText("");
     if (msg.contains("@机器人")) {
       AppSocket.getInstance()
                .sendMessage(2, msg);
       //TODO 测试代码
-      String json
-        = "{\"data\":{\"type\":2,\"rootbean\":{\"msg\":\"小机器人，你赶紧学习呀\",\"actions\":[{\"name\":\"查看主机cpu\",\"type\":\"3\"},{\"name\":\"查看主机内存\",\"type\":\"4\"},{\"name\":\"查看主机监控\",\"type\":\"5\"},{\"name\":\"查看磁盘状态\",\"type\":\"6\"},{\"name\":\"查看CPU温度\",\"type\":\"7\"},{\"name\":\"查看流量状态\",\"type\":\"8\"}]}}}";
-      MainChatRoom.getInstance()
-                  .moni(json);
+      //String json
+      //  = "{\"data\":{\"type\":2,\"rootbean\":{\"msg\":\"小机器人，你赶紧学习呀\",\"actions\":[{\"name\":\"查看主机cpu\",\"type\":\"3\"},{\"name\":\"查看主机内存\",\"type\":\"4\"},{\"name\":\"查看主机监控\",\"type\":\"5\"},{\"name\":\"查看磁盘状态\",\"type\":\"6\"},{\"name\":\"查看CPU温度\",\"type\":\"7\"},{\"name\":\"查看流量状态\",\"type\":\"8\"}]}}}";
+      //MainChatRoom.getInstance()
+      //            .moni(json);
     } else {
       AppSocket.getInstance()
                .sendMessage(msg);
     }
   }
 
-  private void addBeanToRecycler(String username, String url, String content, long l, String token) {
+  private void addBeanToRecycler(String username, String url, String content, long l, String targetId) {
     ChatBean message = new ChatBean();
     message.setUserName(username);
     message.setContent(content);
     message.setUrl(url);
     message.setTime(l);
-    message.setToken(token);
+    message.setTargetId(targetId);
     mAdapter.addBeanToEnd(message);
   }
 
@@ -262,7 +262,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
           switch (model.getEventType()) {
             case IEventType.NEW_MESSAGE:
               NewMessage newMessage = model.getNewMessage();
-              if (isSelfMsg(newMessage.getToken())) {
+              if (isSelfMsg(newMessage.getTargetId())) {
                 return;
               }
               String username = newMessage.getUsername()
@@ -271,8 +271,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               String url = newMessage.getImageUrl();
               String msg = newMessage.getMsg();
               long time = newMessage.getTime();
-              String token = newMessage.getToken();
-              addBeanToRecycler(username, url, msg, time, token);
+              String targetId = newMessage.getTargetId();
+              addBeanToRecycler(username, url, msg, time, targetId);
               break;
             case ROOT_MESSAGE_TYPE_1:
               rootMsg1(model);
@@ -350,11 +350,11 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   /**
    * 是不是自己消息
    */
-  private boolean isSelfMsg(String token) {
+  private boolean isSelfMsg(String userId) {
     return BaseApplication.getInstance()
                           .getUser()
-                          .getToken()
-                          .equals(token);
+                          .getUserId()
+                          .equals(userId);
   }
 
   @Override
@@ -382,9 +382,12 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
           // 图片、视频、音频选择结果回调
           List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
 
-          Log.e("------", "onActivityResult: "+selectList.get(0).getPath() );
-          Log.e("------", "onActivityResult: "+selectList.get(0).getCompressPath() );
-          Log.e("------", "onActivityResult: "+selectList.get(0).getCutPath() );
+          Log.e("------", "onActivityResult: " + selectList.get(0)
+                                                           .getPath());
+          Log.e("------", "onActivityResult: " + selectList.get(0)
+                                                           .getCompressPath());
+          Log.e("------", "onActivityResult: " + selectList.get(0)
+                                                           .getCutPath());
           // 例如 LocalMedia 里面返回三种path
           // 1.media.getPath(); 为原图path
           // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外

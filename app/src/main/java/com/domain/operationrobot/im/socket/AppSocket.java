@@ -36,15 +36,14 @@ public class AppSocket extends BaseSocket {
   public void sendMessage(int type, String content) {
     try {
       JSONObject jsonObject = new JSONObject();
-      jsonObject.put("token", BaseApplication.getInstance()
-                                             .getUser()
-                                             .getToken());
+      JSONObject jsonObject1 = new JSONObject();
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
       jsonObject.put("type", type);
       jsonObject.put("msg", content);
-      mSocket.emit(IConstants.CHAT_BOT, jsonObject);
+      jsonObject1.putOpt("data",jsonObject);
+      mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
     } catch (JSONException e) {
       e.printStackTrace();
     }

@@ -177,6 +177,7 @@ public class ForgetPwdActivity extends AbsActivity {
                 public void onSuss(BaseEntry baseEntry) {
                   hideProgress();
                   resetPwdSuss();
+                  showToast(baseEntry.getMsg());
                 }
 
                 @Override

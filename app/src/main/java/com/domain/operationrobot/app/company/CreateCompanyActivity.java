@@ -16,13 +16,18 @@ import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
 import com.domain.library.utils.ActivityStackManager;
 import com.domain.library.utils.InputUtils;
+import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
 import com.domain.library.widgets.DeleteEdit;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.http.bean.Company;
+import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 public class CreateCompanyActivity extends AbsActivity {
   private DeleteEdit de_company_name;
@@ -77,6 +82,12 @@ public class CreateCompanyActivity extends AbsActivity {
                 public void onSuss(Company company) {
                   hideProgress();
                   ToastUtils.showToast(company.getMsg());
+                  User user = BaseApplication.getInstance()
+                                             .getUser();
+                  user.setUsername(company.getUsername());
+                  user.setRole(company.getRole());
+                  SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
+                                                                .getUser());
                   startMain();
                 }
 

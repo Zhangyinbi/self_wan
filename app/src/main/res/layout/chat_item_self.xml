@@ -20,26 +20,27 @@
         android:text="Darry"
         android:textColor="#747474"
         android:textSize="@dimen/dimens_12sp"
-        android:visibility="gone"
+        android:visibility="invisible"
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimens_18"
         android:layout_marginRight="@dimen/dimens_6"
-        android:background="@drawable/bg_white_big_round"
         android:gravity="end"
         >
       <TextView
           android:id="@+id/tv_content"
           android:layout_width="wrap_content"
+          android:background="@drawable/bg_white_big_round"
           android:layout_height="wrap_content"
-          android:lineSpacingExtra="5dp"
-          android:paddingBottom="14dp"
           android:paddingLeft="12dp"
           android:paddingRight="12dp"
+          android:lineSpacingExtra="5dp"
+          android:paddingBottom="14dp"
           android:paddingTop="@dimen/dimens_12"
+          android:text="你撒接口你撒开的接口你撒接口你撒开的接口你撒接口你撒开的接口"
           android:textColor="#020202"
           android:textSize="@dimen/dimens_16sp"
           />
@@ -49,7 +50,6 @@
         android:id="@+id/iv_user_img"
         android:layout_width="@dimen/dimens_40"
         android:layout_height="@dimen/dimens_40"
-        android:layout_gravity="end"
         android:layout_marginRight="16dp"
         android:src="@drawable/img_self"
         />
