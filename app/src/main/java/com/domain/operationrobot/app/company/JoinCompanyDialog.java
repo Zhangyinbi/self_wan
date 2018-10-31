@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.domain.library.utils.ToastUtils;
 import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.Company;
@@ -34,8 +35,14 @@ public class JoinCompanyDialog extends AppCompatDialog {
                     dismiss();
                     break;
                 case R.id.btn_join:
+                    String inputValue = deAccountName.getInputValue();
+                    if (TextUtils.isEmpty(inputValue)){
+                        ToastUtils.showToast("请输入申请人姓名");
+                        return;
+                    }
+
                     dismiss();
-                    presenter.join(company.getAdmin(),company.getCompany());
+                    presenter.join(inputValue,company.getCompanyid());
                     break;
                 default:
                     break;
@@ -61,8 +68,8 @@ public class JoinCompanyDialog extends AppCompatDialog {
         deAccountName = findViewById(R.id.de_account_name);
         findViewById(R.id.btn_cancel).setOnClickListener(listener);
         findViewById(R.id.btn_join).setOnClickListener(listener);
-        tvCompanyName.setText(company != null ? company.getCompany() : "数据有误");
-        String adminName = company != null ? company.getAdmin() : "";
+        tvCompanyName.setText(company != null ? company.getCompanyname() : "数据有误");
+        String adminName = company != null ? company.getAdmin().get(0) : "";
         if (!TextUtils.isEmpty(adminName)) {
             int length = adminName.length();
             String pref = "";

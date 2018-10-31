@@ -16,6 +16,7 @@
         android:layout_width="@dimen/dimens_40"
         android:layout_height="@dimen/dimens_40"
         android:layout_marginLeft="17dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/img_bieren"
         />
 

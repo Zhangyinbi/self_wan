@@ -81,10 +81,10 @@ public class JoinCompanyPresenterImpl extends JoinCompanyContract.JoinCompanyPre
    * 加入公司 当前用户id可以本地获取或者传名字出去
    */
   @Override
-  public void join(String admin, String companyName) {
+  public void join(String admin, String companyid) {
     showProgress();
     RemoteMode.getInstance()
-              .joinCompany(admin, companyName)
+              .joinCompany(admin, companyid)
               .subscribe(new BaseObserver<Company>(getCompositeDisposable()) {
                 @Override
                 public void onError(BaseException e) {
@@ -92,7 +92,7 @@ public class JoinCompanyPresenterImpl extends JoinCompanyContract.JoinCompanyPre
                     return;
                   }
                   hideProgress();
-                  mView.showToast(e.getMsg());
+                  mView.showToast("服务器繁忙，请重试");
                 }
 
                 @Override

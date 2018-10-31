@@ -1,6 +1,8 @@
 package com.domain.operationrobot.http.bean;
 
 import com.domain.library.http.entry.BaseEntry;
+import java.security.PublicKey;
+import java.util.ArrayList;
 
 /**
  * Project Name : OperationRobot
@@ -11,33 +13,29 @@ import com.domain.library.http.entry.BaseEntry;
  */
 public class Company extends BaseEntry {
 
-  /*{
-  "companyid": "cYQ0xRLj35AX4c6GXzVBEFBQz",
-  "companyname": "aijia",
-  "email": "359594776@qq.com",
-  "msg": "Create success",
-  "role": 4,
-  "status": 0,
-  "username": "phil"
-}
-*/
-
   private String companyname;
   private String companyid;
+  private String companyexpiredate;
+  private String companyrole;
   private String username;
-  private String email;
-  private int    role;
+  private int role;
 
   public String getUsername() {
     return username == null ? "" : username;
   }
 
-  private String admin;
-  private String company;
+  public int getRole() {
+    return  role;
+  }
 
-  public Company(String companyName, String adminName) {
-    this.companyname = companyName;
-    this.username = adminName;
+  private ArrayList<String> admin;
+
+  public String getCompanyname() {
+    return companyname == null ? "" : companyname;
+  }
+
+  public void setCompanyname(String companyname) {
+    this.companyname = companyname;
   }
 
   public String getCompanyid() {
@@ -48,19 +46,27 @@ public class Company extends BaseEntry {
     this.companyid = companyid;
   }
 
-  public String getEmail() {
-    return email == null ? "" : email;
+  public String getCompanyexpiredate() {
+    return companyexpiredate == null ? "" : companyexpiredate;
   }
 
-  public int getRole() {
-    return role;
+  public void setCompanyexpiredate(String companyexpiredate) {
+    this.companyexpiredate = companyexpiredate;
   }
 
-  public String getAdmin() {
-    return username == null ? admin : username;
+  public String getCompanyrole() {
+    return companyrole == null ? "" : companyrole;
   }
 
-  public String getCompany() {
-    return companyname == null ? company : companyname;
+  public void setCompanyrole(String companyrole) {
+    this.companyrole = companyrole;
+  }
+
+  public ArrayList<String> getAdmin() {
+    return admin == null ? new ArrayList<String>() : admin;
+  }
+
+  public void setAdmin(ArrayList<String> admin) {
+    this.admin = admin;
   }
 }

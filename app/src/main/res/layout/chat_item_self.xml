@@ -50,6 +50,7 @@
         android:id="@+id/iv_user_img"
         android:layout_width="@dimen/dimens_40"
         android:layout_height="@dimen/dimens_40"
+        android:scaleType="centerCrop"
         android:layout_marginRight="16dp"
         android:src="@drawable/img_self"
         />

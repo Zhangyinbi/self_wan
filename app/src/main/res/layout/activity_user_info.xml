@@ -98,7 +98,7 @@
           android:layout_weight="1"
           android:drawableLeft="@drawable/grzl_img_toux"
           android:drawablePadding="@dimen/dimens_11"
-          android:text="用户头像"
+          android:text="用户姓名"
           android:textColor="#666"
           android:textSize="@dimen/dimens_16sp"
           />
@@ -166,12 +166,12 @@
 
   <LinearLayout
       android:id="@+id/ll_company"
-      android:visibility="gone"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/dimens_10"
       android:background="@color/white"
       android:orientation="vertical"
+      android:visibility="gone"
       >
 
     <LinearLayout

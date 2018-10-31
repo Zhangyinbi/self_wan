@@ -14,6 +14,11 @@ public class TimeUtil {
   private TimeUtil() {
   }
 
+  public static String formatTimeMillis(long time) {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    return sdf.format(time);
+  }
+
   /**
    * 时间转化为显示字符串
    *

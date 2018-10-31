@@ -11,6 +11,7 @@
       android:background="@drawable/tc_bg_first"
       >
     <TextView
+        android:id="@+id/tv_user_role"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dimens_24"
         android:layout_alignParentRight="true"
@@ -19,7 +20,6 @@
         android:gravity="center_vertical|end"
         android:paddingLeft="@dimen/dimens_13"
         android:paddingRight="@dimen/dimens_7"
-        android:text="管理员、审核员"
         android:textColor="@color/white"
         android:textSize="@dimen/dimens_12sp"
         />
@@ -57,7 +57,6 @@
         android:paddingLeft="@dimen/dimens_6"
         android:paddingRight="@dimen/dimens_6"
         android:paddingTop="@dimen/dimens_2"
-        android:text="试用中"
         android:textColor="@color/white"
         android:textSize="10sp"
         />
@@ -73,7 +72,6 @@
         android:text="成都云图控股有限公司"
         android:textColor="@color/white"
         android:textSize="@dimen/dimens_18"
-        android:visibility="gone"
         />
   </RelativeLayout>
   <LinearLayout
@@ -112,7 +110,6 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="8dp"
           android:paddingBottom="@dimen/dimens_2"
-          android:text="(8)"
           android:textColor="#333"
           android:textSize="16sp"
           />
@@ -149,6 +146,7 @@
           android:gravity="center"
           android:minHeight="@dimen/dimens_14"
           android:minWidth="@dimen/dimens_17"
+          android:visibility="gone"
           android:text="1"
           android:textColor="@color/white"
           android:textSize="14sp"

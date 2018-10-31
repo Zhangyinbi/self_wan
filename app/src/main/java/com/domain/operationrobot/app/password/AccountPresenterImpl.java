@@ -48,46 +48,46 @@ public class AccountPresenterImpl extends AccountContract.AccountPresenter<Accou
   }
 
   /**
-   * 发送验证码 TODO  暂无api
+   * 发送验证码
    */
   @Override
   public void sendCode(String accountPhone) {
     showProgress();
-    //timer.start();
-    //RemoteMode.getInstance()
-    //          .sendCode(accountPhone)
-    //          .subscribe(new BaseObserver<String>(getCompositeDisposable()) {
-    //            @Override
-    //            public void onError(BaseException e) {
-    //              if (mView == null) {
-    //                return;
-    //              }
-    //              hideProgress();
-    //              mView.showToast(e.getMsg());
-    //              if (timer != null) {
-    //                timer.cancel();
-    //              }
-    //              mView.updateText("发送验证码", true, R.color.code_blue);
-    //            }
-    //
-    //            @Override
-    //            public void onSuss(String userBaseEntry) {
-    //              if (mView == null) {
-    //                return;
-    //              }
-    //              hideProgress();
-    //              mView.showToast("验证码已发送至您手机，请注意查收");
-    //            }
-    //
-    //            @Override
-    //            public void onComplete() {
-    //              super.onComplete();
-    //              if (mView == null) {
-    //                return;
-    //              }
-    //              hideProgress();
-    //            }
-    //          });
+    timer.start();
+    RemoteMode.getInstance()
+              .sendCode(accountPhone)
+              .subscribe(new BaseObserver<BaseEntry>(getCompositeDisposable()) {
+                @Override
+                public void onError(BaseException e) {
+                  if (mView == null) {
+                    return;
+                  }
+                  hideProgress();
+                  mView.showToast(e.getMsg());
+                  if (timer != null) {
+                    timer.cancel();
+                  }
+                  mView.updateText("发送验证码", true, R.color.code_blue);
+                }
+
+                @Override
+                public void onSuss(BaseEntry userBaseEntry) {
+                  if (mView == null) {
+                    return;
+                  }
+                  hideProgress();
+                  mView.showToast("验证码已发送至您手机，请注意查收");
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  if (mView == null) {
+                    return;
+                  }
+                  hideProgress();
+                }
+              });
   }
 
   @Override

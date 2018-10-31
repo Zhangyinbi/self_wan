@@ -9,6 +9,7 @@
     android:background="#ededed"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:id="@+id/root_view"
     tools:context=".app.home.MainActivity"
     >
 
@@ -50,21 +51,24 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_margin="@dimen/dimens_3"
         >
       <TextView
           android:id="@+id/btn_send"
           android:layout_width="wrap_content"
-          android:layout_height="28dp"
+          android:layout_height="wrap_content"
           android:layout_gravity="bottom"
           android:background="@drawable/login_blue_round_click_bg"
           android:gravity="center"
+          android:paddingBottom="@dimen/dimens_4"
+          android:paddingTop="@dimen/dimens_4"
           android:paddingLeft="@dimen/dimens_13"
           android:paddingRight="@dimen/dimens_13"
           android:text="发送"
           android:textColor="#FFF"
-          android:visibility="invisible"
+          android:textSize="@dimen/dimens_16sp"
           />
     </LinearLayout>
   </LinearLayout>

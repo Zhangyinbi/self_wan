@@ -81,9 +81,11 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
           if (etPwd.getInputType() == 129) {
             btnToggle.setBackgroundResource(R.drawable.img_yj);
             etPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            etPwd.setSelection(etPwd.getText().toString().trim().length());
           } else {
             etPwd.setInputType(129);
             btnToggle.setBackgroundResource(R.drawable.img_by);
+            etPwd.setSelection(etPwd.getText().toString().trim().length());
           }
           break;
         default:

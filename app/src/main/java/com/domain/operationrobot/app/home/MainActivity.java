@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.domain.library.base.AbsActivity;
+import com.domain.library.http.consumer.BaseObserver;
+import com.domain.library.http.exception.BaseException;
 import com.domain.library.utils.App;
 import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
@@ -30,15 +32,20 @@ import com.domain.operationrobot.app.login.LoginActivity;
 import com.domain.operationrobot.app.operation.OperationActivity;
 import com.domain.operationrobot.app.password.ModifyPwdActivity;
 import com.domain.operationrobot.app.setting.UserInfoActivity;
+import com.domain.operationrobot.http.bean.ApplyInfo;
+import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
+import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 import java.util.ArrayList;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.domain.operationrobot.GlideOptions.bitmapTransform;
+import static com.domain.operationrobot.GlideOptions.signatureOf;
 import static com.domain.operationrobot.app.operation.OperationActivity.ADD_OPERATION;
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 public class MainActivity extends AbsActivity {
   private static final String TAG = "------------";
@@ -53,7 +60,11 @@ public class MainActivity extends AbsActivity {
   private TextView       mTvUserName;
   private TextView       tv_top;
   private TextView       tv_company_name;
+  private TextView       tv_user_role;
   private TextView       tv_app_version;
+  private TextView       tv_join_num;
+  private TextView       tv_admin_num;
+  private TextView       tv_user_indication;
   private User           mUser;
   private LinearLayout   ll_sq;
   private LinearLayout   ll_yunwei;
@@ -125,6 +136,7 @@ public class MainActivity extends AbsActivity {
       }
     }
   };
+  private SideInfo mSideInfo;
 
   private void openOrCloseDrawer() {
     if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -167,7 +179,11 @@ public class MainActivity extends AbsActivity {
 
     mTvUserName = findViewById(R.id.tv_user_name);
     tv_company_name = findViewById(R.id.tv_company_name);
+    tv_user_role = findViewById(R.id.tv_user_role);
+    tv_join_num = findViewById(R.id.tv_join_num);
+    tv_admin_num = findViewById(R.id.tv_admin_num);
     tv_app_version = findViewById(R.id.tv_app_version);
+    tv_user_indication = findViewById(R.id.tv_user_indication);
     drawer = findViewById(R.id.main_layout);
     rl_drawer = findViewById(R.id.rl_drawer);
     tv_top = findViewById(R.id.tv_top);
@@ -225,6 +241,7 @@ public class MainActivity extends AbsActivity {
       @Override
       public void onClick(View view) {
         SpUtils.putBoolean(IS_LOGIN, false);
+        SpUtils.removeData(USER_SP_KEY);
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
       }
@@ -239,21 +256,8 @@ public class MainActivity extends AbsActivity {
 
       @Override
       public void onDrawerOpened(View drawerView) {
-        if (!TextUtils.isEmpty(mUser.getCompany())) {
-          tv_company_name.setVisibility(View.VISIBLE);
-          tv_company_name.setText(mUser.getCompany());
-        } else {
-          tv_company_name.setVisibility(View.GONE);
-        }
-        GlideApp.with(MainActivity.this)
-                .load(BaseApplication.getInstance()
-                                     .getUser()
-                                     .getImage())
-                .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片
-                .error(R.drawable.round_88)//图片加载失败后，显示的图片
-                .transition(withCrossFade())
-                .apply(bitmapTransform(new CircleCrop()))
-                .into(iv_user_header);
+        setSideData();
+        getSide();
       }
 
       @Override
@@ -298,6 +302,16 @@ public class MainActivity extends AbsActivity {
                            .getUser();
     mRole = mUser.getRole();
     mTvUserName.setText(mUser.getUsername());
+    GlideApp.with(MainActivity.this)
+            .load(BaseApplication.getInstance()
+                                 .getUser()
+                                 .getImage())
+            .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片
+            .error(R.drawable.round_88)//图片加载失败后，显示的图片
+            .transition(withCrossFade())
+            .apply(bitmapTransform(new CircleCrop()))
+            .into(iv_user_header);
+    tv_company_name.setText(TextUtils.isEmpty(mUser.getCompany()) ? "你还未加入公司，点击加入/创建" : mUser.getCompany());
     switch (mRole) {
       case 1://游客
         tv_top.setText("加入/创建公司，享受一站式运维 >");
@@ -312,5 +326,70 @@ public class MainActivity extends AbsActivity {
         tv_top.setText("还有18天就要过期了，请续费 >");
         break;
     }
+  }
+
+  private void getSide() {
+    RemoteMode.getInstance()
+              .getSide()
+              .subscribe(new BaseObserver<SideInfo>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                }
+
+                @Override
+                public void onSuss(SideInfo sideInfo) {
+                  mSideInfo = sideInfo;
+                  setSideData();
+                }
+              });
+  }
+
+  private void setSideData() {
+    if (mSideInfo != null) {
+      tv_user_role.setText(getRoleName(mSideInfo.getRole()));
+      tv_user_indication.setText(mSideInfo.getCompanyrole() == 1 ? "试用中" : "正式用户");
+      tv_company_name.setText(TextUtils.isEmpty(mSideInfo.getCompanyname()) ? "你还未加入公司，点击加入/创建" : mUser.getCompany());
+      if (mSideInfo.getJoinlist() > 0) {
+        tv_join_num.setVisibility(View.VISIBLE);
+        tv_join_num.setText(mSideInfo.getJoinlist() + "");
+      }
+      if (mSideInfo.getMemberlist() > 0) {
+        tv_admin_num.setVisibility(View.VISIBLE);
+        tv_admin_num.setText("(" + mSideInfo.getMemberlist() + ")");
+      }
+      return;
+    }
+    tv_join_num.setVisibility(View.GONE);
+    tv_admin_num.setVisibility(View.GONE);
+    tv_user_role.setText(getRoleName(mUser.getRole()));
+    tv_company_name.setText(TextUtils.isEmpty(mUser.getCompany()) ? "你还未加入公司，点击加入/创建" : mUser.getCompany());
+    tv_company_name.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (TextUtils.isEmpty(mUser.getCompany())) {
+          startActivity(new Intent(MainActivity.this, ApplyActivity.class));
+        }
+      }
+    });
+  }
+
+  private String getRoleName(int role) {
+    String userRoleName = "游客";
+    switch (role) {
+      case 1:
+        userRoleName = "游客";
+        break;
+      case 2:
+        userRoleName = "待同意";
+        break;
+      case 3:
+        userRoleName = "普通用户";
+        break;
+      case 4:
+        userRoleName = "管理员/审核员";
+        break;
+    }
+    return userRoleName;
   }
 }

@@ -148,10 +148,17 @@ public class SpUtils {
        .commit();
   }
 
+  //删除
+  public static void removeData(String key) {
+    mSp.edit()
+       .remove(key)
+       .commit();
+  }
+
   /**
    * 保存List
    */
-  public static  <T> void setDataList(String tag, ArrayList<T> datalist) {
+  public static <T> void setDataList(String tag, ArrayList<T> datalist) {
     if (null == datalist || datalist.size() <= 0) {
       return;
     }

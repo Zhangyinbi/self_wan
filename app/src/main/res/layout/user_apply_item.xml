@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_image"
             android:layout_width="47dp"
             android:layout_height="47dp"
             android:background="@drawable/blue_shape_gray"
@@ -30,6 +31,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="刘德华"
@@ -37,6 +39,7 @@
                     android:textSize="@dimen/dimens_18" />
 
                 <TextView
+                    android:id="@+id/tv_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimens_8"
@@ -47,6 +50,7 @@
 
 
             <TextView
+                android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimens_9"

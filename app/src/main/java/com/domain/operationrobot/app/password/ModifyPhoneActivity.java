@@ -115,7 +115,9 @@ public class ModifyPhoneActivity extends AbsActivity {
                   SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
                                                                 .getUser());
                   finish();
-                } @Override
+                }
+
+                @Override
                 public void onComplete() {
                   super.onComplete();
                   hideProgress();
@@ -125,30 +127,32 @@ public class ModifyPhoneActivity extends AbsActivity {
 
   public void sendCode(String accountPhone) {
     showProgress();
-    //timer.start();
-    //RemoteMode.getInstance()
-    //          .sendCode(accountPhone)
-    //          .subscribe(new BaseObserver<String>(compositeDisposable) {
-    //            @Override
-    //            public void onError(BaseException e) {
-    //              hideProgress();
-    //              showToast(e.getMsg());
-    //              if (timer != null) {
-    //                timer.cancel();
-    //              }
-    //              updateText("发送验证码", true, R.color.code_blue);
-    //            }
-    //
-    //            @Override
-    //            public void onSuss(String userBaseEntry) {
-    //              hideProgress();
-    //              showToast("验证码已发送至您手机，请注意查收");
-    //            } @Override
-    //            public void onComplete() {
-    //              super.onComplete();
-    //              hideProgress();
-    //            }
-    //          });
+    timer.start();
+    RemoteMode.getInstance()
+              .sendCode(accountPhone)
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                  if (timer != null) {
+                    timer.cancel();
+                  }
+                  updateText("发送验证码", true, R.color.code_blue);
+                }
+
+                @Override
+                public void onSuss(BaseEntry userBaseEntry) {
+                  hideProgress();
+                  showToast("验证码已发送至您手机，请注意查收");
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
   }
 
   @Override
@@ -175,7 +179,8 @@ public class ModifyPhoneActivity extends AbsActivity {
     btnComplete.setOnClickListener(listener);
     findViewById(R.id.iv_back).setOnClickListener(listener);
     mTvUserMobile = findViewById(R.id.tv_user_mobile);
-    User user = BaseApplication.getInstance().getUser();
+    User user = BaseApplication.getInstance()
+                               .getUser();
     mTvUserMobile.setText(user.getMobile());
     deNewPhone.setTextAfterChange(new DeleteEdit.TextAfterChange() {
       @Override

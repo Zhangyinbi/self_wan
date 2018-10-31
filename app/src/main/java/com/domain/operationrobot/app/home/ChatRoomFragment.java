@@ -9,12 +9,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.domain.library.base.AbsFragment;
 import com.domain.library.utils.MyPermissionUtils;
+import com.domain.library.utils.SoftInputUtil;
 import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
@@ -61,6 +63,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   private ChatAdapter  mAdapter;
   private ImageView    mIvRobot;
   private ImageView    mImageView;
+  private boolean      mSingle;
 
   public static ChatRoomFragment newInstance() {
     ChatRoomFragment fragment = new ChatRoomFragment();
@@ -87,6 +90,17 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
   @Override
   protected void initView(View view) {
+    int height = getActivity().getWindowManager()
+                              .getDefaultDisplay()
+                              .getHeight();
+    view.findViewById(R.id.root_view)
+        .setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            SoftInputUtil.hideSoftInput(view);
+          }
+        });
+
     mEtMsg = view.findViewById(R.id.et_msg);
     mBtnSend = view.findViewById(R.id.btn_send);
     mRecycler = view.findViewById(R.id.rlv_recycler);
@@ -107,6 +121,15 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
                            }, null);
       }
     });
+
+    //mImageView.findViewById(R.id.root_view)
+    //          .addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+    //            @Override
+    //            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+    //                mRecycler.scrollToPosition(mAdapter.getItemCount() - 1);
+    //            }
+    //          });
+
     mIvRobot.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -157,9 +180,19 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         }
       }
     });
+    mEtMsg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+      @Override
+      public void onFocusChange(View view, boolean b) {
+        if (b) {
+          mRecycler.scrollToPosition(mAdapter.getItemCount() - 1);
+        }
+      }
+    });
     mAdapter = new ChatAdapter(new ArrayList<ChatBean>());
     mAdapter.setRecycler(mRecycler);
-    mRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
+    linearLayoutManager.setStackFromEnd(true);
+    mRecycler.setLayoutManager(linearLayoutManager);
     mRecycler.setAdapter(mAdapter);
     String list = SpUtils.getDataList("chat_data");
     if (!TextUtils.isEmpty(list)) {
@@ -172,6 +205,14 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       @Override
       public void onClick(View view) {
         sendMsg();
+      }
+    });
+    mRecycler.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View view, MotionEvent motionEvent) {
+        SoftInputUtil.hideSoftInput(view);
+        view.requestFocus();
+        return false;
       }
     });
   }

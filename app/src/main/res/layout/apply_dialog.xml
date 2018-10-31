@@ -19,8 +19,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginRight="@dimen/dimens_17"
-        android:layout_marginTop="@dimen/dimens_11"
+        android:paddingRight="@dimen/dimens_17"
+        android:paddingTop="@dimen/dimens_11"
+        android:paddingLeft="10dp"
+        android:paddingBottom="@dimen/dimens_10"
         android:src="@drawable/tc_icon_gb"
         />
 

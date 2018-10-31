@@ -61,7 +61,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.MyViewHo
   @Override
   public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
     String currentItemName = data.get(position)
-                                 .getCompany();
+                                 .getCompanyname();
     holder.tvCompanyName.setText(currentItemName);
     if (null != targetName && currentItemName.contains(targetName)) {
       int length = targetName.length();

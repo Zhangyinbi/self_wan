@@ -86,7 +86,7 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
             if (isEmpty(code)) {
               ToastUtils.showToast("请输入短信验证码");
               return;
-            } else if (code.length() != 5) {
+            } else if (code.length() != VERITY_CODE_LENGTH) {
               ToastUtils.showToast("请输入正确的的短信验证码");
               return;
             }
@@ -110,9 +110,11 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
           if (etPwd.getInputType() == 129) {
             btnToggle.setBackgroundResource(R.drawable.img_yj);
             etPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            etPwd.setSelection(etPwd.getText().toString().trim().length());
           } else {
             etPwd.setInputType(129);
             btnToggle.setBackgroundResource(R.drawable.img_by);
+            etPwd.setSelection(etPwd.getText().toString().trim().length());
           }
           break;
         default:
@@ -220,8 +222,8 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
     SpUtils.setObject(USER_SP_KEY, user);
     BaseApplication.getInstance()
                    .setUser(user);
-    startActivity(new Intent(this, RegisterSussActivity.class));
     SpUtils.putBoolean(IS_LOGIN, true);
+    startActivity(new Intent(this, RegisterSussActivity.class));
     finish();
     ActivityStackManager.getInstance()
                         .killActivity(LoginActivity.class);

@@ -43,7 +43,7 @@ public class DelayDialog extends AppCompatDialog {
       }
     });
     mTvTime = findViewById(R.id.tv_time);
-    setCanceledOnTouchOutside(false);
+    setCanceledOnTouchOutside(true);
   }
 
   public void callPhone() {

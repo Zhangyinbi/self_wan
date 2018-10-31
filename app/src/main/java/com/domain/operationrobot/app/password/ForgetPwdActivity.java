@@ -81,7 +81,7 @@ public class ForgetPwdActivity extends AbsActivity {
             if (isEmpty(code)) {
               ToastUtils.showToast("请输入短信验证码");
               return;
-            } else if (code.length() != 5) {
+            } else if (code.length() != VERITY_CODE_LENGTH) {
               ToastUtils.showToast("请输入正确的的短信验证码");
               return;
             }
@@ -105,9 +105,11 @@ public class ForgetPwdActivity extends AbsActivity {
           if (etPwd.getInputType() == 129) {
             btnToggle.setBackgroundResource(R.drawable.img_yj);
             etPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            etPwd.setSelection(etPwd.getText().toString().trim().length());
           } else {
             etPwd.setInputType(129);
             btnToggle.setBackgroundResource(R.drawable.img_by);
+            etPwd.setSelection(etPwd.getText().toString().trim().length());
           }
           break;
         default:
@@ -191,31 +193,31 @@ public class ForgetPwdActivity extends AbsActivity {
   public void sendCode(String accountPhone) {
     showProgress();
     timer.start();
-    //RemoteMode.getInstance()
-    //          .sendCode(accountPhone)
-    //          .subscribe(new BaseObserver<String>(compositeDisposable) {
-    //            @Override
-    //            public void onError(BaseException e) {
-    //              hideProgress();
-    //              showToast(e.getMsg());
-    //              if (timer != null) {
-    //                timer.cancel();
-    //              }
-    //              updateText("发送验证码", true, R.color.code_blue);
-    //            }
-    //
-    //            @Override
-    //            public void onSuss(String userBaseEntry) {
-    //              hideProgress();
-    //              showToast("验证码已发送至您手机，请注意查收");
-    //            }
-    //
-    //            @Override
-    //            public void onComplete() {
-    //              super.onComplete();
-    //              hideProgress();
-    //            }
-    //          });
+    RemoteMode.getInstance()
+              .sendCode(accountPhone)
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                  if (timer != null) {
+                    timer.cancel();
+                  }
+                  updateText("发送验证码", true, R.color.code_blue);
+                }
+
+                @Override
+                public void onSuss(BaseEntry userBaseEntry) {
+                  hideProgress();
+                  showToast("验证码已发送至您手机，请注意查收");
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
   }
 
   public void updateText(String s, boolean b, int color) {

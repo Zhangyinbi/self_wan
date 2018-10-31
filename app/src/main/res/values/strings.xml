@@ -4,7 +4,7 @@
   <string name="login_phone_toast">请输入手机号码</string>
   <string name="login_pwd_hint">请输入登录密码</string>
   <string name="login_forget_pwd">忘记密码</string>
-  <string name="login">登陆</string>
+  <string name="login">登录</string>
   <string name="login_create_accound">创建账号</string>
   <string name="socket_connect_fail">未连接成功</string>
 
@@ -21,7 +21,6 @@
 
 
   <string name="error_login_failed">Login failed</string>
-
 
 
   <string name="time_yesterday">昨天</string>

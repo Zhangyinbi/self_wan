@@ -86,6 +86,10 @@ public class CreateCompanyActivity extends AbsActivity {
                                              .getUser();
                   user.setUsername(company.getUsername());
                   user.setRole(company.getRole());
+                  user.setCompanyname(company.getCompanyname());
+                  user.setCompanyid(company.getCompanyname());
+                  user.setCompanyrole(company.getCompanyrole());
+                  user.setCompanyexpiredate(company.getCompanyexpiredate());
                   SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
                                                                 .getUser());
                   startMain();

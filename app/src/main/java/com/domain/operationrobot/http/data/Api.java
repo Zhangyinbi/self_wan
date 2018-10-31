@@ -1,8 +1,10 @@
 package com.domain.operationrobot.http.data;
 
 import com.domain.library.http.entry.BaseEntry;
+import com.domain.operationrobot.http.bean.ApplyInfo;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
+import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
 
 import java.util.ArrayList;
@@ -44,13 +46,16 @@ public interface Api {
   @POST("/api/v1/user")
   Observable<User> createAccount(@Body RequestBody requestBody);
 
-  @FormUrlEncoded
-  @POST("/sendCode")
-  Observable<String> sendCode(@Field("phone") String phone);
+  /**
+   * 验证码
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @POST("/api/v1/sms")
+  Observable<BaseEntry> sendCode(@Body RequestBody requestBody);
 
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @GET("/api/v1/companys")
-  Observable<CompanyList> getCompanyList(@QueryMap Map<String,String> params);
+  Observable<CompanyList> getCompanyList(@QueryMap Map<String, String> params);
 
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @POST("/api/v1/member")
@@ -90,4 +95,17 @@ public interface Api {
   @FormUrlEncoded
   @POST("/addOperation")
   Observable<String> addOperation(@Field("phone") String phone, @Field("name") String name);
+
+  @GET("/api/v1/joininfo")
+  Observable<ApplyInfo> getJoinInfo(@Query("token") String token);
+
+  /**
+   * 处理用户申请
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @POST("/api/v1/joininfo")
+  Observable<BaseEntry> disposeJoinInfo(@Body RequestBody requestBody);
+
+  @GET("/api/v1/sidebar")
+  Observable<SideInfo> getSide(@Query("token")String token);
 }

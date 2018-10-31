@@ -20,6 +20,45 @@ public class User extends BaseEntry implements Serializable {
   private String imageUrl;
   private String companyid;
   private String mobile;
+  private String userstatus;
+  private String companyrole;
+  private String companyexpiredate;
+
+  public void setCompanyrole(String companyrole) {
+    this.companyrole = companyrole;
+  }
+
+  public String getCompanyname() {
+    return companyname == null ? "" : companyname;
+  }
+
+  public void setCompanyexpiredate(String companyexpiredate) {
+    this.companyexpiredate = companyexpiredate;
+  }
+
+  public String getCompanyexpiredate() {
+    return companyexpiredate == null ? "" : companyexpiredate;
+  }
+
+  public String getCompanyrole() {
+    return companyrole == null ? "" : companyrole;
+  }
+
+  public void setCompanyid(String companyid) {
+    this.companyid = companyid;
+  }
+
+  public void setCompanyname(String companyname) {
+    this.companyname = companyname;
+  }
+
+  public String getUserstatus() {
+    return userstatus == null ? "" : userstatus;
+  }
+
+  public void setUserstatus(String userstatus) {
+    this.userstatus = userstatus;
+  }
 
   public void setRole(int role) {
     this.role = role;

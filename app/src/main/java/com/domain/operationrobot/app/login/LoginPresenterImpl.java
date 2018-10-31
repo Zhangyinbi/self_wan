@@ -61,7 +61,7 @@ public class LoginPresenterImpl extends LoginContract.LoginPresenter<LoginContra
                     return;
                   }
                   hideProgress();
-                  mView.showToast(e.getMessage());
+                  mView.showToast(e.getMsg());
                 }
 
                 @Override

@@ -130,7 +130,6 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
   @Override
   public void joinSuss() {
     startActivity(new Intent(this, MainActivity.class));
-    startActivity(new Intent(this, MainActivity.class));
     ActivityStackManager.getInstance()
                         .killActivity(RegisterSussActivity.class);
 

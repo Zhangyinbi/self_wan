@@ -46,7 +46,7 @@ public class ApplyDialog extends AppCompatDialog {
         callPhone();
       }
     });
-    setCanceledOnTouchOutside(false);
+    setCanceledOnTouchOutside(true);
   }
 
   public void callPhone() {
