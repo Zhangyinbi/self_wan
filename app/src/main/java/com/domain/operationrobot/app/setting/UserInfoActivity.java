@@ -12,16 +12,18 @@ import android.view.View;
 
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.domain.library.GlideApp;
 import com.domain.library.base.AbsActivity;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.utils.MyPermissionUtils;
 import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.BaseApplication;
-import com.domain.operationrobot.GlideApp;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.home.ChatRoomFragment;
+import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.app.password.VerifyPwdActivity;
 import com.domain.operationrobot.glide.CircleImageView;
 import com.domain.operationrobot.http.bean.User;
@@ -32,6 +34,8 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import java.util.List;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+import static com.domain.library.GlideOptions.bitmapTransform;
 import static com.domain.operationrobot.app.password.VerifyPwdActivity.FROM_USER_NAME_MODIFY;
 import static com.domain.operationrobot.app.password.VerifyPwdActivity.FROM_USER_PHONE_MODIFY;
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
@@ -202,12 +206,13 @@ public class UserInfoActivity extends AbsActivity {
 
   private void setHeader(String path) {
     GlideApp.with(this)
-            .load(path)
-            .into(new SimpleTarget<Drawable>() {
-              @Override
-              public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                mCivUserImg.setImageDrawable(resource);
-              }
-            });
+            .load(BaseApplication.getInstance()
+                                 .getUser()
+                                 .getImage())
+            .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片
+            .error(R.drawable.round_88)//图片加载失败后，显示的图片
+            .transition(withCrossFade())
+            .apply(bitmapTransform(new CircleCrop()))
+            .into(mCivUserImg);
   }
 }

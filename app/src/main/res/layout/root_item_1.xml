@@ -22,7 +22,8 @@
         />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
@@ -40,9 +41,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/dimens_6"
-          android:layout_marginRight="@dimen/dimens_17"
           android:layout_marginTop="@dimen/dimens_4"
-          android:background="@drawable/bg_white_big_round"
+          android:background="@drawable/chat_from_bg_normal"
           android:lineSpacingExtra="5dp"
           android:paddingBottom="14dp"
           android:paddingLeft="12dp"
@@ -52,5 +52,14 @@
           android:textSize="@dimen/dimens_16sp"
           />
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dimens_13"
+        android:text="Darry"
+        android:textColor="#747474"
+        android:visibility="invisible"
+        android:textSize="@dimen/dimens_12sp"
+        />
   </LinearLayout>
 </LinearLayout>

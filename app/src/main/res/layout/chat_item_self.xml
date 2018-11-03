@@ -5,9 +5,11 @@
     android:layout_marginBottom="@dimen/dimens_30"
     android:orientation="vertical"
     >
-  <include layout="@layout/time_item"/>
+  <include
+      layout="@layout/time_item"/>
   <LinearLayout
-      android:layout_width="match_parent"
+      android:layout_gravity="end"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:gravity="right"
       android:orientation="horizontal"
@@ -16,7 +18,6 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimens_13"
         android:text="Darry"
         android:textColor="#747474"
         android:textSize="@dimen/dimens_12sp"
@@ -24,25 +25,40 @@
         />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dimens_6"
+        android:layout_marginTop="@dimen/dimens_15"
+        android:background="@color/transparent"
         android:gravity="end"
         >
       <TextView
           android:id="@+id/tv_content"
           android:layout_width="wrap_content"
-          android:background="@drawable/bg_white_big_round"
           android:layout_height="wrap_content"
-          android:paddingLeft="12dp"
-          android:paddingRight="12dp"
+          android:layout_gravity="end"
+          android:background="@drawable/chat_to_bg_normal"
           android:lineSpacingExtra="5dp"
           android:paddingBottom="14dp"
+          android:paddingLeft="12dp"
+          android:paddingRight="12dp"
           android:paddingTop="@dimen/dimens_12"
-          android:text="你撒接口你撒开的接口你撒接口你撒开的接口你撒接口你撒开的接口"
+          android:text=""
           android:textColor="#020202"
           android:textSize="@dimen/dimens_16sp"
+          />
+      <ImageView
+          android:id="@+id/iv_image_msg"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_gravity="end"
+          android:adjustViewBounds="true"
+          android:background="@color/transparent"
+          android:maxHeight="130dp"
+          android:maxWidth="130dp"
+          android:scaleType="centerCrop"
+          android:src="@mipmap/data_empty"
+          android:visibility="gone"
           />
     </LinearLayout>
 
@@ -50,8 +66,8 @@
         android:id="@+id/iv_user_img"
         android:layout_width="@dimen/dimens_40"
         android:layout_height="@dimen/dimens_40"
-        android:scaleType="centerCrop"
         android:layout_marginRight="16dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/img_self"
         />
   </LinearLayout>

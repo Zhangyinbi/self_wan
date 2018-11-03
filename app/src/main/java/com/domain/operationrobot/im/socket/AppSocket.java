@@ -31,7 +31,7 @@ public class AppSocket extends BaseSocket {
   }
 
   /**
-   * 增加用户
+   * fasong机器人消息
    */
   public void sendMessage(int type, String content) {
     try {
@@ -42,7 +42,7 @@ public class AppSocket extends BaseSocket {
                                              .getToken());
       jsonObject.put("type", type);
       jsonObject.put("msg", content);
-      jsonObject1.putOpt("data",jsonObject);
+      jsonObject1.putOpt("data", jsonObject);
       mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
     } catch (JSONException e) {
       e.printStackTrace();
@@ -70,6 +70,22 @@ public class AppSocket extends BaseSocket {
    */
   public void connTest() {
     mSocket.emit(IConstants.CONN, "...");
+  }
+
+  /**
+   * 加入房间
+   */
+  public void setConnSure() {
+    try {
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("token", BaseApplication.getInstance()
+                                             .getUser()
+                                             .getToken());
+      jsonObject.put("msg", "joinroom");
+      mSocket.emit(IConstants.TALK, jsonObject);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
   }
 
   /**

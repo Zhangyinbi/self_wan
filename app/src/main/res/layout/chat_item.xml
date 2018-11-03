@@ -21,8 +21,9 @@
         />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         >
       <TextView
@@ -34,23 +35,52 @@
           android:textColor="#747474"
           android:textSize="@dimen/dimens_12sp"
           />
-      <TextView
-          android:id="@+id/tv_content"
+      <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/dimens_6"
-          android:layout_marginRight="@dimen/dimens_17"
+          android:layout_marginRight="@dimen/dimens_6"
           android:layout_marginTop="@dimen/dimens_4"
-          android:background="@drawable/bg_white_big_round"
-          android:lineSpacingExtra="5dp"
-          android:paddingBottom="14dp"
-          android:paddingLeft="12dp"
-          android:paddingRight="12dp"
-          android:paddingTop="@dimen/dimens_12"
-          android:textColor="#020202"
-          android:textSize="@dimen/dimens_16sp"
-          />
+          android:gravity="end"
+          android:layout_weight="1"
+          >
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chat_from_bg_normal"
+            android:lineSpacingExtra="5dp"
+            android:paddingBottom="14dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="@dimen/dimens_12"
+            android:text="恢复健康是你父母说你麻烦恢复健康是你父母说你麻烦恢复健康是你父母说你麻烦恢复健康是你父母说你麻烦恢复健康是你父母说你麻烦"
+            android:textColor="#020202"
+            android:textSize="@dimen/dimens_16sp"
+            />
+        <ImageView
+            android:id="@+id/iv_image_msg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="end"
+            android:layout_marginLeft="@dimen/dimens_6"
+            android:adjustViewBounds="true"
+            android:background="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/data_empty"
+            android:visibility="gone"
+            />
+      </LinearLayout>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dimens_13"
+        android:text="Darry"
+        android:textColor="#747474"
+        android:textSize="@dimen/dimens_12sp"
+        android:visibility="invisible"
+        />
   </LinearLayout>
 </LinearLayout>

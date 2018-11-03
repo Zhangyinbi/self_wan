@@ -8,14 +8,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
-import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.domain.library.GlideApp;
 import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.exception.BaseException;
@@ -23,8 +22,6 @@ import com.domain.library.utils.App;
 import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
-import com.domain.operationrobot.GlideApp;
-import com.domain.operationrobot.MyAppGlideModule;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.company.ApplyActivity;
 import com.domain.operationrobot.app.company.UserApplyActivity;
@@ -32,7 +29,6 @@ import com.domain.operationrobot.app.login.LoginActivity;
 import com.domain.operationrobot.app.operation.OperationActivity;
 import com.domain.operationrobot.app.password.ModifyPwdActivity;
 import com.domain.operationrobot.app.setting.UserInfoActivity;
-import com.domain.operationrobot.http.bean.ApplyInfo;
 import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
@@ -41,8 +37,7 @@ import com.domain.operationrobot.listener.ThrottleLastClickListener;
 import java.util.ArrayList;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
-import static com.domain.operationrobot.GlideOptions.bitmapTransform;
-import static com.domain.operationrobot.GlideOptions.signatureOf;
+import static com.domain.library.GlideOptions.bitmapTransform;
 import static com.domain.operationrobot.app.operation.OperationActivity.ADD_OPERATION;
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
@@ -268,6 +263,7 @@ public class MainActivity extends AbsActivity {
       public void onDrawerStateChanged(int newState) {
       }
     });
+    getSide();
   }
 
   @Override

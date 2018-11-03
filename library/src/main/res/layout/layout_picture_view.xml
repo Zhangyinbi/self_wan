@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    >
+
+  <com.domain.library.ui.view.PointerFixViewPager
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/pager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      />
+
+  <RelativeLayout
+      android:id="@+id/bottom_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      >
+    <TextView
+        android:id="@+id/tv_image_index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/image_browse_index_margin_bottom"
+        android:layout_marginLeft="@dimen/image_browse_index_margin_left"
+        android:background="@drawable/image_browser_picture_number_bg"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/image_browse_index_text_size"
+        />
+
+    <TextView
+        android:id="@+id/iv_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/image_browse_index_margin_bottom"
+        android:layout_marginRight="@dimen/image_browse_index_margin_left"
+        android:background="@drawable/image_browser_picture_number_bg"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/image_browse_index_text_size"
+        />
+  </RelativeLayout>
+</FrameLayout>

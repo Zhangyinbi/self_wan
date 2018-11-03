@@ -86,10 +86,11 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
             if (isEmpty(code)) {
               ToastUtils.showToast("请输入短信验证码");
               return;
-            } else if (code.length() != VERITY_CODE_LENGTH) {
+              //TODO 验证码
+            } /*else if (code.length() != VERITY_CODE_LENGTH) {
               ToastUtils.showToast("请输入正确的的短信验证码");
               return;
-            }
+            }*/
             String pwd = etPwd.getText()
                               .toString()
                               .trim();

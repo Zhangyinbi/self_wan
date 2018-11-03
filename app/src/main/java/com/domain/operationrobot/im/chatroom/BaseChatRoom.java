@@ -234,9 +234,9 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         break;
       // Socket连接成功
       case Socket.EVENT_CONNECT:
-        Log.e(TAG, "链接成功");
+        Log.e(TAG, "链接成功，发送一条消息 确认加入房间");
         AppSocket.getInstance()
-                 .connTest();
+                 .setConnSure();
         break;
       // Socket断开连接
       case Socket.EVENT_DISCONNECT:

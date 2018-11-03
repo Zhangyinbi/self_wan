@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.domain.library.base.AbsActivity;
 import com.domain.library.base.BasePresenter;
+import com.domain.library.http.consumer.BaseObserver;
+import com.domain.library.http.exception.BaseException;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
@@ -29,11 +31,14 @@ import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.app.login.LoginContract.LoginView;
 import com.domain.operationrobot.app.password.AccountActivity;
 import com.domain.operationrobot.app.password.ForgetPwdActivity;
+import com.domain.operationrobot.http.bean.User;
+import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.PHONE_LENGTH;
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 public class LoginActivity extends AbsActivity implements LoginView<BasePresenter> {
   public static final  String EXTRA_ADDING_ACCOUNT      = "addNewAccount";
@@ -99,9 +104,14 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
   protected void onStart() {
     super.onStart();
     if (SpUtils.getBoolean(IS_LOGIN, false)) {
+      upDataUser();
       startActivity(new Intent(this, MainActivity.class));
       finish();
     }
+  }
+
+  private void upDataUser() {
+
   }
 
   /**

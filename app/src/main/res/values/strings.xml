@@ -28,4 +28,5 @@
   <string name="time_month">月</string>
   <string name="time_year">年</string>
   <string name="time_more">99+</string>
+  <string name="regex"><![CDATA[*&^%$]]></string>
 </resources>

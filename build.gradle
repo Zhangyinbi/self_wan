@@ -19,6 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'http://nexus.nevint.com/repository/maven-releases/' }
         maven { url 'https://jitpack.io' }
     }
 }

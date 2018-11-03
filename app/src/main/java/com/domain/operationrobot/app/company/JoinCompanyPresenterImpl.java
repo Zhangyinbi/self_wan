@@ -4,12 +4,17 @@ import com.domain.library.base.BasePresenter;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
+import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 
 import java.util.ArrayList;
+
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 /**
  * Project Name : OperationRobot
@@ -96,11 +101,20 @@ public class JoinCompanyPresenterImpl extends JoinCompanyContract.JoinCompanyPre
                 }
 
                 @Override
-                public void onSuss(Company companyList) {
+                public void onSuss(Company company) {
                   if (mView == null) {
                     return;
                   }
                   mView.joinSuss();
+
+                  User user = BaseApplication.getInstance()
+                                             .getUser();
+                  user.setUsername(company.getUsername());
+                  user.setRole(company.getRole());
+                  user.setCompanyname(company.getCompanyname());
+                  user.setCompanyrole(company.getCompanyrole());
+                  SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
+                                                                .getUser());
                 }
 
                 @Override

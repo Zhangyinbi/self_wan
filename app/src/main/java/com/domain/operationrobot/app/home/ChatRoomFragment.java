@@ -21,6 +21,8 @@ import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
+import com.domain.operationrobot.http.bean.PictureBean;
+import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
@@ -64,6 +66,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   private ImageView    mIvRobot;
   private ImageView    mImageView;
   private boolean      mSingle;
+  private ArrayList<PictureBean> compressList = new ArrayList<>();
+  private ArrayList<PictureBean> picList      = new ArrayList<>();
 
   public static ChatRoomFragment newInstance() {
     ChatRoomFragment fragment = new ChatRoomFragment();
@@ -121,14 +125,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
                            }, null);
       }
     });
-
-    //mImageView.findViewById(R.id.root_view)
-    //          .addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-    //            @Override
-    //            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-    //                mRecycler.scrollToPosition(mAdapter.getItemCount() - 1);
-    //            }
-    //          });
 
     mIvRobot.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -188,7 +184,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         }
       }
     });
-    mAdapter = new ChatAdapter(new ArrayList<ChatBean>());
+    mAdapter = new ChatAdapter(new ArrayList<ChatBean>(),getActivity());
     mAdapter.setRecycler(mRecycler);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
     linearLayoutManager.setStackFromEnd(true);
@@ -246,6 +242,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     }
     if (!AppSocket.getInstance()
                   .isConnected()) {
+
       MainChatRoom.init();
       return;
     }
@@ -420,22 +417,34 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
         case PictureConfig.CHOOSE_REQUEST:
-          // 图片、视频、音频选择结果回调
           List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-
-          Log.e("------", "onActivityResult: " + selectList.get(0)
-                                                           .getPath());
-          Log.e("------", "onActivityResult: " + selectList.get(0)
-                                                           .getCompressPath());
-          Log.e("------", "onActivityResult: " + selectList.get(0)
-                                                           .getCutPath());
-          // 例如 LocalMedia 里面返回三种path
-          // 1.media.getPath(); 为原图path
-          // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
-          // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
-          // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+          for (LocalMedia localMedia : selectList) {
+            PictureBean pictureBean = new PictureBean(picList.size(), localMedia.getPath());
+            picList.add(pictureBean);
+            if (localMedia.isCompressed()) {
+              PictureBean compressPicBean = new PictureBean(compressList.size(), localMedia.getCompressPath());
+              compressPicBean.setTime(System.currentTimeMillis());
+              Log.e("------1111", "onActivityResult: " + compressPicBean.getPath());
+              compressList.add(compressPicBean);
+              //去上传 TODO  上传成功之后在展示图片信息
+              setImageMsg(compressPicBean.getPath());
+            }
+          }
           break;
       }
     }
+  }
+
+  /**
+   * 发送图片消息
+   */
+  private void setImageMsg(String path) {
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String regex = getContext().getString(R.string.regex);
+    String imgMsg = regex + path + regex;
+    addBeanToRecycler(user.getUsername(), user.getImage(), imgMsg, System.currentTimeMillis(), user.getUserId());
+    AppSocket.getInstance()
+             .sendMessage(imgMsg);
   }
 }

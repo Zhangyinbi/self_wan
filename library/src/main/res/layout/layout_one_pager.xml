@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <ScrollView
+      android:id="@+id/scroll_page"
+      android:visibility="gone"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <com.domain.library.ui.view.PinchImageView
+        android:id="@+id/image_page_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside" />
+  </ScrollView>
+
+  <com.domain.library.ui.view.PinchImageView
+      android:id="@+id/image_page"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:scaleType="centerInside" />
+
+  <ProgressBar
+      android:id="@+id/progress_bar"
+      android:layout_width="@dimen/image_browse_progress_bar_size"
+      android:layout_height="@dimen/image_browse_progress_bar_size"
+      android:layout_gravity="center" />
+
+</FrameLayout>

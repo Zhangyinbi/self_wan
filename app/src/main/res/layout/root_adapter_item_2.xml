@@ -6,11 +6,11 @@
 
   <TextView
       android:id="@+id/tv_action_name"
-      android:layout_width="106dp"
+      android:layout_width="match_parent"
       android:layout_height="33dp"
       android:layout_marginBottom="@dimen/dimens_5"
-      android:layout_marginLeft="@dimen/dimens_15"
-      android:layout_marginRight="@dimen/dimens_15"
+      android:layout_marginLeft="@dimen/dimens_5"
+      android:layout_marginRight="@dimen/dimens_5"
       android:layout_marginTop="@dimen/dimens_5"
       android:gravity="center"
       android:background="@drawable/blue_box"
