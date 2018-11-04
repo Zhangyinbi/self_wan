@@ -347,6 +347,14 @@ public class MainActivity extends AbsActivity {
       tv_user_role.setText(getRoleName(mSideInfo.getRole()));
       tv_user_indication.setText(mSideInfo.getCompanyrole() == 1 ? "试用中" : "正式用户");
       tv_company_name.setText(TextUtils.isEmpty(mSideInfo.getCompanyname()) ? "你还未加入公司，点击加入/创建" : mUser.getCompany());
+      tv_company_name.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          if (TextUtils.isEmpty(mUser.getCompany())) {
+            startActivity(new Intent(MainActivity.this, ApplyActivity.class));
+          }
+        }
+      });
       if (mSideInfo.getJoinlist() > 0) {
         tv_join_num.setVisibility(View.VISIBLE);
         tv_join_num.setText(mSideInfo.getJoinlist() + "");
@@ -361,14 +369,6 @@ public class MainActivity extends AbsActivity {
     tv_admin_num.setVisibility(View.GONE);
     tv_user_role.setText(getRoleName(mUser.getRole()));
     tv_company_name.setText(TextUtils.isEmpty(mUser.getCompany()) ? "你还未加入公司，点击加入/创建" : mUser.getCompany());
-    tv_company_name.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        if (TextUtils.isEmpty(mUser.getCompany())) {
-          startActivity(new Intent(MainActivity.this, ApplyActivity.class));
-        }
-      }
-    });
   }
 
   private String getRoleName(int role) {

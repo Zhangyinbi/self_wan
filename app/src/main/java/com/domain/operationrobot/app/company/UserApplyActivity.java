@@ -64,6 +64,7 @@ public class UserApplyActivity extends AbsActivity {
                 public void onError(BaseException e) {
                   hideProgress();
                   showToast(e.getMsg());
+                  mLl_no_data.setVisibility(View.VISIBLE);
                 }
 
                 @Override

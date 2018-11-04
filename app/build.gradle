@@ -18,7 +18,7 @@ android {
   }
 
   lintOptions {
-    checkReleaseBuilds false
+    checkReleaseBuilds true
     // Or, if you prefer, you can continue to check for errors in release builds,
     // but continue the build even when errors are found:
     abortOnError false
@@ -62,7 +62,7 @@ dependencies {
   annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
   implementation 'com.android.support:multidex:1.0.1'
 
-//  implementation "cn.com.weilaihui3:common-gallery:0.3.5"
+  //  implementation "cn.com.weilaihui3:common-gallery:0.3.5"
 
   implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 }
