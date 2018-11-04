@@ -7,6 +7,7 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.http.bean.ApplyInfo;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
+import com.domain.operationrobot.http.bean.OperationList;
 import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
 
@@ -268,19 +269,43 @@ public class RemoteMode implements BaseMode {
   /**
    * 编辑运维账户
    */
-  public Observable<String> editOperation(String phone, String name, String id) {
+  public Observable<BaseEntry> editOperation(String phone, String name, String id) {
+    JSONObject root = new JSONObject();
+    try {
+      root.put("opuserid", id);
+      root.put("opusername", name);
+      root.put("opmobile", phone);
+      root.put("token", BaseApplication.getInstance()
+                                       .getUser()
+                                       .getToken());
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .editOperation(phone, name, id);
+                         .editOperation(requestBody);
   }
 
   /**
    * 添加运维账户
    */
-  public Observable<String> addOperation(String phone, String name) {
+  public Observable<BaseEntry> addOperation(String phone, String name) {
+    JSONObject root = new JSONObject();
+    try {
+      root.put("mobile", phone);
+      root.put("username", name);
+      root.put("token", BaseApplication.getInstance()
+                                       .getUser()
+                                       .getToken());
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .addOperation(phone, name);
+                         .addOperation(requestBody);
   }
 
   /**
@@ -322,6 +347,35 @@ public class RemoteMode implements BaseMode {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .getSide(token);
+  }
+
+  public Observable<OperationList> getOperationInfo() {
+    String token = BaseApplication.getInstance()
+                                  .getUser()
+                                  .getToken();
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getOperationInfo(token);
+  }
+
+  /**
+   * 管理员状态设置
+   */
+  public Observable<OperationList> updateStatus(int lastRole, String userId) {
+    JSONObject root = new JSONObject();
+    try {
+      root.put("opuserid", userId);
+      root.put("oprole", lastRole);
+      root.put("token", BaseApplication.getInstance()
+                                       .getUser()
+                                       .getToken());
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .updateStatus(requestBody);
   }
 
   private static class SingletonHolder {

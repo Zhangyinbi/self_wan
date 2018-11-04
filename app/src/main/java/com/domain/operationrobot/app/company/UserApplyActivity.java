@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
@@ -24,6 +25,8 @@ public class UserApplyActivity extends AbsActivity {
   private RecyclerView     rlv_recycler;
   private UserApplyAdapter mUserApplyAdapter;
   private TextView         mTv_no_data;
+  private LinearLayout mLl_no_data;
+  private ApplyInfo mApplyInfo;
 
   @Override
   protected int getLayoutId() {
@@ -37,6 +40,7 @@ public class UserApplyActivity extends AbsActivity {
 
   @Override
   protected void initView() {
+    mLl_no_data = findViewById(R.id.ll_no_data);
     mTv_no_data = findViewById(R.id.tv_no_data);
     findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
       @Override
@@ -64,12 +68,14 @@ public class UserApplyActivity extends AbsActivity {
 
                 @Override
                 public void onSuss(ApplyInfo applyInfo) {
+                  mApplyInfo = applyInfo;
                   hideProgress();
                   if (null == applyInfo.getInfo() || applyInfo.getInfo()
                                                               .size() == 0) {
-                    mTv_no_data.setVisibility(View.VISIBLE);
+                    mLl_no_data.setVisibility(View.VISIBLE);
                     return;
                   }
+                  mLl_no_data.setVisibility(View.GONE);
                   mUserApplyAdapter.setData(applyInfo.getInfo());
                 }
 

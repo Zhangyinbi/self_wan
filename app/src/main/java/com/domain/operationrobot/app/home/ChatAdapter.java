@@ -112,19 +112,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         int end = msg.lastIndexOf(regex);
         String imageUrl = msg.substring(regex.length(), end);
         //TODO 实际图片宽高比
-        float ratio = 1080/1920F;
+        float ratio = 1080 / 1920F;
         int height = 0;
         int width = 0;
         if (height >= width) {
-          height = DisplaysUtil.dip2px(mActivity,130);
-          width = (int) (height*ratio);
+          height = DisplaysUtil.dip2px(mActivity, 130);
+          width = (int) (height * ratio);
         } else {
-          width = DisplaysUtil.dip2px(mActivity,130);
-          height = (int) (width*ratio);
+          width = DisplaysUtil.dip2px(mActivity, 130);
+          height = (int) (width * ratio);
         }
         holder.iv_image_msg.setAdjustViewBounds(true);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.iv_image_msg.getLayoutParams();
-        layoutParams.height=height;
+        layoutParams.height = height;
         layoutParams.width = width;
         holder.iv_image_msg.setLayoutParams(layoutParams);
         ////设置图片圆角角度
@@ -133,9 +133,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
         //
         Glide.with(mActivity)
-                .load(imageUrl)
-                .apply(options)
-                .into(holder.iv_image_msg);
+             .load(imageUrl)
+             .apply(options)
+             .into(holder.iv_image_msg);
 
         holder.iv_image_msg.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -149,7 +149,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
 
     if (holder.tv_content != null) {
-      holder.iv_image_msg.setVisibility(View.GONE);
+      if (holder.iv_image_msg != null) {
+        holder.iv_image_msg.setVisibility(View.GONE);
+      }
       holder.tv_content.setVisibility(View.VISIBLE);
       holder.tv_content.setOnClickListener(null);
       holder.tv_content.setText(msg);

@@ -27,6 +27,7 @@ import com.domain.operationrobot.app.company.ApplyActivity;
 import com.domain.operationrobot.app.company.UserApplyActivity;
 import com.domain.operationrobot.app.login.LoginActivity;
 import com.domain.operationrobot.app.operation.OperationActivity;
+import com.domain.operationrobot.app.operation.OperationManagerActivity;
 import com.domain.operationrobot.app.password.ModifyPwdActivity;
 import com.domain.operationrobot.app.setting.UserInfoActivity;
 import com.domain.operationrobot.http.bean.SideInfo;
@@ -88,7 +89,7 @@ public class MainActivity extends AbsActivity {
           drawer.postDelayed(new Runnable() {
             @Override
             public void run() {
-              OperationActivity.start(MainActivity.this, ADD_OPERATION, null);
+              OperationManagerActivity.start(MainActivity.this);
             }
           }, 300);
           break;

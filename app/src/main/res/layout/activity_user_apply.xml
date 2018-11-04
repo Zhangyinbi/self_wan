@@ -7,36 +7,18 @@
     android:orientation="vertical"
     tools:context=".app.company.UserApplyActivity"
     >
-
-  <RelativeLayout
+  <com.domain.operationrobot.widgets.TitleBar
       android:layout_width="match_parent"
-      android:layout_height="64dp"
-      android:background="@color/code_blue"
-      android:paddingTop="@dimen/dimens_20"
-      >
+      android:layout_height="wrap_content"
+      app:title="用户申请"
+      />
 
-    <ImageView
-        android:id="@+id/iv_back"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/dimens_17"
-        android:src="@drawable/back_icon_white"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dimens_10"
-        android:text="用户申请"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        />
-  </RelativeLayout>
   <LinearLayout
+      android:id="@+id/ll_no_data"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center"
+      android:visibility="gone"
       android:orientation="vertical"
       >
     <ImageView
@@ -50,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="暂时没有数据"
+        android:text="暂未查询到数据"
         android:textColor="#D9D9D9"
         android:textSize="13sp"
         />

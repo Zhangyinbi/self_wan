@@ -5,31 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".app.operation.OperationActivity">
 
-    <RelativeLayout
+    <com.domain.operationrobot.widgets.TitleBar
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/code_blue"
-        android:paddingTop="@dimen/dimens_20">
+        android:layout_height="wrap_content"
+        app:title="编辑运维用户"
+        />
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/dimens_17"
-            android:src="@drawable/back_icon_white" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimens_10"
-            android:text="编辑运维用户"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

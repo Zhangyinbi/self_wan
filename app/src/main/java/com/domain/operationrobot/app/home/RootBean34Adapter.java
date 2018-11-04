@@ -40,7 +40,7 @@ public class RootBean34Adapter extends RecyclerView.Adapter<RootBean34Adapter.My
     RootMessage34.Action action = mActions.get(position);
     holder.tv_title.setText(action.getTitle());
     holder.tv_ratio.setText(action.getRatio() + "%");
-    holder.progress_bar.setProgress(action.getRatio());
+    holder.progress_bar.setProgress((int) action.getRatio());
     if (action.getRatio() >= 85) {
       holder.progress_bar.setProgressDrawable(holder.itemView.getContext()
                                                              .getResources()

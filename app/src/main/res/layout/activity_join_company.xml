@@ -9,101 +9,95 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/code_blue"
-        android:paddingTop="@dimen/dimens_20">
+  <com.domain.operationrobot.widgets.TitleBar
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:title="加入公司"
+      />
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/dimens_17"
-            android:src="@drawable/back_icon_white" />
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="91dp"
+      >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimens_10"
-            android:text="加入公司"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="91dp">
+        android:text="没找到你的公司？点击"
+        android:textColor="#999"
+        android:textSize="@dimen/dimens_14sp"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="没找到你的公司？点击"
-            android:textColor="#999"
-            android:textSize="@dimen/dimens_14sp" />
+    <Button
+        android:id="@+id/btn_create"
+        android:layout_width="78dp"
+        android:layout_height="27dp"
+        android:layout_marginLeft="@dimen/dimens_3"
+        android:background="@drawable/blue_border_press"
+        android:text="创建公司"
+        android:textColor="@color/code_blue"
+        android:textSize="@dimen/dimens_14sp"
+        />
+  </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_create"
-            android:layout_width="78dp"
-            android:layout_height="27dp"
-            android:layout_marginLeft="@dimen/dimens_3"
-            android:background="@drawable/blue_border_press"
-            android:text="创建公司"
-            android:textColor="@color/code_blue"
-            android:textSize="@dimen/dimens_14sp" />
-    </LinearLayout>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/dimens_18"
+      android:layout_marginTop="@dimen/dimens_27"
+      android:background="@drawable/bg_white_round_black_border"
+      android:orientation="vertical"
+      >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dimens_18"
-        android:layout_marginTop="@dimen/dimens_27"
-        android:background="@drawable/bg_white_round_black_border"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+      <Space
+          android:layout_width="@dimen/dimens_7"
+          android:layout_height="wrap_content"
+          />
 
-            <Space
-                android:layout_width="@dimen/dimens_7"
-                android:layout_height="wrap_content" />
-
-            <ImageView
-                android:id="@+id/iv_search"
-                android:layout_width="@dimen/dimens_20"
-                android:layout_height="@dimen/dimens_20"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dimens_5"
-                android:src="@drawable/icon_search" />
+      <ImageView
+          android:id="@+id/iv_search"
+          android:layout_width="@dimen/dimens_20"
+          android:layout_height="@dimen/dimens_20"
+          android:layout_gravity="center_vertical"
+          android:layout_marginLeft="@dimen/dimens_5"
+          android:src="@drawable/icon_search"
+          />
 
 
-            <com.domain.library.widgets.DeleteEdit
-                android:id="@+id/auto_search_company"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/dimens_10"
-                android:paddingRight="@dimen/dimens_13"
-                app:hint_color="#C5C5C5"
-                app:text_color="#333333"
-                app:value_hint="请输入公司名称" />
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_height"
-            android:background="@color/line_color" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:scrollbars="none" />
+      <com.domain.library.widgets.DeleteEdit
+          android:id="@+id/auto_search_company"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingLeft="@dimen/dimens_10"
+          android:paddingRight="@dimen/dimens_13"
+          app:hint_color="#C5C5C5"
+          app:text_color="#333333"
+          app:value_hint="请输入公司名称"
+          />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:background="@color/line_color"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rlv_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        />
+  </LinearLayout>
 
 </LinearLayout>

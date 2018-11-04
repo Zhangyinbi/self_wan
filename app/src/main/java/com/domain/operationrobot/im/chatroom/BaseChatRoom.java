@@ -137,16 +137,20 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     }
   }
 
-  public void moni(String json) {
-    JSONObject rootData = null;
-    try {
-      rootData = new JSONObject(json);
-      JSONObject jsonObject = rootData.optJSONObject("data");
-      upDataRoot(jsonObject);
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
-  }
+  ///**
+  //  // * 模拟机器人发送的消息
+  //  // * @param json
+  //  // */
+  //  //public void moni(String json) {
+  //  //  JSONObject rootData = null;
+  //  //  try {
+  //  //    rootData = new JSONObject(json);
+  //  //    JSONObject jsonObject = rootData.optJSONObject("data");
+  //  //    upDataRoot(jsonObject);
+  //  //  } catch (JSONException e) {
+  //  //    e.printStackTrace();
+  //  //  }
+  //  //}
 
   /**
    * 解析第二种数据类型
@@ -214,11 +218,13 @@ public class BaseChatRoom extends Observable implements IChatRoom {
 
       case IConstants.TALK_STATUS:
         JSONObject content = (JSONObject) args[0];
+        Log.e(TAG, "接收到其他人消息: "+ content.toString());
         JSONObject jsonObject1 = content.optJSONObject("data");
         upData(jsonObject1);
         break;
       case IConstants.CHAT_BOT_STATUS:
         JSONObject rootData = (JSONObject) args[0];
+        Log.e(TAG, "接收到机器人消息: "+ rootData.toString());
         JSONObject jsonObject = rootData.optJSONObject("data");
         upDataRoot(jsonObject);
         break;

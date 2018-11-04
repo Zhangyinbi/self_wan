@@ -40,7 +40,7 @@ public class RootMessage34 {
 
   public class Action {
     private String title;
-    private int ratio;
+    private float ratio;
 
     public String getTitle() {
       return title == null ? "" : title;
@@ -50,11 +50,11 @@ public class RootMessage34 {
       this.title = title;
     }
 
-    public int getRatio() {
+    public float getRatio() {
       return  ratio;
     }
 
-    public void setRatio(int ratio) {
+    public void setRatio(float ratio) {
       this.ratio = ratio;
     }
   }

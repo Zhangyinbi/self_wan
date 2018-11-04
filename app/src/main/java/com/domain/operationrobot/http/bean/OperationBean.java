@@ -26,6 +26,12 @@ public class OperationBean implements Parcelable {
     private String phone;
     private String id;
 
+    public OperationBean(String name, String phone, String id) {
+        this.name = name;
+        this.phone = phone;
+        this.id = id;
+    }
+
     protected OperationBean(Parcel in) {
         name = in.readString();
         phone = in.readString();

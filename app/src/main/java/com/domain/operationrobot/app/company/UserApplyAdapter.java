@@ -15,15 +15,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.domain.library.GlideApp;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.http.bean.ApplyInfo;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
 import com.domain.operationrobot.util.TimeUtil;
 import java.util.ArrayList;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+import static com.domain.library.GlideOptions.bitmapTransform;
 
 /**
  * Project Name : OperationRobot
@@ -74,8 +79,10 @@ public class UserApplyAdapter extends RecyclerView.Adapter<UserApplyAdapter.MyVi
     holder.tv_time.setText("申请时间：" + TimeUtil.formatTimeMillis(info.getRequest_createtime()));
     GlideApp.with(context)
             .load(info.getRequest_img())
-            .placeholder(R.drawable.yhsq_tx2)
-            .error(R.drawable.yhsq_tx2)
+            .placeholder(R.drawable.yhsq_tx2)//图片加载出来前，显示的图片
+            .error(R.drawable.yhsq_tx2)//图片加载失败后，显示的图片
+            .transition(withCrossFade())
+            .apply(bitmapTransform(new CircleCrop()))
             .into(holder.iv_image);
 
     holder.btn_agree.setOnClickListener(new View.OnClickListener() {

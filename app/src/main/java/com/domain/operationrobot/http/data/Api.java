@@ -4,6 +4,7 @@ import com.domain.library.http.entry.BaseEntry;
 import com.domain.operationrobot.http.bean.ApplyInfo;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
+import com.domain.operationrobot.http.bean.OperationList;
 import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
 
@@ -88,13 +89,19 @@ public interface Api {
   @POST("/api/v1/company")
   Observable<Company> createCompany(@Body RequestBody requestBody);
 
-  @FormUrlEncoded
-  @POST("/editOperation")
-  Observable<String> editOperation(@Field("phone") String phone, @Field("name") String name, @Field("id") String id);
+  /**
+   * 编辑运维用户
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @PATCH("/api/v1/opuser")
+  Observable<BaseEntry> editOperation(@Body RequestBody requestBody);
 
-  @FormUrlEncoded
-  @POST("/addOperation")
-  Observable<String> addOperation(@Field("phone") String phone, @Field("name") String name);
+  /**
+   * 添加运维用户
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @POST("/api/v1/opuser")
+  Observable<BaseEntry> addOperation(@Body RequestBody requestBody);
 
   @GET("/api/v1/joininfo")
   Observable<ApplyInfo> getJoinInfo(@Query("token") String token);
@@ -107,5 +114,15 @@ public interface Api {
   Observable<BaseEntry> disposeJoinInfo(@Body RequestBody requestBody);
 
   @GET("/api/v1/sidebar")
-  Observable<SideInfo> getSide(@Query("token")String token);
+  Observable<SideInfo> getSide(@Query("token") String token);
+
+  @GET("/api/v1/opusers")
+  Observable<OperationList> getOperationInfo(@Query("token") String token);
+
+  /**
+   * 设置管理员
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @PATCH("/api/v1/opuser")
+  Observable<OperationList> updateStatus(@Body RequestBody requestBody);
 }
