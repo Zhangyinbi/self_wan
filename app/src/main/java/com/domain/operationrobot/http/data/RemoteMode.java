@@ -365,7 +365,7 @@ public class RemoteMode implements BaseMode {
     JSONObject root = new JSONObject();
     try {
       root.put("opuserid", userId);
-      root.put("oprole", lastRole);
+      root.put("oprole", String.valueOf(lastRole));
       root.put("token", BaseApplication.getInstance()
                                        .getUser()
                                        .getToken());

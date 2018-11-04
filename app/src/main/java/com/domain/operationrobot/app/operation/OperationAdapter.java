@@ -39,6 +39,7 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
   private ArrayList<OperationList.OperationInfo> data;
   private ArrayList<OperationList.OperationInfo> target = new ArrayList<>();
   private Context mContext;
+  OperationManagerActivity.IUpdate update;
 
   public OperationAdapter(Context context) {
     this.mContext = context;
@@ -87,7 +88,7 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
     holder.btn_manger.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-          new OperationDialog(mContext,operationInfo).show();
+          new OperationDialog(mContext,operationInfo,update).show();
       }
     });
   }
@@ -100,7 +101,8 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
   /**
    * 更新数据
    */
-  public void updateData(ArrayList<OperationList.OperationInfo> data, String targetName) {
+  public void updateData(ArrayList<OperationList.OperationInfo> data, String targetName,OperationManagerActivity.IUpdate update) {
+    this.update = update;
     if (!TextUtils.isEmpty(targetName)) {
       target.clear();
       for (OperationList.OperationInfo operationInfo : data) {

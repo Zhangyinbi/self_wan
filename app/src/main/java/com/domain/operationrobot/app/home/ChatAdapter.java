@@ -30,6 +30,7 @@ import com.domain.operationrobot.util.TimeUtil;
 //import com.jelly.mango.Mango;
 //import com.jelly.mango.MultiplexImage;
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 import static com.domain.operationrobot.util.Constant.MESSAGE_OTHER;
 import static com.domain.operationrobot.util.Constant.MESSAGE_SELF;
@@ -216,9 +217,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     setImgs(message);
     mList.add(message);
     notifyItemInserted(getItemCount());
-    if (mRecyclerView != null) {
-      mRecyclerView.scrollToPosition(getItemCount() - 1);
-    }
+    //new android.os.Handler().postDelayed(new Runnable() {
+    //  @Override
+    //  public void run() {
+        if (mRecyclerView != null) {
+          mRecyclerView.scrollToPosition(getItemCount()-1);
+        }
+      //}
+    //}, 200);
+
+    //new android.os.Handler().postDelayed(new Runnable() {
+    //  @Override
+    //  public void run() {
+    //    if (mRecyclerView != null) {
+    //      mRecyclerView.scrollToPosition(getItemCount() - 1);
+    //    }
+    //  }
+    //}, 100);
   }
 
   public void addAll(ArrayList<ChatBean> list) {
@@ -227,9 +242,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
     mList.addAll(list);
     notifyItemRangeInserted(getItemCount(), list.size());
-    if (mRecyclerView != null) {
-      mRecyclerView.scrollToPosition(getItemCount() - 1);
-    }
+    new android.os.Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        if (mRecyclerView != null) {
+          mRecyclerView.scrollToPosition(getItemCount() - 1);
+        }
+      }
+    }, 100);
   }
 
   public void setRecycler(RecyclerView recycler) {

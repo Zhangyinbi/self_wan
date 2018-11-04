@@ -2,6 +2,7 @@ package com.domain.operationrobot.app.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -187,8 +188,14 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     });
     mAdapter = new ChatAdapter(new ArrayList<ChatBean>(), getActivity());
     mAdapter.setRecycler(mRecycler);
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
-    linearLayoutManager.setStackFromEnd(true);
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
+    //linearLayoutManager.setStackFromEnd(true);
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        linearLayoutManager.setStackFromEnd(true);
+      }
+    }, 300);
     mRecycler.setLayoutManager(linearLayoutManager);
     mRecycler.setAdapter(mAdapter);
     String list = SpUtils.getDataList("chat_data");

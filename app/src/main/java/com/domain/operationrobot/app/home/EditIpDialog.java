@@ -42,7 +42,7 @@ public class EditIpDialog extends AppCompatDialog {
 
   private void init() {
     setContentView(R.layout.edit_ip_dialog);
-    getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     setCanceledOnTouchOutside(true);
     mEditText = findViewById(R.id.et_host);
     mBtnSend = findViewById(R.id.btn_send);

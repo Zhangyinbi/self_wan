@@ -19,6 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="55dp"
+        android:ellipsize="middle"
+        android:maxWidth="102dp"
+        android:singleLine="true"
         android:text="李桂芳"
         android:textColor="#666"
         android:textSize="@dimen/dimens_16sp"
@@ -53,8 +56,8 @@
       android:id="@+id/civ_user_img"
       android:layout_width="100dp"
       android:layout_height="100dp"
-      android:scaleType="fitXY"
       android:layout_centerHorizontal="true"
+      android:scaleType="fitXY"
       android:src="@drawable/round_88"
       />
   <LinearLayout

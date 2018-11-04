@@ -9,7 +9,7 @@
       layout="@layout/time_item"/>
   <LinearLayout
       android:layout_gravity="end"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="right"
       android:orientation="horizontal"
@@ -25,8 +25,9 @@
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_marginRight="@dimen/dimens_6"
         android:layout_marginTop="@dimen/dimens_15"
         android:background="@color/transparent"

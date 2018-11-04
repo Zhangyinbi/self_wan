@@ -32,21 +32,23 @@ import static com.domain.library.utils.ToastUtils.showToast;
  */
 public class OperationDialog extends AppCompatDialog {
 
-  private OperationList.OperationInfo operationInfo;
-  private ImageView                   mCiv_user_img;
-  private TextView                    mTv_admin_name;
-  private Button                      mBtn_update_status;
-  private Button                      mBtn_shy_status;
-  private Button                      mBtn_cancel;
-  private Button                      mBtn_sure;
-  private Context                     mContext;
-  private int                         role;
+  private OperationList.OperationInfo      operationInfo;
+  private ImageView                        mCiv_user_img;
+  private TextView                         mTv_admin_name;
+  private Button                           mBtn_update_status;
+  private Button                           mBtn_shy_status;
+  private Button                           mBtn_cancel;
+  private Button                           mBtn_sure;
+  private Context                          mContext;
+  private int                              role;
+  private OperationManagerActivity.IUpdate update;
 
-  public OperationDialog(@NonNull Context context, OperationList.OperationInfo operationInfo) {
+  public OperationDialog(@NonNull Context context, OperationList.OperationInfo operationInfo, OperationManagerActivity.IUpdate update) {
     super(context, R.style.ROBOT_Dialog);
     mContext = context;
     this.operationInfo = operationInfo;
     role = operationInfo.getRole();
+    this.update = update;
     init();
   }
 
@@ -70,7 +72,6 @@ public class OperationDialog extends AppCompatDialog {
       //TODO
       showToast("暂无此功能");
     });
-
     updateUI();
     mBtn_update_status.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -103,6 +104,7 @@ public class OperationDialog extends AppCompatDialog {
 
                 @Override
                 public void onSuss(BaseEntry baseEntry) {
+                  update.updateData();
                   if (role == 3) {
                     role = 4;
                   } else {

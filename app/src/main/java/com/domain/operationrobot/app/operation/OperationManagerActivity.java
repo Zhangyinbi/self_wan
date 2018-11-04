@@ -49,6 +49,7 @@ public class OperationManagerActivity extends AbsActivity {
   private OperationAdapter                       mOperationAdapter;
   private EditText                               mEtAdminName;
   private ArrayList<OperationList.OperationInfo> mInfo;
+  private IUpdate                                mIUpdate;
 
   public static void start(Activity activity) {
     Intent intent = new Intent(activity, OperationManagerActivity.class);
@@ -88,10 +89,16 @@ public class OperationManagerActivity extends AbsActivity {
         String targetName = editable.toString()
                                     .trim();
         if (mInfo != null) {
-          mOperationAdapter.updateData(mInfo, targetName);
+          mOperationAdapter.updateData(mInfo, targetName, mIUpdate);
         }
       }
     });
+    mIUpdate = new IUpdate() {
+      @Override
+      public void updateData() {
+        getOperationInfo();
+      }
+    };
 
     mRecycler = findViewById(R.id.rlv_recycler_view);
     mRecycler.setLayoutManager(new GridLayoutManager(this, 2) {
@@ -106,11 +113,11 @@ public class OperationManagerActivity extends AbsActivity {
 
   @Override
   protected void initData() {
+    showProgress();
     getOperationInfo();
   }
 
   private void getOperationInfo() {
-    showProgress();
     RemoteMode.getInstance()
               .getOperationInfo()
               .subscribe(new BaseObserver<OperationList>(compositeDisposable) {
@@ -124,7 +131,7 @@ public class OperationManagerActivity extends AbsActivity {
                 public void onSuss(OperationList operationList) {
                   hideProgress();
                   mInfo = operationList.getInfo();
-                  mOperationAdapter.updateData(mInfo, null);
+                  mOperationAdapter.updateData(mInfo, null, mIUpdate);
                 }
 
                 @Override
@@ -154,5 +161,9 @@ public class OperationManagerActivity extends AbsActivity {
     mTvAddAdmin.setFocusable(true);
     mTvAddAdmin.setFocusableInTouchMode(true);
     mTvAddAdmin.requestFocus();
+  }
+
+  public interface IUpdate {
+    void updateData();
   }
 }
