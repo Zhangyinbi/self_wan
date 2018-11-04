@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -134,6 +135,7 @@ public class CreateCompanyActivity extends AbsActivity {
     findViewById(R.id.btn_complete).setOnClickListener(listener);
 
     de_company_name = findViewById(R.id.de_company_name);
+    de_company_name.addFilter(new InputFilter.LengthFilter(12));
     de_email = findViewById(R.id.de_email);
     de_name = findViewById(R.id.de_name);
   }

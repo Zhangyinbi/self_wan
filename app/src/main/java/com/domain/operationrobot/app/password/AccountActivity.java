@@ -51,7 +51,7 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
   private Button                           btnCreate;
   private RelativeLayout                   rlToggle;
   private ImageView                        ivIcon;
-  private boolean                          check;
+  private boolean                          check = true;
   private TextView                         tvUserServiceProtocol;
   private TextView                         tvSendCode;
   private AccountContract.AccountPresenter presenter;

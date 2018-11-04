@@ -317,7 +317,7 @@ public class MainActivity extends AbsActivity {
         tv_top.setText("已申请公司，请等待公司管理员审核");
         break;
       case 3://普通公司用户
-        tv_top.setText("升级成为正式用户，请等待公司管理员审核 >");
+        tv_top.setText("升级成为正式用户，享受一站式运维 >");
         break;
       case 4://公司管理员
         tv_top.setText("还有18天就要过期了，请续费 >");

@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.domain.library.GlideApp;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
@@ -18,6 +19,8 @@ import com.domain.operationrobot.http.bean.OperationList;
 import com.domain.operationrobot.http.data.RemoteMode;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+import static com.domain.library.GlideOptions.bitmapTransform;
 import static com.domain.library.utils.ToastUtils.showToast;
 
 /**
@@ -55,6 +58,10 @@ public class OperationDialog extends AppCompatDialog {
 
     GlideApp.with(mContext)
             .load(operationInfo.getImageUrl())
+            .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片
+            .error(R.drawable.round_88)//图片加载失败后，显示的图片
+            .transition(withCrossFade())
+            .apply(bitmapTransform(new CircleCrop()))
             .into(mCiv_user_img);
     mTv_admin_name.setText(operationInfo.getUsername());
 

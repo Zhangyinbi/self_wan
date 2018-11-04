@@ -18,6 +18,7 @@ import com.domain.library.base.AbsFragment;
 import com.domain.library.utils.MyPermissionUtils;
 import com.domain.library.utils.SoftInputUtil;
 import com.domain.library.utils.SpUtils;
+import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
@@ -184,7 +185,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         }
       }
     });
-    mAdapter = new ChatAdapter(new ArrayList<ChatBean>(),getActivity());
+    mAdapter = new ChatAdapter(new ArrayList<ChatBean>(), getActivity());
     mAdapter.setRecycler(mRecycler);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
     linearLayoutManager.setStackFromEnd(true);
@@ -227,12 +228,10 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     String msg = mEtMsg.getText()
                        .toString()
                        .trim();
-    String mUsername = BaseApplication.getInstance()
-                                      .getUser()
-                                      .getUsername();
-    String url = BaseApplication.getInstance()
-                                .getUser()
-                                .getImage();
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String mUsername = user.getUsername();
+    String url = user.getImage();
     if (null == mUsername) {
       return;
     }
@@ -247,13 +246,14 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       return;
     }
 
-    addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), BaseApplication.getInstance()
-                                                                                      .getUser()
-                                                                                      .getUserId());
+    addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), user.getUserId());
     mEtMsg.setText("");
     if (msg.contains("@机器人")) {
       AppSocket.getInstance()
                .sendMessage(2, msg);
+      if (user.getRole() == 1 || user.getRole() == 2) {
+        ToastUtils.showToast("只有加入了公司才可以使用机器人功能");
+      }
       //TODO 测试代码
       //String json
       //  = "{\"data\":{\"type\":2,\"rootbean\":{\"msg\":\"小机器人，你赶紧学习呀\",\"actions\":[{\"name\":\"查看主机cpu\",\"type\":\"3\"},{\"name\":\"查看主机内存\",\"type\":\"4\"},{\"name\":\"查看主机监控\",\"type\":\"5\"},{\"name\":\"查看磁盘状态\",\"type\":\"6\"},{\"name\":\"查看CPU温度\",\"type\":\"7\"},{\"name\":\"查看流量状态\",\"type\":\"8\"}]}}}";

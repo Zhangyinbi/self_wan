@@ -41,7 +41,7 @@
             android:id="@+id/iv_icon"
             android:layout_width="@dimen/dimens_18"
             android:layout_height="@dimen/dimens_18"
-            android:src="@drawable/icon_no_choose" />
+            android:src="@drawable/icon_choose" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -11,7 +11,7 @@
   <string name="code_1003_connect_fail">网路链接失败</string>
   <string name="code_1001_json_parse">数据解析失败</string>
   <string name="code_1006_json_syntax">数据格式异常</string>
-  <string name="http_exception">Http请求发生了异常</string>
+  <string name="http_exception">服务器异常，请稍后重试</string>
 
   <string name="gallery_down_fail">保存失败</string>
   <string name="gallery_down_success">图片已保存至%1$s</string>

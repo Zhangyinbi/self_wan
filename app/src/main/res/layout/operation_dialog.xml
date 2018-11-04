@@ -8,7 +8,7 @@
       android:id="@+id/ll_top"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="31dp"
+      android:layout_marginTop="50dp"
       android:background="@drawable/bg_light_blue_top_round"
       android:orientation="vertical"
       >
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="55dp"
         android:text="李桂芳"
         android:textColor="#666"
         android:textSize="@dimen/dimens_16sp"
@@ -49,10 +49,11 @@
           />
     </RelativeLayout>
   </LinearLayout>
-  <com.domain.operationrobot.glide.CircleImageView
+  <ImageView
       android:id="@+id/civ_user_img"
-      android:layout_width="62dp"
-      android:layout_height="62dp"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      android:scaleType="fitXY"
       android:layout_centerHorizontal="true"
       android:src="@drawable/round_88"
       />
