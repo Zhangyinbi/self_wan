@@ -100,7 +100,7 @@ public class UserApplyActivity extends AbsActivity {
     showProgress();
     RemoteMode.getInstance()
               .disposeJoinInfo(action, request_userid)
-              .subscribe(new BaseObserver<ApplyInfo>(compositeDisposable) {
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
                 @Override
                 public void onError(BaseException e) {
                   hideProgress();
@@ -108,7 +108,7 @@ public class UserApplyActivity extends AbsActivity {
                 }
 
                 @Override
-                public void onSuss(ApplyInfo applyInfo) {
+                public void onSuss(BaseEntry applyInfo) {
                   hideProgress();
                   initData();
                 }

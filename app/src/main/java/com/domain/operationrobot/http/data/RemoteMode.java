@@ -326,7 +326,7 @@ public class RemoteMode implements BaseMode {
   public Observable<BaseEntry> disposeJoinInfo(int action, String request_userid) {
     JSONObject root = new JSONObject();
     try {
-      root.put("admin_action", action);
+      root.put("admin_action", String.valueOf(action));
       root.put("request_userid", request_userid);
       root.put("token", BaseApplication.getInstance()
                                        .getUser()

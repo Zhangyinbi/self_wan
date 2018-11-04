@@ -10,7 +10,7 @@
   <EditText
       android:id="@+id/et_host"
       android:layout_width="match_parent"
-      android:layout_height="50dp"
+      android:layout_height="44dp"
       android:layout_marginLeft="@dimen/dimens_25"
       android:layout_marginRight="@dimen/dimens_25"
       android:layout_marginTop="@dimen/dimens_30"
@@ -21,7 +21,7 @@
       android:paddingLeft="@dimen/dimens_12"
       android:textColor="@color/text_333"
       android:textColorHint="@color/color_69"
-      android:textSize="@dimen/dimens_14"
+      android:textSize="@dimen/dimens_12"
       />
   <Button
       android:id="@+id/btn_send"

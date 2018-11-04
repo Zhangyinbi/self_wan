@@ -22,7 +22,7 @@ public class ApplyInfo extends BaseEntry {
   }
 
   public class Info {
-    private int    admin_action;
+    private String    admin_action;
     private String request_mobile;
     private String request_userid;
     private long   request_createtime;
@@ -30,7 +30,7 @@ public class ApplyInfo extends BaseEntry {
     private String request_img;
 
     public int getAdmin_action() {
-      return admin_action;
+      return Integer.parseInt(admin_action);
     }
 
     public String getRequest_img() {
@@ -38,7 +38,7 @@ public class ApplyInfo extends BaseEntry {
     }
 
     public void setAdmin_action(int admin_action) {
-      this.admin_action = admin_action;
+      this.admin_action = String.valueOf(admin_action);
     }
 
     public String getRequest_mobile() {
