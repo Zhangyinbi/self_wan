@@ -1,6 +1,7 @@
 package com.domain.operationrobot.app.home;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,20 +18,25 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.domain.library.GlideApp;
 import com.domain.library.utils.DisplaysUtil;
 import com.domain.library.utils.GalleryUtil;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
+import com.domain.operationrobot.http.bean.ImageBean;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
 import com.domain.operationrobot.util.TimeUtil;
 //import com.jelly.mango.Mango;
 //import com.jelly.mango.MultiplexImage;
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.logging.Handler;
+import org.json.JSONObject;
 
 import static com.domain.operationrobot.util.Constant.MESSAGE_OTHER;
 import static com.domain.operationrobot.util.Constant.MESSAGE_SELF;
@@ -43,16 +49,20 @@ import static com.domain.operationrobot.util.Constant.MESSAGE_SELF;
  * Create at : 2018/10/21 16:34
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
+  private final Gson mGson;
   private ArrayList<ChatBean> mList = new ArrayList<>();
   private RecyclerView mRecyclerView;
   //private ArrayList<MultiplexImage> images = new ArrayList<>();
   private ArrayList<String> imgs = new ArrayList<>();
   private Activity mActivity;
+  private String   mRegex;
 
   public ChatAdapter(ArrayList<ChatBean> list, Activity activity) {
     mList.clear();
     mList.addAll(list);
     mActivity = activity;
+    mGson = new Gson();
+    mRegex = mActivity.getString(R.string.regex);
     notifyDataSetChanged();
   }
 
@@ -106,45 +116,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     String msg = chatBean.getContent();
     if (holder.iv_image_msg != null) {
-      String regex = mActivity.getString(R.string.regex);
-      if (msg.startsWith(regex) && msg.endsWith(regex)) {
+      if (msg.startsWith(mRegex) && msg.endsWith(mRegex)) {
         holder.tv_content.setVisibility(View.GONE);
         holder.iv_image_msg.setVisibility(View.VISIBLE);
-        int end = msg.lastIndexOf(regex);
-        String imageUrl = msg.substring(regex.length(), end);
-        //TODO 实际图片宽高比
-        float ratio = 1080 / 1920F;
-        int height = 0;
-        int width = 0;
-        if (height >= width) {
-          height = DisplaysUtil.dip2px(mActivity, 130);
-          width = (int) (height * ratio);
-        } else {
-          width = DisplaysUtil.dip2px(mActivity, 130);
-          height = (int) (width * ratio);
-        }
-        holder.iv_image_msg.setAdjustViewBounds(true);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.iv_image_msg.getLayoutParams();
-        layoutParams.height = height;
-        layoutParams.width = width;
-        holder.iv_image_msg.setLayoutParams(layoutParams);
-        ////设置图片圆角角度
-        RoundedCorners roundedCorners = new RoundedCorners(14);
-        //通过RequestOptions扩展功能
-        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-        //
-        Glide.with(mActivity)
-             .load(imageUrl)
-             .apply(options)
-             .into(holder.iv_image_msg);
-
-        holder.iv_image_msg.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            GalleryUtil.with(mActivity)
-                       .launchPicturePreview(imgs, imgs.indexOf(imageUrl));
-          }
-        });
+        setChatImage(msg, holder.iv_image_msg);
         return;
       }
     }
@@ -190,6 +165,89 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
   }
 
+  private void setChatImage(String msg, ImageView iv_image_msg) {
+    int end = msg.lastIndexOf(mRegex);
+    String imageInfo = msg.substring(mRegex.length(), end);
+    ImageBean imageBean = null;
+    try {
+      imageBean = mGson.fromJson(imageInfo, ImageBean.class);
+      imageInfo = imageBean.getUrl();
+    } catch (Exception e) {
+
+    }
+    //////设置图片圆角角度
+    //RoundedCorners roundedCorners = new RoundedCorners(14);
+    ////通过RequestOptions扩展功能
+    //RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+    ////获取图片真正的宽高
+    //GlideApp.with(mActivity)
+    //        .asBitmap()
+    //        .placeholder(R.drawable.round_88)
+    //        .error(R.drawable.round_88)
+    //        .load(imageInfo)
+    //        .apply(options)
+    //        .into(new SimpleTarget<Bitmap>() {
+    //          @Override
+    //          public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+    //            int originalWidth = bitmap.getWidth();
+    //            int originalHeight = bitmap.getHeight();
+    //            int finallyHeight = 0;
+    //            int finallyWidth = 0;
+    //            if (originalHeight >= originalWidth) {
+    //              finallyHeight = DisplaysUtil.dip2px(mActivity, 130);
+    //              finallyWidth = (int) (finallyHeight * originalWidth / originalHeight);
+    //            } else {
+    //              finallyWidth = DisplaysUtil.dip2px(mActivity, 130);
+    //              finallyHeight = (int) (finallyWidth * originalHeight / originalWidth);
+    //            }
+    //            iv_image_msg.setAdjustViewBounds(true);
+    //            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) iv_image_msg.getLayoutParams();
+    //            layoutParams.height = finallyHeight;
+    //            layoutParams.width = finallyWidth;
+    //            iv_image_msg.setLayoutParams(layoutParams);
+    //            iv_image_msg.setImageBitmap(bitmap);
+    //          }
+    //        });
+
+    //TODO 实际图片宽高比
+    Float originalWidth = Float.valueOf(imageBean.getWidth());
+    Float originalHeight = Float.valueOf(imageBean.getHeight());
+    int finallyHeight = 0;
+    int finallyWidth = 0;
+    if (originalHeight >= originalWidth) {
+      finallyHeight = DisplaysUtil.dip2px(mActivity, 130);
+      finallyWidth = (int) (finallyHeight * originalWidth / originalHeight);
+    } else {
+      finallyWidth = DisplaysUtil.dip2px(mActivity, 130);
+      finallyHeight = (int) (finallyWidth * originalHeight / originalWidth);
+    }
+    iv_image_msg.setAdjustViewBounds(true);
+    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) iv_image_msg.getLayoutParams();
+    layoutParams.height = finallyHeight;
+    layoutParams.width = finallyWidth;
+    iv_image_msg.setLayoutParams(layoutParams);
+    //设置图片圆角角度
+    RoundedCorners roundedCorners = new RoundedCorners(14);
+    //通过RequestOptions扩展功能
+    RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+
+    GlideApp.with(mActivity)
+            .load(imageBean.getUrl())
+            .placeholder(R.drawable.round_88)
+            .error(R.drawable.round_88)
+            .apply(options)
+            .into(iv_image_msg);
+
+    String finalImageInfo = imageInfo;
+    iv_image_msg.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        GalleryUtil.with(mActivity)
+                   .launchPicturePreview(imgs, imgs.indexOf(finalImageInfo));
+      }
+    });
+  }
+
   @Override
   public int getItemViewType(int position) {
     if (mList.get(position)
@@ -214,16 +272,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
   }
 
   public void addBeanToEnd(ChatBean message) {
-    setImgs(message);
+    setImgs(message.content);
     mList.add(message);
     notifyItemInserted(getItemCount());
     //new android.os.Handler().postDelayed(new Runnable() {
     //  @Override
     //  public void run() {
-        if (mRecyclerView != null) {
-          mRecyclerView.scrollToPosition(getItemCount()-1);
-        }
-      //}
+    if (mRecyclerView != null) {
+      mRecyclerView.scrollToPosition(getItemCount() - 1);
+    }
+    //}
     //}, 200);
 
     //new android.os.Handler().postDelayed(new Runnable() {
@@ -238,7 +296,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
   public void addAll(ArrayList<ChatBean> list) {
     for (ChatBean chatBean : list) {
-      setImgs(chatBean);
+      setImgs(chatBean.content);
     }
     mList.addAll(list);
     notifyItemRangeInserted(getItemCount(), list.size());
@@ -256,15 +314,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     mRecyclerView = recycler;
   }
 
-  private void setImgs(ChatBean message) {
+  private void setImgs(String msg) {
+    if (msg.startsWith(mRegex) && msg.endsWith(mRegex)) {
+      int end = msg.lastIndexOf(mRegex);
+      String imageUrl = msg.substring(mRegex.length(), end);
+      try {
+        ImageBean imageBean = mGson.fromJson(imageUrl, ImageBean.class);
+        imageUrl = imageBean.getUrl();
+      } catch (Exception e) {
 
-    String msg = message.content;
-    String regex = mActivity.getString(R.string.regex);
-    if (msg.startsWith(regex) && msg.endsWith(regex)) {
-      int end = msg.lastIndexOf(regex);
-      final String imageUrl = msg.substring(regex.length(), end);
+      }
       if (!imgs.contains(imageUrl)) {
-        //images.add(new MultiplexImage(imageUrl, null, MultiplexImage.ImageType.NORMAL));
         imgs.add(imageUrl);
       }
       return;

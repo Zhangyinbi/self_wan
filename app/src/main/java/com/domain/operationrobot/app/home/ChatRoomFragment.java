@@ -1,6 +1,8 @@
 package com.domain.operationrobot.app.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +25,7 @@ import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ChatBean;
-import com.domain.operationrobot.http.bean.PictureBean;
+import com.domain.operationrobot.http.bean.ImageBean;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
@@ -35,6 +37,8 @@ import com.domain.operationrobot.im.chatroom.BaseChatRoom;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.im.listener.IEventType;
 import com.domain.operationrobot.im.socket.AppSocket;
+import com.domain.operationrobot.util.FileUpLoadUtils;
+import com.domain.operationrobot.util.IUpLoadCallBack;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
@@ -65,11 +69,10 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   private EditText     mEtMsg;
   private RecyclerView mRecycler;
   private ChatAdapter  mAdapter;
-  private ImageView    mIvRobot;
-  private ImageView    mImageView;
-  private boolean      mSingle;
-  private ArrayList<PictureBean> compressList = new ArrayList<>();
-  private ArrayList<PictureBean> picList      = new ArrayList<>();
+  IUpLoadCallBack mIUpLoadCallBack = (url, outWidth, outHeight) -> setImageMsg(url, outWidth, outHeight);
+  private ImageView mIvRobot;
+  private ImageView mImageView;
+  private boolean   mSingle;
 
   public static ChatRoomFragment newInstance() {
     ChatRoomFragment fragment = new ChatRoomFragment();
@@ -242,17 +245,14 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     if (null == mUsername) {
       return;
     }
-
     if (TextUtils.isEmpty(msg)) {
       return;
     }
     if (!AppSocket.getInstance()
                   .isConnected()) {
-
       MainChatRoom.init();
       return;
     }
-
     addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), user.getUserId());
     mEtMsg.setText("");
     if (msg.contains("@机器人")) {
@@ -261,17 +261,20 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       if (user.getRole() == 1 || user.getRole() == 2) {
         ToastUtils.showToast("只有加入了公司才可以使用机器人功能");
       }
-      //TODO 测试代码
-      //String json
-      //  = "{\"data\":{\"type\":2,\"rootbean\":{\"msg\":\"小机器人，你赶紧学习呀\",\"actions\":[{\"name\":\"查看主机cpu\",\"type\":\"3\"},{\"name\":\"查看主机内存\",\"type\":\"4\"},{\"name\":\"查看主机监控\",\"type\":\"5\"},{\"name\":\"查看磁盘状态\",\"type\":\"6\"},{\"name\":\"查看CPU温度\",\"type\":\"7\"},{\"name\":\"查看流量状态\",\"type\":\"8\"}]}}}";
-      //MainChatRoom.getInstance()
-      //            .moni(json);
     } else {
       AppSocket.getInstance()
                .sendMessage(msg);
     }
   }
 
+  /**
+   * 往列表的adapter中添加数据
+   * @param username
+   * @param url
+   * @param content
+   * @param l
+   * @param targetId
+   */
   private void addBeanToRecycler(String username, String url, String content, long l, String targetId) {
     ChatBean message = new ChatBean();
     message.setUserName(username);
@@ -297,6 +300,11 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
   }
 
+  /**
+   * 接收消息
+   * @param observable
+   * @param o
+   */
   @Override
   public void update(final Observable observable, final Object o) {
     getActivity().runOnUiThread(new Runnable() {
@@ -367,6 +375,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mAdapter.addBeanToEnd(chatBean);
   }
 
+  /**
+   * @机器人的消息
+   */
   private void rootMsg2(ObserverModel model) {
     ChatBean chatBean = new ChatBean();
     chatBean.setType(2);
@@ -393,7 +404,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   }
 
   /**
-   * 是不是自己消息
+   * 是不是自己发出的消息
    */
   private boolean isSelfMsg(String userId) {
     return BaseApplication.getInstance()
@@ -418,6 +429,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
              .disConnnect();
   }
 
+  /**
+   * 接收选择图片回收的结果
+   */
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
@@ -426,16 +440,11 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         case PictureConfig.CHOOSE_REQUEST:
           List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
           for (LocalMedia localMedia : selectList) {
-            PictureBean pictureBean = new PictureBean(picList.size(), localMedia.getPath());
-            picList.add(pictureBean);
+            String filePath = localMedia.getPath();
             if (localMedia.isCompressed()) {
-              PictureBean compressPicBean = new PictureBean(compressList.size(), localMedia.getCompressPath());
-              compressPicBean.setTime(System.currentTimeMillis());
-              Log.e("------1111", "onActivityResult: " + compressPicBean.getPath());
-              compressList.add(compressPicBean);
-              //去上传 TODO  上传成功之后在展示图片信息
-              setImageMsg(compressPicBean.getPath());
+              filePath = localMedia.getCompressPath();
             }
+            uploadImage(filePath);
           }
           break;
       }
@@ -443,13 +452,25 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   }
 
   /**
+   * 上传图片
+   */
+  private void uploadImage(String filePath) {
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    Bitmap bitmap = BitmapFactory.decodeFile(filePath, options); // 此时返回的bitmap为null
+    FileUpLoadUtils.getInstance()
+                   .upLoadFile(filePath, mIUpLoadCallBack, options.outWidth, options.outHeight);
+  }
+
+  /**
    * 发送图片消息
    */
-  private void setImageMsg(String path) {
+  private void setImageMsg(String path, int outWidth, int outHeight) {
     User user = BaseApplication.getInstance()
                                .getUser();
     String regex = getContext().getString(R.string.regex);
-    String imgMsg = regex + path + regex;
+    String realMsg = "{\"url\":\"" + path + "\",\"width\":" + outWidth + ",\"height\":" + outHeight + "}";
+    String imgMsg = regex + realMsg + regex;
     addBeanToRecycler(user.getUsername(), user.getImage(), imgMsg, System.currentTimeMillis(), user.getUserId());
     AppSocket.getInstance()
              .sendMessage(imgMsg);
