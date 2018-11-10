@@ -378,6 +378,18 @@ public class RemoteMode implements BaseMode {
                          .updateStatus(requestBody);
   }
 
+  /**
+   * 退出公司
+   * @return
+   */
+  public Observable<User> outOfCompany() {
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .outOfCompany(BaseApplication.getInstance()
+                                                      .getUser()
+                                                      .getToken());
+  }
+
   private static class SingletonHolder {
     private static final RemoteMode INSTANCE = new RemoteMode();
   }

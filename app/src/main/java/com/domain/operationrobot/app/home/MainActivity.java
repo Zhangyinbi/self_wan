@@ -236,8 +236,7 @@ public class MainActivity extends AbsActivity {
     findViewById(R.id.btn_out).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        SpUtils.putBoolean(IS_LOGIN, false);
-        SpUtils.removeData(USER_SP_KEY);
+        SpUtils.clearData();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
       }

@@ -19,8 +19,8 @@ public class FileUpLoadUtils {
 
   public static final  String accessKey = "_4jLMJkFKjg9futXCQ0UuV-xyhd9s-HyFEULKpd8";
   private static final String secretKey = "iRDeM4UX-3shDhcwXbF1xkLhjBa3ppPGjsWLYSwe";
-  private static final String bucket    = "icloud";
-  private static final String host      = "http://pgbrhokqt.bkt.clouddn.com/";
+  private static final String bucket    = "robot";
+  private static final String host      = "http://phwvb3fdu.bkt.clouddn.com/";
 
   private static UploadManager uploadManager;
 

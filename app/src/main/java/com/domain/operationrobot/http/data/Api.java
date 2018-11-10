@@ -14,6 +14,7 @@ import io.reactivex.Observable;
 import java.util.Map;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -125,4 +126,12 @@ public interface Api {
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @PATCH("/api/v1/opuser")
   Observable<OperationList> updateStatus(@Body RequestBody requestBody);
+
+  /**
+   * 退出公司
+   * @return
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @DELETE("/api/v1/member")
+  Observable<User> outOfCompany(@Query("token") String token);
 }

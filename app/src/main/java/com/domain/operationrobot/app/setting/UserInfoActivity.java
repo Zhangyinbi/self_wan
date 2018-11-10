@@ -17,6 +17,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.domain.library.GlideApp;
 import com.domain.library.base.AbsActivity;
+import com.domain.library.http.consumer.BaseObserver;
+import com.domain.library.http.entry.BaseEntry;
+import com.domain.library.http.exception.BaseException;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.utils.MyPermissionUtils;
 import com.domain.library.utils.SpUtils;
@@ -27,6 +30,7 @@ import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.app.password.VerifyPwdActivity;
 import com.domain.operationrobot.glide.CircleImageView;
 import com.domain.operationrobot.http.bean.User;
+import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -42,6 +46,12 @@ import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 public class UserInfoActivity extends AbsActivity {
 
+  private TextView        mTvUserName;
+  private CircleImageView mCivUserImg;
+  private TextView        mTvMobile;
+  private LinearLayout    mLlModifyMobile;
+  private TextView        mTv_company_name;
+  private LinearLayout    mLl_company;
   ThrottleLastClickListener listener = new ThrottleLastClickListener() {
     @Override
     public void onViewClick(View v) {
@@ -64,17 +74,40 @@ public class UserInfoActivity extends AbsActivity {
       }
     }
   };
-  private TextView        mTvUserName;
-  private CircleImageView mCivUserImg;
-  private TextView        mTvMobile;
-  private LinearLayout    mLlModifyMobile;
-  private TextView mTv_company_name;
-  private LinearLayout mLl_company;
 
   /**
-   * 推出公司
+   * 退出公司
    */
   private void outOfCompany() {
+    RemoteMode.getInstance()
+              .outOfCompany()
+              .subscribe(new BaseObserver<User>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(User user) {
+                  hideProgress();
+                  showToast("您已退出公司");
+                  User realUser = BaseApplication.getInstance()
+                                                 .getUser();
+                  realUser.setRole(user.getRole());
+                  realUser.setCompanyexpiredate("");
+                  realUser.setCompanyrole("");
+                  realUser.setCompanyname("");
+                  realUser.setCompanyid("");
+                  mLl_company.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
   }
 
   /**
@@ -137,7 +170,6 @@ public class UserInfoActivity extends AbsActivity {
     mLl_company = findViewById(R.id.ll_company);
     findViewById(R.id.btn_out_company).setOnClickListener(listener);
     findViewById(R.id.ll_modify_header_image).setOnClickListener(listener);
-
   }
 
   @Override

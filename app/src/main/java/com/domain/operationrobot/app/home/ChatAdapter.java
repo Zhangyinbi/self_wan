@@ -168,13 +168,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
   private void setChatImage(String msg, ImageView iv_image_msg) {
     int end = msg.lastIndexOf(mRegex);
     String imageInfo = msg.substring(mRegex.length(), end);
-    ImageBean imageBean = null;
-    try {
-      imageBean = mGson.fromJson(imageInfo, ImageBean.class);
-      imageInfo = imageBean.getUrl();
-    } catch (Exception e) {
-
-    }
+    ImageBean imageBean = mGson.fromJson(imageInfo, ImageBean.class);
+    imageInfo = imageBean.getUrl();
     //////设置图片圆角角度
     //RoundedCorners roundedCorners = new RoundedCorners(14);
     ////通过RequestOptions扩展功能
@@ -226,11 +221,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     layoutParams.height = finallyHeight;
     layoutParams.width = finallyWidth;
     iv_image_msg.setLayoutParams(layoutParams);
-    //设置图片圆角角度
     RoundedCorners roundedCorners = new RoundedCorners(14);
-    //通过RequestOptions扩展功能
     RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-
     GlideApp.with(mActivity)
             .load(imageBean.getUrl())
             .placeholder(R.drawable.round_88)
@@ -238,12 +230,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
             .apply(options)
             .into(iv_image_msg);
 
-    String finalImageInfo = imageInfo;
     iv_image_msg.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         GalleryUtil.with(mActivity)
-                   .launchPicturePreview(imgs, imgs.indexOf(finalImageInfo));
+                   .launchPicturePreview(imgs, imgs.indexOf(imageBean.getUrl()));
       }
     });
   }
