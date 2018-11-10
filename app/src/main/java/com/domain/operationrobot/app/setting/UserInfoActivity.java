@@ -100,6 +100,7 @@ public class UserInfoActivity extends AbsActivity {
                   realUser.setCompanyname("");
                   realUser.setCompanyid("");
                   mLl_company.setVisibility(View.GONE);
+                  SpUtils.setObject(USER_SP_KEY, realUser);
                 }
 
                 @Override
