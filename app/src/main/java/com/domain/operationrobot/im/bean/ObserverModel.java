@@ -15,11 +15,12 @@ public class ObserverModel {
 
   private RootMessage1 mRootMessage1;
 
-  private RootMessage2 mRootMessage2;
+  private RootMessage2  mRootMessage2;
   //磁盘使用
-  private RootMessage6 mRootMessage6;
+  private RootMessage6  mRootMessage6;
   //cpu 和 内存
   private RootMessage34 mRootMessage34;
+  private RootMessage8 mRootMessage8;
 
   //      无效的
   private Login      mLogin;
@@ -28,8 +29,16 @@ public class ObserverModel {
   private Typing     mTyping;
   private StopTyping mStopTyping;
 
+  public RootMessage8 getRootMessage8() {
+    return mRootMessage8;
+  }
+
+  public void setRootMessage8(RootMessage8 rootMessage8) {
+    mRootMessage8 = rootMessage8;
+  }
+
   public RootMessage34 getRootMessage34() {
-    return  mRootMessage34;
+    return mRootMessage34;
   }
 
   public void setRootMessage34(RootMessage34 rootMessage34) {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#E9FFFB"
+    android:paddingBottom="@dimen/dimens_6"
+    >
+  <TextView
+      android:id="@+id/tv_time"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:text="18:00"
+      android:textColor="#333333"
+      android:textSize="@dimen/dimens_12"
+      />
+  <TextView
+      android:id="@+id/tv_in"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:text="1035.46"
+      android:textColor="#333333"
+      android:textSize="@dimen/dimens_12"
+      />
+  <TextView
+      android:id="@+id/tv_out"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:text="980.46"
+      android:textColor="#333333"
+      android:textSize="@dimen/dimens_12"
+      />
+
+</LinearLayout>

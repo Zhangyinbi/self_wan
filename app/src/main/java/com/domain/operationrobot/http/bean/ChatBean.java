@@ -4,6 +4,7 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
+import com.domain.operationrobot.im.bean.RootMessage8;
 import java.util.ArrayList;
 
 /**
@@ -21,16 +22,7 @@ public class ChatBean {
   private String token;
   private String targetId;
   private int type = -1;//默认正常聊天信息  1-> 机器人消息 2
-  private ArrayList<RootMessage2.Action> actions;
-
-  public String getTargetId() {
-    return  targetId;
-  }
-
-  public void setTargetId(String targetId) {
-    this.targetId = targetId;
-  }
-
+  private ArrayList<RootMessage2.Action>  actions;
   /**
    * 磁盘
    */
@@ -40,8 +32,30 @@ public class ChatBean {
    */
   private ArrayList<RootMessage34.Action> actions34;
 
+  private ArrayList<RootMessage8.Action> actions8;
+
+  public String getTargetId() {
+    return targetId;
+  }
+
+  public void setTargetId(String targetId) {
+    this.targetId = targetId;
+  }
+
   public ArrayList<RootMessage34.Action> getActions34() {
-    return  actions34;
+    return actions34;
+  }
+
+  public void setActions34(ArrayList<RootMessage34.Action> actions34) {
+    this.actions34 = actions34;
+  }
+
+  public ArrayList<RootMessage8.Action> getActions8() {
+    return actions8;
+  }
+
+  public void setActions8(ArrayList<RootMessage8.Action> actions8) {
+    this.actions8 = actions8;
   }
 
   public ArrayList<RootMessage6.Action> getActions6() {
@@ -58,10 +72,6 @@ public class ChatBean {
 
   public void setActions(ArrayList<RootMessage2.Action> actions) {
     this.actions = actions;
-  }
-
-  public void setActions34(ArrayList<RootMessage34.Action> actions34) {
-    this.actions34 = actions34;
   }
 
   public String getToken() {

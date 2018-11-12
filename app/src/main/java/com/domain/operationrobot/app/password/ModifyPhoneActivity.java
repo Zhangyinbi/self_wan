@@ -77,7 +77,7 @@ public class ModifyPhoneActivity extends AbsActivity {
             if (isEmpty(code)) {
               ToastUtils.showToast("请输入短信验证码");
               return;
-            } else if (code.length() != 5) {
+            } else if (code.length() != VERITY_CODE_LENGTH) {
               ToastUtils.showToast("请输入正确的的短信验证码");
               return;
             }

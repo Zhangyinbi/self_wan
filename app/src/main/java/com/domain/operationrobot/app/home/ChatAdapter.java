@@ -30,6 +30,7 @@ import com.domain.operationrobot.http.bean.ImageBean;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
+import com.domain.operationrobot.im.bean.RootMessage8;
 import com.domain.operationrobot.util.TimeUtil;
 //import com.jelly.mango.Mango;
 //import com.jelly.mango.MultiplexImage;
@@ -79,7 +80,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     } else if (type == 1) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_1, viewGroup, false);
-    } else if (type == 2 || type == 6 || type == 34) {
+    } else if (type == 2 || type == 6 || type == 34||type==8) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_2, viewGroup, false);
     }
@@ -152,8 +153,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
       });
       ArrayList<RootMessage6.Action> actions = chatBean.getActions6();
       holder.rlv_recycler.setAdapter(new RootBean6Adapter(actions));
-    }
-    if (type == 34) {
+    } else if (type == 34) {
       holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
         @Override
         public boolean canScrollVertically() {
@@ -162,9 +162,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
       });
       ArrayList<RootMessage34.Action> actions = chatBean.getActions34();
       holder.rlv_recycler.setAdapter(new RootBean34Adapter(actions));
+    }else if (type == 8) {
+      holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
+        @Override
+        public boolean canScrollVertically() {
+          return false;
+        }
+      });
+      ArrayList<RootMessage8.Action> actions = chatBean.getActions8();
+      holder.rlv_recycler.setAdapter(new RootBean8Adapter(actions));
     }
   }
 
+  /**
+   * 设置聊天图片
+   */
   private void setChatImage(String msg, ImageView iv_image_msg) {
     int end = msg.lastIndexOf(mRegex);
     String imageInfo = msg.substring(mRegex.length(), end);

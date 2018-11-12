@@ -4,6 +4,7 @@ import com.domain.library.http.entry.BaseEntry;
 import com.domain.operationrobot.http.bean.ApplyInfo;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
+import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.OperationList;
 import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
@@ -11,7 +12,9 @@ import com.domain.operationrobot.http.bean.User;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import java.util.List;
 import java.util.Map;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -19,9 +22,12 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -129,9 +135,22 @@ public interface Api {
 
   /**
    * 退出公司
-   * @return
    */
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @DELETE("/api/v1/member")
   Observable<User> outOfCompany(@Query("token") String token);
+
+  /**
+   * 上传头像
+   */
+  @Multipart
+  @POST("/api/v1/headp")
+  Observable<ImageFileBean> upLoadImage(@Part List<MultipartBody.Part> partLis);
+
+  /**
+   * 上传聊天图片
+   */
+  @Multipart
+  @POST("/api/v1/uploads")
+  Observable<ImageFileBean> upLoadImageMsg(@Part List<MultipartBody.Part> parts);
 }

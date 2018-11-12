@@ -97,7 +97,7 @@
           android:layout_marginLeft="@dimen/dimens_17"
           android:layout_marginRight="@dimen/dimens_22"
           android:layout_marginTop="@dimen/dimens_17"
-          android:text="注：一个公司必须有且只能有2个管理员账号，最多拥有3个审核员账号，审核时只要有一个审核员通过表示审核已通过"
+          android:text="注：一个公司必须有且只能有1个管理员账号，最多拥有3个审核员账号，审核时只要有一个审核员通过表示审核已通过"
           android:textColor="#C1C1C1"
           android:textSize="@dimen/dimens_14sp"
           />

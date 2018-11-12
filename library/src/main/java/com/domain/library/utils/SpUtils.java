@@ -143,6 +143,7 @@ public class SpUtils {
 
   //删除
   public static void clearData() {
+
     mSp.edit()
        .clear()
        .commit();

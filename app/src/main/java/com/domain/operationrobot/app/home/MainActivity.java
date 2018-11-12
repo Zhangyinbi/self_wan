@@ -18,6 +18,8 @@ import com.domain.library.GlideApp;
 import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.exception.BaseException;
+import com.domain.library.ui.CommonDialog;
+import com.domain.library.ui.SureInterface;
 import com.domain.library.utils.App;
 import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
@@ -236,9 +238,16 @@ public class MainActivity extends AbsActivity {
     findViewById(R.id.btn_out).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        SpUtils.clearData();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        finish();
+        new CommonDialog.Builder(MainActivity.this).setContent("确定要退出吗？")
+                                                     .setCancelText("取消", null)
+                                                   .setSureText("确定", new SureInterface() {
+                                                     @Override
+                                                     public void onSureClick() {
+                                                       outLogin();
+                                                     }
+                                                   })
+                                                   .build()
+                                                   .show();
       }
     });
     tv_top.setOnClickListener(listener);
@@ -264,6 +273,12 @@ public class MainActivity extends AbsActivity {
       }
     });
     getSide();
+  }
+
+  private void outLogin() {
+    SpUtils.clearData();
+    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+    finish();
   }
 
   @Override
@@ -297,6 +312,7 @@ public class MainActivity extends AbsActivity {
     mUser = BaseApplication.getInstance()
                            .getUser();
     mRole = mUser.getRole();
+
     mTvUserName.setText(mUser.getUsername());
     GlideApp.with(MainActivity.this)
             .load(BaseApplication.getInstance()
@@ -311,15 +327,19 @@ public class MainActivity extends AbsActivity {
     switch (mRole) {
       case 1://游客
         tv_top.setText("加入/创建公司，享受一站式运维 >");
+        mTv_fragment1.setVisibility(View.GONE);
         break;
       case 2://申请待同意用户
         tv_top.setText("已申请公司，请等待公司管理员审核");
+        mTv_fragment1.setVisibility(View.GONE);
         break;
       case 3://普通公司用户
         tv_top.setText("升级成为正式用户，享受一站式运维 >");
+        mTv_fragment1.setVisibility(View.VISIBLE);
         break;
       case 4://公司管理员
         tv_top.setText("还有18天就要过期了，请续费 >");
+        mTv_fragment1.setVisibility(View.VISIBLE);
         break;
     }
   }
@@ -350,7 +370,13 @@ public class MainActivity extends AbsActivity {
         @Override
         public void onClick(View view) {
           if (TextUtils.isEmpty(mUser.getCompany())) {
-            startActivity(new Intent(MainActivity.this, ApplyActivity.class));
+            openOrCloseDrawer();
+            drawer.postDelayed(new Runnable() {
+              @Override
+              public void run() {
+                startActivity(new Intent(MainActivity.this, ApplyActivity.class));
+              }
+            }, 300);
           }
         }
       });

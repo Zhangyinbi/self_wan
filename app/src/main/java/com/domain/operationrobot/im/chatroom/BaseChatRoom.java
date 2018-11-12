@@ -1,12 +1,15 @@
 package com.domain.operationrobot.im.chatroom;
 
 import android.util.Log;
+import android.widget.Toast;
+import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
+import com.domain.operationrobot.im.bean.RootMessage8;
 import com.domain.operationrobot.im.listener.IChatRoom;
 import com.domain.operationrobot.im.listener.IConstants;
 import com.domain.operationrobot.im.listener.IEventType;
@@ -132,25 +135,36 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         parse_type_2(rootBean);
         break;
       case 8:
-        parse_type_2(rootBean);
+        parse_type_8(rootBean);
         break;
     }
   }
 
-  ///**
-  //  // * 模拟机器人发送的消息
-  //  // * @param json
-  //  // */
-  //  //public void moni(String json) {
-  //  //  JSONObject rootData = null;
-  //  //  try {
-  //  //    rootData = new JSONObject(json);
-  //  //    JSONObject jsonObject = rootData.optJSONObject("data");
-  //  //    upDataRoot(jsonObject);
-  //  //  } catch (JSONException e) {
-  //  //    e.printStackTrace();
-  //  //  }
-  //  //}
+  /**
+   * 查看网络状况
+   */
+  private void parse_type_8(JSONObject rootBean) {
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.ROOT_MESSAGE_TYPE_8);
+    RootMessage8 newMessage = mGson.fromJson(rootBean.toString(), RootMessage8.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setRootMessage8(newMessage);
+    notifyObservers(model);
+  }
+
+  /**
+   * 模拟机器人发送的消息
+   */
+  public void moni(String json) {
+    JSONObject rootData = null;
+    try {
+      rootData = new JSONObject(json);
+      JSONObject jsonObject = rootData.optJSONObject("data");
+      upDataRoot(jsonObject);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+  }
 
   /**
    * 解析第二种数据类型
@@ -208,6 +222,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         break;
 
       case Socket.EVENT_CONNECT_ERROR:
+        ToastUtils.showToast("登陆聊天服务器失败");
         Log.e(TAG, "EVENT_CONNECT_ERROR");
 
         break;
@@ -218,13 +233,13 @@ public class BaseChatRoom extends Observable implements IChatRoom {
 
       case IConstants.TALK_STATUS:
         JSONObject content = (JSONObject) args[0];
-        Log.e(TAG, "接收到其他人消息: "+ content.toString());
+        Log.e(TAG, "接收到其他人消息: " + content.toString());
         JSONObject jsonObject1 = content.optJSONObject("data");
         upData(jsonObject1);
         break;
       case IConstants.CHAT_BOT_STATUS:
         JSONObject rootData = (JSONObject) args[0];
-        Log.e(TAG, "接收到机器人消息: "+ rootData.toString());
+        Log.e(TAG, "接收到机器人消息: " + rootData.toString());
         JSONObject jsonObject = rootData.optJSONObject("data");
         upDataRoot(jsonObject);
         break;
@@ -250,6 +265,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         break;
       // Socket连接错误
       case Socket.EVENT_ERROR:
+
         Log.e(TAG, "EVENT_ERROR");
         break;
 

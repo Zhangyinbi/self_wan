@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#E9FFFB"
+    android:paddingBottom="@dimen/dimens_12"
+    android:paddingTop="@dimen/dimens_10"
+    >
+  <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:text="时间"
+      android:textColor="#898989"
+      android:textSize="@dimen/dimens_12"
+      />
+  <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:text="网络入:(k/s)"
+      android:textColor="#898989"
+      android:textSize="@dimen/dimens_12"
+      />
+  <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:text="网络出:(k/s)"
+      android:textColor="#898989"
+      android:textSize="@dimen/dimens_12"
+      />
+
+</LinearLayout>

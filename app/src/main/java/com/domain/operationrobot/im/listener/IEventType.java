@@ -18,6 +18,9 @@ public interface IEventType {
   //内存  和 cpu
   String ROOT_MESSAGE_TYPE_34 = "root_message_type_34";
 
+  //网络状况
+  String ROOT_MESSAGE_TYPE_8 = "root_message_type_8";
+
   /*** ****************    无效的    ***********************/
   String LOGIN       = "login";
   String ADD_USER    = "connTest";

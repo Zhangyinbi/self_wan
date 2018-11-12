@@ -20,6 +20,8 @@ import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.library.ui.CommonDialog;
+import com.domain.library.ui.SureInterface;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.utils.MyPermissionUtils;
 import com.domain.library.utils.SpUtils;
@@ -29,6 +31,7 @@ import com.domain.operationrobot.app.home.ChatRoomFragment;
 import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.app.password.VerifyPwdActivity;
 import com.domain.operationrobot.glide.CircleImageView;
+import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
@@ -66,7 +69,16 @@ public class UserInfoActivity extends AbsActivity {
           modifyMobile();
           break;
         case R.id.btn_out_company:
-          outOfCompany();
+          new CommonDialog.Builder(UserInfoActivity.this).setContent("确定要退出此公司吗？")
+                                                     .setCancelText("取消", null)
+                                                     .setSureText("确定", new SureInterface() {
+                                                       @Override
+                                                       public void onSureClick() {
+                                                         outOfCompany();
+                                                       }
+                                                     })
+                                                     .build()
+                                                     .show();
           break;
         case R.id.ll_modify_header_image:
           openImage();
@@ -91,7 +103,7 @@ public class UserInfoActivity extends AbsActivity {
                 @Override
                 public void onSuss(User user) {
                   hideProgress();
-                  showToast("您已退出公司");
+                  showToast("退出公司成功");
                   User realUser = BaseApplication.getInstance()
                                                  .getUser();
                   realUser.setRole(user.getRole());
@@ -220,12 +232,7 @@ public class UserInfoActivity extends AbsActivity {
             }
           }
           if (!TextUtils.isEmpty(path)) {
-            BaseApplication.getInstance()
-                           .getUser()
-                           .setImage(path);
-            setHeader(path);
-            SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
-                                                          .getUser());
+            upLoadImage(path);
           }
 
           // 例如 LocalMedia 里面返回三种path
@@ -235,6 +242,37 @@ public class UserInfoActivity extends AbsActivity {
           // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
       }
     }
+  }
+
+  /**
+   * 上传头像
+   */
+  private void upLoadImage(String path) {
+    RemoteMode.getInstance()
+              .upLoadImage(path,0)
+              .subscribe(new BaseObserver<ImageFileBean>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(ImageFileBean imageFileBean) {
+                  BaseApplication.getInstance()
+                                 .getUser()
+                                 .setImage(imageFileBean.getImageUrl());
+                  setHeader(imageFileBean.getImageUrl());
+                  SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
+                                                                .getUser());
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
   }
 
   private void setHeader(String path) {

@@ -45,8 +45,7 @@ public class RootBean2Adapter extends RecyclerView.Adapter<RootBean2Adapter.MyVi
     myViewHolder.tv_action_name.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-
-        new EditIpDialog(view.getContext(),Integer.parseInt(type)).show();
+        new EditIpDialog(view.getContext(), Integer.parseInt(type)).show();
 
         //TODO 测试代码
         //switch (Integer.parseInt(type)) {
@@ -75,7 +74,9 @@ public class RootBean2Adapter extends RecyclerView.Adapter<RootBean2Adapter.MyVi
         //    ToastUtils.showToast("sorry,暂时还没有功能");
         //    break;
         //  case 8:
-        //    ToastUtils.showToast("sorry,暂时还没有功能");
+        //String s8 = "{\"data\":{\"type\":\"8\",\"rootbean\":{\"msg\":\"网络状况\",\"actions\":[{\"time\":\"15:00\",\"out\":\"27312\",\"in\":\"7248\"},{\"time\":\"15:46\",\"out\":\"1213\",\"in\":\"277.5\"},{\"time\":\"16:00\",\"out\":\"1213.45\",\"in\":\"432.75\"},{\"time\":\"19:00\",\"out\":\"324234\",\"in\":\"4353.654\"}]}}}";
+        //MainChatRoom.getInstance()
+        //                .moni(s8);
         //    break;
         //}
       }

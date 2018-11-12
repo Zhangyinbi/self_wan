@@ -4,19 +4,24 @@ import com.domain.library.base.BaseMode;
 import com.domain.library.http.RetrofitHelper;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.operationrobot.BaseApplication;
+import com.domain.operationrobot.http.UpLoadFileHelper;
 import com.domain.operationrobot.http.bean.ApplyInfo;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
+import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.OperationList;
 import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -380,7 +385,6 @@ public class RemoteMode implements BaseMode {
 
   /**
    * 退出公司
-   * @return
    */
   public Observable<User> outOfCompany() {
     return RetrofitHelper.getInstance()
@@ -388,6 +392,42 @@ public class RemoteMode implements BaseMode {
                          .outOfCompany(BaseApplication.getInstance()
                                                       .getUser()
                                                       .getToken());
+  }
+
+  /**
+   * 上传头像
+   * @param type 0-》上传头像   1-》聊天图片上传
+   */
+  public Observable<ImageFileBean> upLoadImage(String path, int type) {
+    //File file = new File(path);
+    //RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+    MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);//表单类型
+
+//2.获取图片，创建请求体
+    File file = new File(path);
+    RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), file);//表单类型
+
+//3.调用MultipartBody.Builder的addFormDataPart()方法添加表单数据
+    builder.addFormDataPart("token", BaseApplication.getInstance()
+                                                    .getUser()
+                                                    .getToken());//传入服务器需要的key，和相应value值
+    builder.addFormDataPart("image", file.getName(), body); //添加图片数据，body创建的请求体
+
+//4.创建List<MultipartBody.Part> 集合，
+//  调用MultipartBody.Builder的build()方法会返回一个新创建的MultipartBody
+//  再调用MultipartBody的parts()方法返回MultipartBody.Part集合
+    List<MultipartBody.Part> parts = builder.build()
+                                            .parts();
+
+    if (type == 0){
+      return UpLoadFileHelper.getInstance()
+                             .create(Api.class)
+                             .upLoadImage(parts);
+    }
+   return UpLoadFileHelper.getInstance()
+                          .create(Api.class)
+                          .upLoadImageMsg(parts);
   }
 
   private static class SingletonHolder {

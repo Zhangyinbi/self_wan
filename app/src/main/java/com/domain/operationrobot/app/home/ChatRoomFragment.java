@@ -33,6 +33,7 @@ import com.domain.operationrobot.im.bean.RootMessage1;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
+import com.domain.operationrobot.im.bean.RootMessage8;
 import com.domain.operationrobot.im.chatroom.BaseChatRoom;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.im.listener.IEventType;
@@ -55,6 +56,8 @@ import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_2;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_34;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_6;
+import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_8;
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 /**
  * Project Name : OperationRobot
@@ -95,6 +98,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   @Override
   public void onResume() {
     super.onResume();
+    if (mRecycler!=null){
+      mRecycler.scrollToPosition(mAdapter.getItemCount() - 1);
+    }
   }
 
   @Override
@@ -253,27 +259,24 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       MainChatRoom.init();
       return;
     }
-    addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), user.getUserId());
-    mEtMsg.setText("");
+
     if (msg.contains("@机器人")) {
       AppSocket.getInstance()
                .sendMessage(2, msg);
       if (user.getRole() == 1 || user.getRole() == 2) {
         ToastUtils.showToast("只有加入了公司才可以使用机器人功能");
+        return;
       }
     } else {
       AppSocket.getInstance()
                .sendMessage(msg);
     }
+    addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), user.getUserId());
+    mEtMsg.setText("");
   }
 
   /**
    * 往列表的adapter中添加数据
-   * @param username
-   * @param url
-   * @param content
-   * @param l
-   * @param targetId
    */
   private void addBeanToRecycler(String username, String url, String content, long l, String targetId) {
     ChatBean message = new ChatBean();
@@ -302,8 +305,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
   /**
    * 接收消息
-   * @param observable
-   * @param o
    */
   @Override
   public void update(final Observable observable, final Object o) {
@@ -338,11 +339,25 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               break;
             case ROOT_MESSAGE_TYPE_34:
               rootMsg34(model);
+              break;case ROOT_MESSAGE_TYPE_8:
+              rootMsg8(model);
               break;
           }
         }
       }
     });
+  }
+
+  private void rootMsg8(ObserverModel model) {
+    ChatBean chatBean = new ChatBean();
+    chatBean.setType(8);
+    RootMessage8 rootMessage = model.getRootMessage8();
+    chatBean.setUserName("机器人");
+    chatBean.setTime(rootMessage.getTime());
+    chatBean.setContent(rootMessage.getMsg());
+    ArrayList<RootMessage8.Action> actions = rootMessage.getActions();
+    chatBean.setActions8(actions);
+    mAdapter.addBeanToEnd(chatBean);
   }
 
   /**
@@ -416,13 +431,15 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    ArrayList<ChatBean> list = mAdapter.getList();
-    if (list.size() > 20) {
-      for (int i = 0; i < list.size() - 19; i++) {
-        list.remove(i);
+    if (SpUtils.getObject(USER_SP_KEY, User.class) != null) {
+      ArrayList<ChatBean> list = mAdapter.getList();
+      if (list.size() > 20) {
+        for (int i = 0; i < list.size() - 19; i++) {
+          list.remove(i);
+        }
       }
+      SpUtils.setDataList("chat_data", list);
     }
-    SpUtils.setDataList("chat_data", list);
     MainChatRoom.getInstance()
                 .deleteObserver(this);
     AppSocket.getInstance()

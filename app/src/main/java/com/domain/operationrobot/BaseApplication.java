@@ -13,6 +13,7 @@ import com.domain.library.exception.AppUncaughtExceptionHandler;
 import com.domain.library.exception.SdcardConfig;
 import com.domain.library.http.RetrofitHelper;
 import com.domain.library.utils.SpUtils;
+import com.domain.operationrobot.http.UpLoadFileHelper;
 import com.domain.operationrobot.http.bean.User;
 
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
@@ -93,6 +94,9 @@ public class BaseApplication extends Application {
     RetrofitHelper.getInstance()
                   .initUrl("http://139.196.107.14:5000/")
                   .builder();
+    UpLoadFileHelper.getInstance()
+                    .initUrl("http://139.196.107.14:6000/")
+                    .builder();
   }
 
   private void createNotificationChannel() {
