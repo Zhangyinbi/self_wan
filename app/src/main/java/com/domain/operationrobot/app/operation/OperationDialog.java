@@ -13,6 +13,8 @@ import com.domain.library.GlideApp;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.library.ui.CommonDialog;
+import com.domain.library.ui.SureInterface;
 import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.OperationList;
@@ -76,11 +78,20 @@ public class OperationDialog extends AppCompatDialog {
     mBtn_update_status.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (role == 3) {
-          upDateStatus(4);
-        } else {
-          upDateStatus(3);
+        if (operationInfo.getRole() == 4) {
+          ToastUtils.showToast("你需要指定一个用户为管理员");
+          return;
         }
+        new CommonDialog.Builder(mContext).setContent("此操作将会撤销本人的管理员权限，确定设置此用户为管理员吗？")
+                                          .setSureText("确定", new SureInterface() {
+                                            @Override
+                                            public void onSureClick() {
+                                              upDateStatus(4);
+                                            }
+                                          })
+                                          .setCancelText("取消", null)
+                                          .build()
+                                          .show();
       }
     });
   }

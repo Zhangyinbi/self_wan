@@ -172,8 +172,9 @@ public class OperationActivity extends AbsActivity {
       operationBean = intent.getParcelableExtra(EXTRA_BEAN);
       de_name.setValue(operationBean.getName());
       de_phone.setValue(operationBean.getPhone());
-      de_name.setSelection(operationBean.getName()
-                                        .length());
+      int length = operationBean.getName()
+                                .length();
+      de_name.setSelection(length);
       de_phone.setSelection(operationBean.getPhone()
                                          .length());
     }

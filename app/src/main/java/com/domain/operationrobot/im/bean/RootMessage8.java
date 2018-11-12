@@ -40,15 +40,15 @@ public class RootMessage8 {
 
   public class Action {
     private String time;
-    private String in;
-    private String out;
+    private String inNet;
+    private String outNet;
 
     public String getIn() {
-      return in == null ? "" : in;
+      return inNet == null ? "" : inNet;
     }
 
     public String getOut() {
-      return out == null ? "" : out;
+      return outNet == null ? "" : outNet;
     }
 
     public String getTime() {

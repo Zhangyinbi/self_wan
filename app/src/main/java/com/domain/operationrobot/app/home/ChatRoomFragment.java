@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.domain.library.base.AbsFragment;
+import com.domain.library.ui.CommonDialog;
 import com.domain.library.utils.MyPermissionUtils;
 import com.domain.library.utils.SoftInputUtil;
 import com.domain.library.utils.SpUtils;
@@ -98,7 +99,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   @Override
   public void onResume() {
     super.onResume();
-    if (mRecycler!=null){
+    if (mRecycler != null) {
       mRecycler.scrollToPosition(mAdapter.getItemCount() - 1);
     }
   }
@@ -133,7 +134,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
                                  openImageSelect();
                                }
                              }
-                           }, null);
+                           }, new CommonDialog.Builder(getActivity()).setContent("请在手机设置中打开权限")
+                                                                     .setSureText("知道了", null)
+                                                                     .build());
       }
     });
 
@@ -263,10 +266,10 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     if (msg.contains("@机器人")) {
       AppSocket.getInstance()
                .sendMessage(2, msg);
-      if (user.getRole() == 1 || user.getRole() == 2) {
-        ToastUtils.showToast("只有加入了公司才可以使用机器人功能");
-        return;
-      }
+      //if (user.getRole() == 1 || user.getRole() == 2) {
+      //  ToastUtils.showToast("只有加入了公司才可以使用机器人功能");
+      //  return;
+      //}
     } else {
       AppSocket.getInstance()
                .sendMessage(msg);
@@ -339,7 +342,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               break;
             case ROOT_MESSAGE_TYPE_34:
               rootMsg34(model);
-              break;case ROOT_MESSAGE_TYPE_8:
+              break;
+            case ROOT_MESSAGE_TYPE_8:
               rootMsg8(model);
               break;
           }

@@ -36,10 +36,10 @@ import static com.domain.operationrobot.app.operation.OperationActivity.EDIT_OPE
  */
 public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyViewHolder> {
 
+  OperationManagerActivity.IUpdate update;
   private ArrayList<OperationList.OperationInfo> data;
   private ArrayList<OperationList.OperationInfo> target = new ArrayList<>();
   private Context mContext;
-  OperationManagerActivity.IUpdate update;
 
   public OperationAdapter(Context context) {
     this.mContext = context;
@@ -82,13 +82,17 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
       holder.iv_gly.setVisibility(View.GONE);
     } else if (operationInfo.getRole() == 4) {
       holder.iv_yw.setVisibility(View.GONE);
-      holder.iv_shy.setVisibility(View.GONE);
+      holder.iv_shy.setVisibility(View.VISIBLE);
       holder.iv_gly.setVisibility(View.VISIBLE);
+    } else if (operationInfo.getRole() == 6) {
+      holder.iv_yw.setVisibility(View.GONE);
+      holder.iv_shy.setVisibility(View.VISIBLE);
+      holder.iv_gly.setVisibility(View.GONE);
     }
     holder.btn_manger.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-          new OperationDialog(mContext,operationInfo,update).show();
+        new OperationDialog(mContext, operationInfo, update).show();
       }
     });
   }
@@ -101,7 +105,7 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
   /**
    * 更新数据
    */
-  public void updateData(ArrayList<OperationList.OperationInfo> data, String targetName,OperationManagerActivity.IUpdate update) {
+  public void updateData(ArrayList<OperationList.OperationInfo> data, String targetName, OperationManagerActivity.IUpdate update) {
     this.update = update;
     if (!TextUtils.isEmpty(targetName)) {
       target.clear();
