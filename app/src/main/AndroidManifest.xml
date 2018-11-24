@@ -67,6 +67,7 @@
         android:launchMode="singleTask"
         android:windowSoftInputMode="stateHidden|adjustResize">
     </activity>
+    //运维用户管理
     <activity android:name=".app.operation.OperationManagerActivity">
     </activity>
 

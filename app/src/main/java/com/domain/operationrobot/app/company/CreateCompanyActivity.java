@@ -86,10 +86,11 @@ public class CreateCompanyActivity extends AbsActivity {
                   User user = BaseApplication.getInstance()
                                              .getUser();
                   user.setUsername(company.getUsername());
-                  user.setRole(company.getRole());
                   user.setCompanyname(company.getCompanyname());
                   user.setCompanyid(company.getCompanyid());
                   user.setCompanyrole(company.getCompanyrole());
+                  user.setRole(company.getRole());
+                  user.setOprole(company.getOprole());
                   user.setCompanyexpiredate(company.getCompanyexpiredate());
                   SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
                                                                 .getUser());
@@ -110,7 +111,6 @@ public class CreateCompanyActivity extends AbsActivity {
                         .killActivity(RegisterSussActivity.class);
     ActivityStackManager.getInstance()
                         .killActivity(JoinCompanyActivity.class);
-
     finish();
   }
 

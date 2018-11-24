@@ -49,13 +49,14 @@
           />
     </LinearLayout>
     <TextView
+        android:id="@+id/tv_delay_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="14dp"
         android:layout_marginTop="41dp"
-        android:text="18天12小时48分50秒"
+        android:text="31天12小时48分50秒"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         />
@@ -104,7 +105,7 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="9dp"
           android:gravity="center"
-          android:text="028-23658965"
+          android:text="@string/server_phone"
           android:textColor="@color/white"
           android:textSize="@dimen/dimens_14sp"
           />

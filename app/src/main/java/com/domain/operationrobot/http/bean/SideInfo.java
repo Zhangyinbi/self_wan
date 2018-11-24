@@ -23,12 +23,22 @@ public class SideInfo extends BaseEntry {
 */
   private String companyid;
   private String companyname;
+  private String companyexpiredate;
   private String mobile;
   private String username;
-  private int    companyrole;
+  private String    companyrole;
   private int    memberlist;
   private int    role;
+  private int    oprole;
   private int    joinlist;
+
+  public int getOprole() {
+    return oprole;
+  }
+
+  public String getCompanyexpiredate() {
+    return companyexpiredate == null ? "" : companyexpiredate;
+  }
 
   public String getCompanyid() {
     return companyid == null ? "" : companyid;
@@ -62,11 +72,11 @@ public class SideInfo extends BaseEntry {
     this.username = username;
   }
 
-  public int getCompanyrole() {
+  public String getCompanyrole() {
     return companyrole;
   }
 
-  public void setCompanyrole(int companyrole) {
+  public void setCompanyrole(String companyrole) {
     this.companyrole = companyrole;
   }
 

@@ -71,20 +71,20 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
             .apply(bitmapTransform(new CircleCrop()))
             .into(holder.iv_admin_image);
 
-    holder.tv_admin_name.setText(operationInfo.getUsername());
+    holder.tv_admin_name.setText(operationInfo.getOpusername());
     holder.iv_edit_operation.setOnClickListener(view -> {
       OperationActivity.start((Activity) mContext, EDIT_OPERATION,
-        new OperationBean(operationInfo.getUsername(), operationInfo.getMobile(), operationInfo.getUserid()));
+        new OperationBean(operationInfo.getOpusername(), operationInfo.getOpmobile(), operationInfo.getUserid(),operationInfo.getOpcompanyid()));
     });
-    if (operationInfo.getRole() == 3) {
+    if (operationInfo.getOprole() == 3) {
       holder.iv_yw.setVisibility(View.VISIBLE);
       holder.iv_shy.setVisibility(View.GONE);
       holder.iv_gly.setVisibility(View.GONE);
-    } else if (operationInfo.getRole() == 4) {
+    } else if (operationInfo.getOprole() == 4) {
       holder.iv_yw.setVisibility(View.GONE);
       holder.iv_shy.setVisibility(View.VISIBLE);
       holder.iv_gly.setVisibility(View.VISIBLE);
-    } else if (operationInfo.getRole() == 6) {
+    } else if (operationInfo.getOprole() == 6) {
       holder.iv_yw.setVisibility(View.GONE);
       holder.iv_shy.setVisibility(View.VISIBLE);
       holder.iv_gly.setVisibility(View.GONE);
@@ -110,7 +110,7 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
     if (!TextUtils.isEmpty(targetName)) {
       target.clear();
       for (OperationList.OperationInfo operationInfo : data) {
-        if (operationInfo.getUsername()
+        if (operationInfo.getOpusername()
                          .contains(targetName)) {
           target.add(operationInfo);
         }

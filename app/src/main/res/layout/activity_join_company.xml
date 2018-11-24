@@ -49,6 +49,7 @@
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="@dimen/dimens_18"
       android:layout_marginTop="@dimen/dimens_27"
+      android:layout_marginBottom="@dimen/dimens_20"
       android:background="@drawable/bg_white_round_black_border"
       android:orientation="vertical"
       >

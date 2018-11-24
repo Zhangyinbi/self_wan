@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +38,8 @@ import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+import com.domain.operationrobot.util.TimeUtil;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -115,11 +118,18 @@ public class MainActivity extends AbsActivity {
           if (mRole == 1) {
             startActivity(new Intent(MainActivity.this, ApplyActivity.class));
           } else if (mRole == 2) {
-
-          } else if (mRole == 3) {
-            new ApplyDialog(MainActivity.this).show();
-          } else if (mRole == 4) {
-            new DelayDialog(MainActivity.this).show();
+            //申请等待同意
+            //new DelayDialog(MainActivity.this, new BigDecimal("987876756")).show();//测试代码
+          } else if (mRole == 0) {
+            if (TextUtils.isEmpty(mUser.getCompanyexpiredate())) {
+              new ApplyDialog(MainActivity.this).show();
+            } else {
+              try {
+                new DelayDialog(MainActivity.this, new BigDecimal(mUser.getCompanyexpiredate())).show();
+              } catch (NumberFormatException n) {
+                Log.e(TAG, "onViewClick: 服务器返回的过期时间不是时间戳--》" + mUser.getCompanyexpiredate());
+              }
+            }
           }
           break;
         case R.id.iv_user_header:
@@ -239,7 +249,7 @@ public class MainActivity extends AbsActivity {
       @Override
       public void onClick(View view) {
         new CommonDialog.Builder(MainActivity.this).setContent("确定要退出吗？")
-                                                     .setCancelText("取消", null)
+                                                   .setCancelText("取消", null)
                                                    .setSureText("确定", new SureInterface() {
                                                      @Override
                                                      public void onSureClick() {
@@ -333,13 +343,16 @@ public class MainActivity extends AbsActivity {
         tv_top.setText("已申请公司，请等待公司管理员审核");
         mTv_fragment1.setVisibility(View.GONE);
         break;
-      case 3://普通公司用户
-        tv_top.setText("升级成为正式用户，享受一站式运维 >");
+      case 0://普通公司用户
+        if (TextUtils.isEmpty(mUser.getCompanyexpiredate())) {
+          tv_top.setText("升级成为正式用户，享受一站式运维 >");
+        } else {
+          tv_top.setText("还有" + TimeUtil.getTimeDay(new BigDecimal(mUser.getCompanyexpiredate())) + "天就要过期了，请续费 >");
+        }
         mTv_fragment1.setVisibility(View.VISIBLE);
         break;
-      case 4://公司管理员
-        tv_top.setText("还有18天就要过期了，请续费 >");
-        mTv_fragment1.setVisibility(View.VISIBLE);
+      case 3://被拒绝
+        tv_top.setText("公司申请被驳回，请联系管理员");
         break;
     }
   }
@@ -356,20 +369,54 @@ public class MainActivity extends AbsActivity {
                 @Override
                 public void onSuss(SideInfo sideInfo) {
                   mSideInfo = sideInfo;
+                  User user = BaseApplication.getInstance()
+                                             .getUser();
+                  user.setRole(sideInfo.getRole());
+                  BaseApplication.getInstance()
+                                 .setUser(user);
+                  mUser = user;
+                  SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
+                                                                .getUser());
                   setSideData();
                 }
               });
   }
 
   private void setSideData() {
+    User user = BaseApplication.getInstance()
+                               .getUser();
     if (mSideInfo != null) {
-      tv_user_role.setText(getRoleName(mSideInfo.getRole()));
-      tv_user_indication.setText(mSideInfo.getCompanyrole() == 1 ? "试用中" : "正式用户");
-      tv_company_name.setText(TextUtils.isEmpty(mSideInfo.getCompanyname()) ? "你还未加入公司，点击加入/创建" : mUser.getCompany());
+      user.setUsername(mSideInfo.getUsername());
+      if (mSideInfo.getRole() == 1) {
+        //游客
+        tv_user_role.setText("游客");
+      } else if (mSideInfo.getRole() == 3) {
+        tv_user_role.setText("申请未通过");
+      } else {
+        tv_user_role.setText(getRoleName(mSideInfo.getOprole()));
+      }
+
+      if ("1".equals(mSideInfo.getCompanyrole())) {
+        tv_user_indication.setText("试用中");
+      } else {
+        tv_user_indication.setVisibility(View.GONE);
+      }
+      if (TextUtils.isEmpty(mSideInfo.getCompanyname())) {
+        tv_company_name.setText("你还未加入公司，点击加入/创建");
+      } else {
+        tv_company_name.setText(mSideInfo.getCompanyname());
+
+        user.setCompanyname(mSideInfo.getCompanyname());
+        user.setCompanyid(mSideInfo.getCompanyid());
+        user.setCompanyrole(mSideInfo.getCompanyrole());
+        if (TextUtils.isEmpty(mSideInfo.getCompanyexpiredate())) {
+          user.setCompanyexpiredate(mSideInfo.getCompanyexpiredate());
+        }
+      }
       tv_company_name.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          if (TextUtils.isEmpty(mUser.getCompany())) {
+          if (TextUtils.isEmpty(mSideInfo.getCompanyname())) {
             openOrCloseDrawer();
             drawer.postDelayed(new Runnable() {
               @Override
@@ -383,33 +430,49 @@ public class MainActivity extends AbsActivity {
       if (mSideInfo.getJoinlist() > 0) {
         tv_join_num.setVisibility(View.VISIBLE);
         tv_join_num.setText(mSideInfo.getJoinlist() + "");
+      }else {
+        tv_join_num.setVisibility(View.GONE);
       }
       if (mSideInfo.getMemberlist() > 0) {
         tv_admin_num.setVisibility(View.VISIBLE);
         tv_admin_num.setText("(" + mSideInfo.getMemberlist() + ")");
+      }else {
+        tv_admin_num.setVisibility(View.GONE);
       }
+      BaseApplication.getInstance()
+                     .setUser(user);
+      mUser = user;
+      SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
+                                                    .getUser());
       return;
     }
     tv_join_num.setVisibility(View.GONE);
     tv_admin_num.setVisibility(View.GONE);
-    tv_user_role.setText(getRoleName(mUser.getRole()));
+    tv_user_role.setText(getRoleName(mUser.getOprole()));
     tv_company_name.setText(TextUtils.isEmpty(mUser.getCompany()) ? "你还未加入公司，点击加入/创建" : mUser.getCompany());
   }
 
-  private String getRoleName(int role) {
+  private String getRoleName(int oprRole) {
     String userRoleName = "游客";
-    switch (role) {
+//（2为申请待同意用户，3为普通用户，4为管理员，5为机器人，6为审核员）
+    switch (oprRole) {
       case 1:
-        userRoleName = "游客";
+
         break;
       case 2:
-        userRoleName = "待同意";
+        userRoleName = "申请待同意";
         break;
       case 3:
         userRoleName = "普通用户";
         break;
       case 4:
-        userRoleName = "管理员/审核员";
+        userRoleName = "管理员";
+        break;
+      case 5:
+        userRoleName = "机器人";
+        break;
+      case 6:
+        userRoleName = "审核员";
         break;
     }
     return userRoleName;

@@ -31,17 +31,29 @@ public class OperationList extends BaseEntry {
   public class OperationInfo {
     private String imageUrl;
     private String userid;
-    private String username;
     private String userstatus;
     private int    role;
-    private String mobile;
 
-    public String getMobile() {
-      return mobile == null ? "" : mobile;
+    private String opcompanyid;
+    private String opusername;
+    private String opmobile;
+    //（2为申请待同意用户，3为普通用户，4为管理员，5为机器人，6为审核员）
+    private int oprole;
+
+    public String getOpusername() {
+      return opusername == null ? "" : opusername;
     }
 
-    public void setMobile(String mobile) {
-      this.mobile = mobile;
+    public String getOpmobile() {
+      return opmobile == null ? "" : opmobile;
+    }
+
+    public int getOprole() {
+      return  oprole;
+    }
+
+    public String getOpcompanyid() {
+      return opcompanyid == null ? "" : opcompanyid;
     }
 
     public String getImageUrl() {
@@ -58,14 +70,6 @@ public class OperationList extends BaseEntry {
 
     public void setUserid(String userid) {
       this.userid = userid;
-    }
-
-    public String getUsername() {
-      return username == null ? "" : username;
-    }
-
-    public void setUsername(String username) {
-      this.username = username;
     }
 
     public String getUserstatus() {

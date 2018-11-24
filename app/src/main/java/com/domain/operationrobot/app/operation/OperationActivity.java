@@ -60,7 +60,7 @@ public class OperationActivity extends AbsActivity {
           if (type == ADD_OPERATION) {
             addOperation(phone, name);
           } else {
-            editOperation(phone, name, operationBean.getId());
+            editOperation(phone, name, operationBean.getUserId(), operationBean.getOpCompanyId());
           }
           break;
       }
@@ -79,10 +79,10 @@ public class OperationActivity extends AbsActivity {
   /**
    * 编辑运维用户
    */
-  private void editOperation(String phone, String name, String id) {
+  private void editOperation(String phone, String name, String id, String companyId) {
     showProgress();
     RemoteMode.getInstance()
-              .editOperation(phone, name, id)
+              .editOperation(phone, name, id,companyId)
               .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
                 @Override
                 public void onError(BaseException e) {
@@ -170,12 +170,12 @@ public class OperationActivity extends AbsActivity {
     } else {
       tvTitle.setText("编辑运维用户");
       operationBean = intent.getParcelableExtra(EXTRA_BEAN);
-      de_name.setValue(operationBean.getName());
-      de_phone.setValue(operationBean.getPhone());
-      int length = operationBean.getName()
+      de_name.setValue(operationBean.getOpUserName());
+      de_phone.setValue(operationBean.getOpMobile());
+      int length = operationBean.getOpUserName()
                                 .length();
       de_name.setSelection(length);
-      de_phone.setSelection(operationBean.getPhone()
+      de_phone.setSelection(operationBean.getOpMobile()
                                          .length());
     }
   }

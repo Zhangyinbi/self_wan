@@ -274,12 +274,13 @@ public class RemoteMode implements BaseMode {
   /**
    * 编辑运维账户
    */
-  public Observable<BaseEntry> editOperation(String phone, String name, String id) {
+  public Observable<BaseEntry> editOperation(String phone, String name, String id,String companyId) {
     JSONObject root = new JSONObject();
     try {
       root.put("opuserid", id);
       root.put("opusername", name);
       root.put("opmobile", phone);
+      root.put("opcompanyid", companyId);
       root.put("token", BaseApplication.getInstance()
                                        .getUser()
                                        .getToken());
@@ -299,8 +300,10 @@ public class RemoteMode implements BaseMode {
   public Observable<BaseEntry> addOperation(String phone, String name) {
     JSONObject root = new JSONObject();
     try {
-      root.put("mobile", phone);
-      root.put("username", name);
+      root.put("opmobile", phone);
+      root.put("opusername", name);
+      root.put("companyid", BaseApplication.getInstance()
+                                             .getUser().getCompanyid());
       root.put("token", BaseApplication.getInstance()
                                        .getUser()
                                        .getToken());
@@ -333,6 +336,8 @@ public class RemoteMode implements BaseMode {
     try {
       root.put("admin_action", String.valueOf(action));
       root.put("request_userid", request_userid);
+      root.put("request_companyid", BaseApplication.getInstance()
+                                                   .getUser().getCompanyid());
       root.put("token", BaseApplication.getInstance()
                                        .getUser()
                                        .getToken());
@@ -355,21 +360,23 @@ public class RemoteMode implements BaseMode {
   }
 
   public Observable<OperationList> getOperationInfo() {
-    String token = BaseApplication.getInstance()
-                                  .getUser()
-                                  .getToken();
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String token = user.getToken();
+    String companyid = user.getCompanyid();
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .getOperationInfo(token);
+                         .getOperationInfo(token,companyid);
   }
 
   /**
    * 管理员状态设置
    */
-  public Observable<OperationList> updateStatus(int lastRole, String userId) {
+  public Observable<OperationList> updateStatus(int lastRole, String userId,String opcompanyid) {
     JSONObject root = new JSONObject();
     try {
       root.put("opuserid", userId);
+      root.put("opcompanyid", opcompanyid);
       root.put("oprole", String.valueOf(lastRole));
       root.put("token", BaseApplication.getInstance()
                                        .getUser()
@@ -396,6 +403,7 @@ public class RemoteMode implements BaseMode {
 
   /**
    * 上传头像
+   *
    * @param type 0-》上传头像   1-》聊天图片上传
    */
   public Observable<ImageFileBean> upLoadImage(String path, int type) {
@@ -420,14 +428,28 @@ public class RemoteMode implements BaseMode {
     List<MultipartBody.Part> parts = builder.build()
                                             .parts();
 
-    if (type == 0){
+    if (type == 0) {
       return UpLoadFileHelper.getInstance()
                              .create(Api.class)
                              .upLoadImage(parts);
     }
-   return UpLoadFileHelper.getInstance()
-                          .create(Api.class)
-                          .upLoadImageMsg(parts);
+    return UpLoadFileHelper.getInstance()
+                           .create(Api.class)
+                           .upLoadImageMsg(parts);
+  }
+
+  public Observable<User> setDefaultCompany(String companyId, String token) {
+    JSONObject root = new JSONObject();
+    try {
+      root.put("companyid", companyId);
+      root.put("token", token);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .setDefaultCompany(requestBody);
   }
 
   private static class SingletonHolder {

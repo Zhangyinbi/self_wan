@@ -95,6 +95,7 @@ public class UserApplyActivity extends AbsActivity {
 
   /**
    * 处理请求
+   * @param action 0代表同意加入公司，1代表拒绝加入公司
    */
   public void dispose(int action, String request_userid) {
     showProgress();

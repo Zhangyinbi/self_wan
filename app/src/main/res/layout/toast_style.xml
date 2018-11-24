@@ -14,6 +14,7 @@
         android:src="@drawable/img_cg" />
 
     <TextView
+        android:id="@+id/tv_hint_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dimens_26"

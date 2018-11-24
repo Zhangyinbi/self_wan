@@ -22,6 +22,7 @@ public class RegisterSussActivity extends AbsActivity implements JoinCompanyCont
   ThrottleLastClickListener listener = new ThrottleLastClickListener() {
     @Override
     public void onViewClick(View v) {
+      finish();
       switch (v.getId()) {
         case R.id.iv_back:
           onBackPressed();

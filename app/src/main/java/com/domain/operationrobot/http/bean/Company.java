@@ -13,22 +13,43 @@ import java.util.ArrayList;
  */
 public class Company extends BaseEntry {
 
-  private String companyname;
-  private String companyid;
-  private String companyexpiredate;
-  private String companyrole;
-  private String username;
-  private int role;
+  private String            companyname;
+  private String            companyid;
+  private String            companyexpiredate;
+  //（1代表试用公司，2代表正式公司）
+  private String            companyrole;
+  private String            username;
+  private String            mobile;
+  private String            userid;
+  private String            email;
+  private int               role;
+  private int               oprole;
+  private ChatBotInfo       chatBotInfo;
+  private String admin;
+
+  public int getRole() {
+    return role;
+  }
+
+  public String getEmail() {
+    return email == null ? "" : email;
+  }
+
+  public int getOprole() {
+    return oprole;
+  }
+
+  public String getMobile() {
+    return mobile == null ? "" : mobile;
+  }
+
+  public String getUserid() {
+    return userid == null ? "" : userid;
+  }
 
   public String getUsername() {
     return username == null ? "" : username;
   }
-
-  public int getRole() {
-    return  role;
-  }
-
-  private ArrayList<String> admin;
 
   public String getCompanyname() {
     return companyname == null ? "" : companyname;
@@ -62,11 +83,17 @@ public class Company extends BaseEntry {
     this.companyrole = companyrole;
   }
 
-  public ArrayList<String> getAdmin() {
-    return admin == null ? new ArrayList<String>() : admin;
+  public String getAdmin() {
+    return admin == null ? "" : admin;
   }
 
-  public void setAdmin(ArrayList<String> admin) {
+  public void setAdmin(String admin) {
     this.admin = admin;
+  }
+
+  public class ChatBotInfo {
+    private String chatbotid;
+    private String chatbotpassword;
+    private String chatbotusername;
   }
 }

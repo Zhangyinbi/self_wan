@@ -18,8 +18,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center"
-      android:visibility="gone"
       android:orientation="vertical"
+      android:visibility="gone"
       >
     <ImageView
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="暂未查询到数据"
+        android:text="暂无用户申请"
         android:textColor="#D9D9D9"
         android:textSize="13sp"
         />

@@ -35,6 +35,7 @@ import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+import com.domain.operationrobot.util.ToastU;
 
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.PHONE_LENGTH;
@@ -86,11 +87,17 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
           if (etPwd.getInputType() == 129) {
             btnToggle.setBackgroundResource(R.drawable.img_yj);
             etPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            etPwd.setSelection(etPwd.getText().toString().trim().length());
+            etPwd.setSelection(etPwd.getText()
+                                    .toString()
+                                    .trim()
+                                    .length());
           } else {
             etPwd.setInputType(129);
             btnToggle.setBackgroundResource(R.drawable.img_by);
-            etPwd.setSelection(etPwd.getText().toString().trim().length());
+            etPwd.setSelection(etPwd.getText()
+                                    .toString()
+                                    .trim()
+                                    .length());
           }
           break;
         default:
@@ -194,22 +201,8 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
 
   @Override
   public void LoginSuss() {
-    ToastLoginSussMessage();
+    ToastU.ToastLoginSussMessage(this, "登录成功");
     startActivity(new Intent(this, MainActivity.class));
-    SpUtils.putBoolean(IS_LOGIN, true);
     finish();
-  }
-
-  /**
-   * Toast 提示登陆成功
-   */
-  private void ToastLoginSussMessage() {
-    LayoutInflater inflater = getLayoutInflater();
-    View view = inflater.inflate(R.layout.toast_style, null);
-    Toast toast = new Toast(getApplicationContext());
-    toast.setGravity(Gravity.CENTER, 0, 0);
-    toast.setDuration(Toast.LENGTH_SHORT);
-    toast.setView(view);
-    toast.show();
   }
 }

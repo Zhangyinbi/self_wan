@@ -21,5 +21,6 @@ public interface LoginContract {
     public abstract class LoginPresenter<T extends LoginView> extends BasePresenter<T> {
 
         public abstract void login(String phone, String pwd);
+        public abstract void setDefaultCompany(String companyId, String token);
     }
 }

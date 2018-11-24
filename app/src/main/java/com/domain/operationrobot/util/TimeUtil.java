@@ -2,6 +2,7 @@ package com.domain.operationrobot.util;
 
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -157,5 +158,45 @@ public class TimeUtil {
         return sdf.format(currenTimeZone);
       }
     }
+  }
+
+  /**
+   * @param timeStamp 毫秒
+   * @return 将时间转化为还有多少天数
+   */
+  public static BigDecimal getTimeDay(BigDecimal timeStamp) {
+    BigDecimal dayNum = (timeStamp.divide(BigDecimal.valueOf(1000 / 60 / 60 / 24), 0, BigDecimal.ROUND_DOWN));
+    return dayNum;
+  }
+
+  /**
+   * @param timeStamp 毫秒
+   * @return 18天12小时48分50秒
+   */
+  public static String getTime(BigDecimal timeStamp) {
+    BigDecimal day = timeStamp.divide(BigDecimal.valueOf(24 * 60 * 60 * 1000), 0, BigDecimal.ROUND_DOWN);
+    BigDecimal hour = timeStamp.divide(BigDecimal.valueOf(60 * 60 * 1000), 0, BigDecimal.ROUND_DOWN)
+                               .subtract(day.multiply(BigDecimal.valueOf(24)));
+    BigDecimal min = (timeStamp.divide(BigDecimal.valueOf((60 * 1000)), 0, BigDecimal.ROUND_DOWN)).subtract(day.multiply(BigDecimal.valueOf(24 * 60)))
+                                                                                                  .subtract(hour.multiply(BigDecimal.valueOf(60)));
+    BigDecimal sec = (timeStamp.divide(BigDecimal.valueOf(1000), 0, BigDecimal.ROUND_DOWN)
+                               .subtract(day.multiply(BigDecimal.valueOf(24 * 60 * 60)))
+                               .subtract(hour.multiply(BigDecimal.valueOf(60 * 60)))
+                               .subtract(min.multiply(BigDecimal.valueOf(60))));
+    String time = "";
+
+    if (day.compareTo(BigDecimal.valueOf(0)) > 0) {
+      time += day + "天";
+    }
+    if (hour.compareTo(BigDecimal.valueOf(0)) > 0) {
+      time += hour + "小时";
+    }
+    if (min.compareTo(BigDecimal.valueOf(0)) > 0) {
+      time += min + "分";
+    }
+    if (sec.compareTo(BigDecimal.valueOf(0)) > 0) {
+      time += sec + "秒";
+    }
+    return time;
   }
 }

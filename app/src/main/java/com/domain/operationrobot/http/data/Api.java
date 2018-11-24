@@ -124,7 +124,7 @@ public interface Api {
   Observable<SideInfo> getSide(@Query("token") String token);
 
   @GET("/api/v1/opusers")
-  Observable<OperationList> getOperationInfo(@Query("token") String token);
+  Observable<OperationList> getOperationInfo(@Query("token") String token, @Query("companyid") String companyid);
 
   /**
    * 设置管理员
@@ -153,4 +153,11 @@ public interface Api {
   @Multipart
   @POST("/api/v1/uploads")
   Observable<ImageFileBean> upLoadImageMsg(@Part List<MultipartBody.Part> parts);
+
+  /**
+   * 设置默认公司
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @PATCH("/api/v1/company")
+  Observable<User> setDefaultCompany(@Body RequestBody requestBody);
 }

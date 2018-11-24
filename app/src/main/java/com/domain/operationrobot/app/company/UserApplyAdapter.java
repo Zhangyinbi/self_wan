@@ -79,8 +79,8 @@ public class UserApplyAdapter extends RecyclerView.Adapter<UserApplyAdapter.MyVi
     holder.tv_time.setText("申请时间：" + TimeUtil.formatTimeMillis(info.getRequest_createtime()));
     GlideApp.with(context)
             .load(info.getRequest_img())
-            .placeholder(R.drawable.yhsq_tx2)//图片加载出来前，显示的图片
-            .error(R.drawable.yhsq_tx2)//图片加载失败后，显示的图片
+            .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片
+            .error(R.drawable.round_88)//图片加载失败后，显示的图片
             .transition(withCrossFade())
             .apply(bitmapTransform(new CircleCrop()))
             .into(holder.iv_image);

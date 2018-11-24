@@ -5,10 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.util.TimeUtil;
+import java.math.BigDecimal;
+
+import static com.domain.operationrobot.util.Constant.SERVER_PHONE;
 
 /**
  * Project Name : OperationRobot
@@ -20,9 +25,12 @@ import com.domain.operationrobot.R;
 public class DelayDialog extends AppCompatDialog {
 
   private TextView mTvTime;
+  private BigDecimal     timeStamp;
+  private TextView mTv_delay_time;
 
-  public DelayDialog(@NonNull Context context) {
+  public DelayDialog(@NonNull Context context, BigDecimal timeStamp) {
     super(context, R.style.ROBOT_Dialog);
+    this.timeStamp = timeStamp;
     init();
   }
 
@@ -42,13 +50,15 @@ public class DelayDialog extends AppCompatDialog {
         callPhone();
       }
     });
+    mTv_delay_time = findViewById(R.id.tv_delay_time);
     mTvTime = findViewById(R.id.tv_time);
     setCanceledOnTouchOutside(true);
+    mTv_delay_time.setText(TimeUtil.getTime(timeStamp));
   }
 
   public void callPhone() {
     Intent intent = new Intent(Intent.ACTION_DIAL);
-    Uri data = Uri.parse("tel:028-23658965");
+    Uri data = Uri.parse("tel:"+SERVER_PHONE);
     intent.setData(data);
     getContext().startActivity(intent);
   }

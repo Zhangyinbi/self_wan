@@ -22,75 +22,72 @@ import com.domain.operationrobot.listener.ThrottleLastClickListener;
  * Create at : 2018/10/13 19:08
  */
 public class JoinCompanyDialog extends AppCompatDialog {
-    private Company company;
-    private String accountName;
-    private DeleteEdit deAccountName;
-    private TextView tvAdminName;
-    private JoinCompanyContract.JoinCompanyPresenter presenter;
-    ThrottleLastClickListener listener = new ThrottleLastClickListener() {
-        @Override
-        public void onViewClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_cancel:
-                    dismiss();
-                    break;
-                case R.id.btn_join:
-                    String inputValue = deAccountName.getInputValue();
-                    if (TextUtils.isEmpty(inputValue)){
-                        ToastUtils.showToast("请输入申请人姓名");
-                        return;
-                    }
+  private Company                                  company;
+  private String                                   accountName;
+  private DeleteEdit                               deAccountName;
+  private TextView                                 tvAdminName;
+  private JoinCompanyContract.JoinCompanyPresenter presenter;
+  ThrottleLastClickListener listener = new ThrottleLastClickListener() {
+    @Override
+    public void onViewClick(View v) {
+      switch (v.getId()) {
+        case R.id.btn_cancel:
+          dismiss();
+          break;
+        case R.id.btn_join:
+          String inputValue = deAccountName.getInputValue();
+          if (TextUtils.isEmpty(inputValue)) {
+            ToastUtils.showToast("请输入申请人姓名");
+            return;
+          }
 
-                    dismiss();
-                    presenter.join(inputValue,company.getCompanyid());
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-    private TextView tvCompanyName;
-
-    public JoinCompanyDialog(@NonNull Context context, Company company, String accountName, JoinCompanyContract.JoinCompanyPresenter presenter) {
-        super(context, R.style.ROBOT_Dialog);
-        this.accountName = accountName;
-        this.presenter = presenter;
-        this.company = company;
-        init();
+          dismiss();
+          presenter.join(inputValue, company.getCompanyid());
+          break;
+        default:
+          break;
+      }
     }
+  };
+  private TextView tvCompanyName;
 
-    private void init() {
-        setContentView(R.layout.default_hint_join);
-        getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT);
-        tvAdminName = findViewById(R.id.tv_admin_name);
-        tvCompanyName = findViewById(R.id.tv_company_name);
-        deAccountName = findViewById(R.id.de_account_name);
-        findViewById(R.id.btn_cancel).setOnClickListener(listener);
-        findViewById(R.id.btn_join).setOnClickListener(listener);
-        tvCompanyName.setText(company != null ? company.getCompanyname() : "数据有误");
-        String adminName = company != null ? company.getAdmin().get(0) : "";
-        if (!TextUtils.isEmpty(adminName)) {
-            int length = adminName.length();
-            String pref = "";
-            if (length == 1) {
+  public JoinCompanyDialog(@NonNull Context context, Company company, String accountName, JoinCompanyContract.JoinCompanyPresenter presenter) {
+    super(context, R.style.ROBOT_Dialog);
+    this.accountName = accountName;
+    this.presenter = presenter;
+    this.company = company;
+    init();
+  }
 
-            } else if (length == 2) {
-                pref = "*";
-            } else {
-                pref = "**";
-            }
-            String temp = pref + adminName.substring(length - 1, length);
-            tvAdminName.setText("管理员：" + temp);
-        } else {
-            tvAdminName.setText("管理员：***");
-        }
-        if (!TextUtils.isEmpty(accountName)) {
-            deAccountName.setValue(accountName);
-            deAccountName.setSelection(accountName.length());
-        }
-        setCanceledOnTouchOutside(false);
+  private void init() {
+    setContentView(R.layout.default_hint_join);
+    getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    tvAdminName = findViewById(R.id.tv_admin_name);
+    tvCompanyName = findViewById(R.id.tv_company_name);
+    deAccountName = findViewById(R.id.de_account_name);
+    findViewById(R.id.btn_cancel).setOnClickListener(listener);
+    findViewById(R.id.btn_join).setOnClickListener(listener);
+    tvCompanyName.setText(company != null ? company.getCompanyname() : "数据有误");
+    String adminName = company != null ? company.getAdmin() : "";
+    if (!TextUtils.isEmpty(adminName)) {
+      int length = adminName.length();
+      String pref = "";
+      if (length == 1) {
+
+      } else if (length == 2) {
+        pref = "*";
+      } else {
+        pref = "**";
+      }
+      String temp = pref + adminName.substring(length - 1, length);
+      tvAdminName.setText("管理员：" + temp);
+    } else {
+      tvAdminName.setText("管理员：***");
     }
-
-
+    if (!TextUtils.isEmpty(accountName)) {
+      deAccountName.setValue(accountName);
+      deAccountName.setSelection(accountName.length());
+    }
+    setCanceledOnTouchOutside(false);
+  }
 }

@@ -109,10 +109,10 @@ public class JoinCompanyPresenterImpl extends JoinCompanyContract.JoinCompanyPre
 
                   User user = BaseApplication.getInstance()
                                              .getUser();
-                  user.setUsername(company.getUsername());
                   user.setRole(company.getRole());
-                  user.setCompanyname(company.getCompanyname());
-                  user.setCompanyrole(company.getCompanyrole());
+                  user.setOprole(company.getOprole());
+                  BaseApplication.getInstance()
+                                 .setUser(user);
                   SpUtils.setObject(USER_SP_KEY, BaseApplication.getInstance()
                                                                 .getUser());
                 }

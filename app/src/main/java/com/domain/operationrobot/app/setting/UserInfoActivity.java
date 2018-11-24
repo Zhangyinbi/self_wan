@@ -70,15 +70,15 @@ public class UserInfoActivity extends AbsActivity {
           break;
         case R.id.btn_out_company:
           new CommonDialog.Builder(UserInfoActivity.this).setContent("确定要退出此公司吗？")
-                                                     .setCancelText("取消", null)
-                                                     .setSureText("确定", new SureInterface() {
-                                                       @Override
-                                                       public void onSureClick() {
-                                                         outOfCompany();
-                                                       }
-                                                     })
-                                                     .build()
-                                                     .show();
+                                                         .setCancelText("取消", null)
+                                                         .setSureText("确定", new SureInterface() {
+                                                           @Override
+                                                           public void onSureClick() {
+                                                             outOfCompany();
+                                                           }
+                                                         })
+                                                         .build()
+                                                         .show();
           break;
         case R.id.ll_modify_header_image:
           openImage();
@@ -196,9 +196,10 @@ public class UserInfoActivity extends AbsActivity {
     String userName = user.getUsername();
     mTvUserName.setText(userName);
     mTvMobile.setText(user.getMobile());
-    if (TextUtils.isEmpty(user.getCompany())) {
-      mLl_company.setVisibility(View.GONE);
-    } else {
+    if (user.getRole() == 1) {
+      return;
+    }
+    if (!TextUtils.isEmpty(user.getCompany())) {
       mLl_company.setVisibility(View.VISIBLE);
       mTv_company_name.setText(user.getCompany());
     }
@@ -249,7 +250,7 @@ public class UserInfoActivity extends AbsActivity {
    */
   private void upLoadImage(String path) {
     RemoteMode.getInstance()
-              .upLoadImage(path,0)
+              .upLoadImage(path, 0)
               .subscribe(new BaseObserver<ImageFileBean>(compositeDisposable) {
                 @Override
                 public void onError(BaseException e) {

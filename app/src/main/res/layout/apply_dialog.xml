@@ -71,7 +71,7 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="9dp"
           android:gravity="center"
-          android:text="028-23658965"
+          android:text="@string/server_phone"
           android:textColor="@color/white"
           android:textSize="@dimen/dimens_14sp"
           />

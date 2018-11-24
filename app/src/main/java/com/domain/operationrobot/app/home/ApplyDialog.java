@@ -16,6 +16,8 @@ import com.domain.operationrobot.app.company.JoinCompanyContract;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
+import static com.domain.operationrobot.util.Constant.SERVER_PHONE;
+
 /**
  * Project Name : OperationRobot
  * description:null
@@ -51,7 +53,7 @@ public class ApplyDialog extends AppCompatDialog {
 
   public void callPhone() {
     Intent intent = new Intent(Intent.ACTION_DIAL);
-    Uri data = Uri.parse("tel:028-23658965");
+    Uri data = Uri.parse("tel:"+SERVER_PHONE);
     intent.setData(data);
     getContext().startActivity(intent);
   }

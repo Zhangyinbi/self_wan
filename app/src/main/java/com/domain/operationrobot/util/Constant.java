@@ -16,6 +16,7 @@ public class Constant {
   public static final int MESSAGE_OTHER = MESSAGE_SELF+1;
 
   public static final String USER_SP_KEY = "robot_user";
+  public static final String SERVER_PHONE="028-23658965";
 
   public static final int OPERATION_REQUEST_CODE = 00001;
 

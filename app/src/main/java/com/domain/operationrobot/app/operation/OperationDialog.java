@@ -49,7 +49,7 @@ public class OperationDialog extends AppCompatDialog {
     super(context, R.style.ROBOT_Dialog);
     mContext = context;
     this.operationInfo = operationInfo;
-    role = operationInfo.getRole();
+    role = operationInfo.getOprole();
     this.update = update;
     init();
   }
@@ -67,7 +67,7 @@ public class OperationDialog extends AppCompatDialog {
             .transition(withCrossFade())
             .apply(bitmapTransform(new CircleCrop()))
             .into(mCiv_user_img);
-    mTv_admin_name.setText(operationInfo.getUsername());
+    mTv_admin_name.setText(operationInfo.getOpusername());
 
     mBtn_cancel.setOnClickListener(view -> dismiss());
     mBtn_sure.setOnClickListener(view -> {
@@ -78,7 +78,7 @@ public class OperationDialog extends AppCompatDialog {
     mBtn_update_status.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (operationInfo.getRole() == 4) {
+        if (role == 4) {
           ToastUtils.showToast("你需要指定一个用户为管理员");
           return;
         }
@@ -86,7 +86,7 @@ public class OperationDialog extends AppCompatDialog {
                                           .setSureText("确定", new SureInterface() {
                                             @Override
                                             public void onSureClick() {
-                                              upDateStatus(4);
+                                              upDateStatus();
                                             }
                                           })
                                           .setCancelText("取消", null)
@@ -97,16 +97,27 @@ public class OperationDialog extends AppCompatDialog {
   }
 
   private void updateUI() {
-    if (role == 3) {
-      mBtn_update_status.setBackgroundResource(R.drawable.tc_btn_gb);
-    } else {
+    if (role == 4) {
       mBtn_update_status.setBackgroundResource(R.drawable.tc_btn_kq);
+      mBtn_shy_status.setBackgroundResource(R.drawable.tc_btn_kq);
+    } else if (role == 3) {
+      mBtn_update_status.setBackgroundResource(R.drawable.tc_btn_gb);
+      mBtn_shy_status.setBackgroundResource(R.drawable.tc_btn_gb);
+    } else if (role == 6) {
+      mBtn_update_status.setBackgroundResource(R.drawable.tc_btn_gb);
+      mBtn_shy_status.setBackgroundResource(R.drawable.tc_btn_kq);
     }
   }
 
-  private void upDateStatus(int lastRole) {
+  private void upDateStatus() {
+    //int lastRole = 0;
+    //if (role == 6) {
+    //  lastRole = 4;
+    //} else {
+    //  lastRole = 6;
+    //}
     RemoteMode.getInstance()
-              .updateStatus(lastRole, operationInfo.getUserid())
+              .updateStatus(6, operationInfo.getUserid(), operationInfo.getOpcompanyid())
               .subscribe(new BaseObserver<BaseEntry>(new CompositeDisposable()) {
                 @Override
                 public void onError(BaseException e) {
@@ -116,10 +127,10 @@ public class OperationDialog extends AppCompatDialog {
                 @Override
                 public void onSuss(BaseEntry baseEntry) {
                   update.updateData();
-                  if (role == 3) {
+                  if (role == 6) {
                     role = 4;
                   } else {
-                    role = 3;
+                    role = 6;
                   }
                   updateUI();
                 }

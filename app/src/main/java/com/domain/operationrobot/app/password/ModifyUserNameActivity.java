@@ -15,6 +15,7 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+import com.domain.operationrobot.util.ToastU;
 
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
@@ -52,7 +53,7 @@ public class ModifyUserNameActivity extends AbsActivity {
                 @Override
                 public void onSuss(BaseEntry userBaseEntry) {
                   hideProgress();
-                  showToast(userBaseEntry.msg);
+                  ToastU.ToastLoginSussMessage(ModifyUserNameActivity.this, userBaseEntry.msg);
                   BaseApplication.getInstance()
                                  .getUser()
                                  .setUsername(name);

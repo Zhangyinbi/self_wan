@@ -12,92 +12,93 @@ import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+import com.domain.operationrobot.util.ToastU;
 
 public class ModifyPwdActivity extends AbsActivity {
 
-    private DeleteEdit de_old_pwd;
-    private DeleteEdit de_new_pwd;
-    private DeleteEdit de_new_pwd_again;
-    ThrottleLastClickListener listener = new ThrottleLastClickListener() {
-        @Override
-        public void onViewClick(View v) {
-            switch (v.getId()) {
-                case R.id.iv_back:
-                    finish();
-                    break;
-                case R.id.tv_complete:
-                    String old = de_old_pwd.getValue();
-                    String newP = de_new_pwd.getValue();
-                    String again = de_new_pwd_again.getValue();
+  private DeleteEdit de_old_pwd;
+  private DeleteEdit de_new_pwd;
+  private DeleteEdit de_new_pwd_again;
+  ThrottleLastClickListener listener = new ThrottleLastClickListener() {
+    @Override
+    public void onViewClick(View v) {
+      switch (v.getId()) {
+        case R.id.iv_back:
+          finish();
+          break;
+        case R.id.tv_complete:
+          String old = de_old_pwd.getValue();
+          String newP = de_new_pwd.getValue();
+          String again = de_new_pwd_again.getValue();
 
-                    if (!(isEmpty(old) || isEmpty(newP) || isEmpty(again))) {
-                        if (!newP.equals(again)) {
-                            showToast("两次密码输入不一致");
-                            return;
-                        }
-                        complete(old, newP);
-                    }
-                    break;
-
+          if (!(isEmpty(old) || isEmpty(newP) || isEmpty(again))) {
+            if (!newP.equals(again)) {
+              showToast("两次密码输入不一致");
+              return;
             }
-        }
-    };
-
-    /**
-     * 完成修改提交
-     *
-     * @param old
-     * @param newP
-     */
-    public void complete(String old, String newP) {
-        showProgress();
-        RemoteMode.getInstance().modifyPwd(old, newP).subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
-            @Override
-            public void onError(BaseException e) {
-                hideProgress();
-                showToast(e.getMsg());
-            }
-
-            @Override
-            public void onSuss(BaseEntry userBaseEntry) {
-                hideProgress();
-                showToast("修改密码成功");
-                finish();
-            } @Override
-            public void onComplete() {
-                super.onComplete();
-                hideProgress();
-            }
-        });
+            complete(old, newP);
+          }
+          break;
+      }
     }
+  };
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_modify_pwd;
-    }
+  /**
+   * 完成修改提交
+   */
+  public void complete(String old, String newP) {
+    showProgress();
+    RemoteMode.getInstance()
+              .modifyPwd(old, newP)
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
 
-    @Override
-    protected void newInstancePresenter() {
+                @Override
+                public void onSuss(BaseEntry userBaseEntry) {
+                  hideProgress();
+                  ToastU.ToastLoginSussMessage(ModifyPwdActivity.this, userBaseEntry.msg);
+                  finish();
+                }
 
-    }
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
+  }
 
-    @Override
-    protected void initView() {
-        findViewById(R.id.iv_back).setOnClickListener(listener);
-        findViewById(R.id.tv_complete).setOnClickListener(listener);
+  @Override
+  protected int getLayoutId() {
+    return R.layout.activity_modify_pwd;
+  }
 
-        de_old_pwd = findViewById(R.id.de_old_pwd);
-        de_new_pwd = findViewById(R.id.de_new_pwd);
-        de_new_pwd_again = findViewById(R.id.de_new_pwd_again);
-    }
+  @Override
+  protected void newInstancePresenter() {
 
-    @Override
-    protected void initData() {
+  }
 
-    }
+  @Override
+  protected void initView() {
+    findViewById(R.id.iv_back).setOnClickListener(listener);
+    findViewById(R.id.tv_complete).setOnClickListener(listener);
 
-    @Override
-    public void showEmptyView() {
+    de_old_pwd = findViewById(R.id.de_old_pwd);
+    de_new_pwd = findViewById(R.id.de_new_pwd);
+    de_new_pwd_again = findViewById(R.id.de_new_pwd_again);
+  }
 
-    }
+  @Override
+  protected void initData() {
+
+  }
+
+  @Override
+  public void showEmptyView() {
+
+  }
 }
