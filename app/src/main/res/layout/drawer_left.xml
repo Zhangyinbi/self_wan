@@ -29,7 +29,7 @@
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginLeft="@dimen/dimens_17"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/round_88"
         />
     <TextView
@@ -63,6 +63,24 @@
         android:textSize="10sp"
         />
     <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/iv_user_header"
+        android:layout_below="@+id/iv_user_header"
+        android:layout_marginTop="@dimen/dimens_4"
+        android:background="@drawable/bg_gray_round"
+        android:drawableLeft="@drawable/img_sj"
+        android:drawablePadding="@dimen/dimens_4"
+        android:paddingBottom="@dimen/dimens_2"
+        android:paddingLeft="@dimen/dimens_5"
+        android:paddingRight="@dimen/dimens_5"
+        android:paddingTop="@dimen/dimens_2"
+        android:text="将于20129年21月12日到期"
+        android:textColor="@color/code_blue"
+        android:textSize="@dimen/dimens_12"
+        />
+    <TextView
         android:id="@+id/tv_company_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,6 +95,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/dimens_18"
         />
+
   </RelativeLayout>
   <LinearLayout
       android:layout_width="match_parent"

@@ -3,14 +3,30 @@ package com.domain.operationrobot.util;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import java.math.BigDecimal;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 时间转换工具
  */
 public class TimeUtil {
+
+  public static final String FORMAT_DATE_EN = "yyyy-MM-dd";
+  public static final String FORMAT_DATE_CN = "yyyy年MM月dd日";
+
+  public static final String FORMAT_TIME_CN = "yyyy年MM月dd HH时mm分ss秒";
+  public static final String FORMAT_TIME_CN_2 = "yyyy年MM月dd HH时mm分";
+  public static final String FORMAT_TIME_EN = "yyyy-MM-dd HH:mm:ss";
+  public static final String FORMAT_TIME_EN_2 = "yyyy-MM-dd HH:mm";
+
+  public static final String FORMAT_DAY_CN = "HH时mm分ss秒";
+  public static final String FORMAT_DAY_CN_2 = "HH时mm分";
+  public static final String FORMAT_DAY_EN = "HH:mm:ss";
+  public static final String FORMAT_DAY_EN_2 = "HH:mm";
+  public static final String FORMAT_DAY_EN_3 = "mm:ss";
 
   private TimeUtil() {
   }
@@ -165,7 +181,7 @@ public class TimeUtil {
    * @return 将时间转化为还有多少天数
    */
   public static BigDecimal getTimeDay(BigDecimal timeStamp) {
-    BigDecimal dayNum = (timeStamp.divide(BigDecimal.valueOf(1000 / 60 / 60 / 24), 0, BigDecimal.ROUND_DOWN));
+    BigDecimal dayNum = (timeStamp.divide(BigDecimal.valueOf(60 * 60 * 24), 0, BigDecimal.ROUND_DOWN));
     return dayNum;
   }
 
@@ -174,13 +190,12 @@ public class TimeUtil {
    * @return 18天12小时48分50秒
    */
   public static String getTime(BigDecimal timeStamp) {
-    BigDecimal day = timeStamp.divide(BigDecimal.valueOf(24 * 60 * 60 * 1000), 0, BigDecimal.ROUND_DOWN);
-    BigDecimal hour = timeStamp.divide(BigDecimal.valueOf(60 * 60 * 1000), 0, BigDecimal.ROUND_DOWN)
+    BigDecimal day = timeStamp.divide(BigDecimal.valueOf(24 * 60 * 60), 0, BigDecimal.ROUND_DOWN);
+    BigDecimal hour = timeStamp.divide(BigDecimal.valueOf(60 * 60), 0, BigDecimal.ROUND_DOWN)
                                .subtract(day.multiply(BigDecimal.valueOf(24)));
-    BigDecimal min = (timeStamp.divide(BigDecimal.valueOf((60 * 1000)), 0, BigDecimal.ROUND_DOWN)).subtract(day.multiply(BigDecimal.valueOf(24 * 60)))
-                                                                                                  .subtract(hour.multiply(BigDecimal.valueOf(60)));
-    BigDecimal sec = (timeStamp.divide(BigDecimal.valueOf(1000), 0, BigDecimal.ROUND_DOWN)
-                               .subtract(day.multiply(BigDecimal.valueOf(24 * 60 * 60)))
+    BigDecimal min = (timeStamp.divide(BigDecimal.valueOf((60)), 0, BigDecimal.ROUND_DOWN)).subtract(day.multiply(BigDecimal.valueOf(24 * 60)))
+                                                                                           .subtract(hour.multiply(BigDecimal.valueOf(60)));
+    BigDecimal sec = (timeStamp.subtract(day.multiply(BigDecimal.valueOf(24 * 60 * 60)))
                                .subtract(hour.multiply(BigDecimal.valueOf(60 * 60)))
                                .subtract(min.multiply(BigDecimal.valueOf(60))));
     String time = "";
@@ -199,4 +214,17 @@ public class TimeUtil {
     }
     return time;
   }
+
+  public static String strToDate(String time) {
+    SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日");
+    @SuppressWarnings("unused")
+    long lcc = Long.valueOf(time);
+    int i = Integer.parseInt(time);
+    String times = sdr.format(new Date(i * 1000L));
+    return times;
+
+  }
+
+
+
 }

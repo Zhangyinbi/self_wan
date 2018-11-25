@@ -77,7 +77,7 @@ public class LoginPresenterImpl extends LoginContract.LoginPresenter<LoginContra
                                                                            .getCompanyinfo() != null && user.getChoice()
                                                                                                             .getCompanyinfo()
                                                                                                             .size() > 0) {
-                    mChoiceCompanyDialog = new ChoiceCompanyDialog(((LoginActivity) mView).getApplicationContext(), user.getChoice()
+                    mChoiceCompanyDialog = new ChoiceCompanyDialog(((LoginActivity) mView), user.getChoice()
                                                                                                                         .getCompanyinfo(),
                       LoginPresenterImpl.this, user.getToken());
                     mChoiceCompanyDialog.show();

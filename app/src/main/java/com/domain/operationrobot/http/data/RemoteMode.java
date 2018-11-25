@@ -274,7 +274,7 @@ public class RemoteMode implements BaseMode {
   /**
    * 编辑运维账户
    */
-  public Observable<BaseEntry> editOperation(String phone, String name, String id,String companyId) {
+  public Observable<BaseEntry> editOperation(String phone, String name, String id, String companyId) {
     JSONObject root = new JSONObject();
     try {
       root.put("opuserid", id);
@@ -303,7 +303,8 @@ public class RemoteMode implements BaseMode {
       root.put("opmobile", phone);
       root.put("opusername", name);
       root.put("companyid", BaseApplication.getInstance()
-                                             .getUser().getCompanyid());
+                                           .getUser()
+                                           .getCompanyid());
       root.put("token", BaseApplication.getInstance()
                                        .getUser()
                                        .getToken());
@@ -337,7 +338,8 @@ public class RemoteMode implements BaseMode {
       root.put("admin_action", String.valueOf(action));
       root.put("request_userid", request_userid);
       root.put("request_companyid", BaseApplication.getInstance()
-                                                   .getUser().getCompanyid());
+                                                   .getUser()
+                                                   .getCompanyid());
       root.put("token", BaseApplication.getInstance()
                                        .getUser()
                                        .getToken());
@@ -366,13 +368,13 @@ public class RemoteMode implements BaseMode {
     String companyid = user.getCompanyid();
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .getOperationInfo(token,companyid);
+                         .getOperationInfo(token, companyid);
   }
 
   /**
    * 管理员状态设置
    */
-  public Observable<OperationList> updateStatus(int lastRole, String userId,String opcompanyid) {
+  public Observable<OperationList> updateStatus(int lastRole, String userId, String opcompanyid) {
     JSONObject root = new JSONObject();
     try {
       root.put("opuserid", userId);
@@ -398,7 +400,9 @@ public class RemoteMode implements BaseMode {
                          .create(Api.class)
                          .outOfCompany(BaseApplication.getInstance()
                                                       .getUser()
-                                                      .getToken());
+                                                      .getToken(), BaseApplication.getInstance()
+                                                                                  .getUser()
+                                                                                  .getCompanyid());
   }
 
   /**
@@ -450,6 +454,18 @@ public class RemoteMode implements BaseMode {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .setDefaultCompany(requestBody);
+  }
+
+  /**
+   * 检查默认公司
+   * @return
+   */
+  public Observable<User> checkDefaultCompany() {
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .checkDefaultCompany(BaseApplication.getInstance()
+                                                             .getUser()
+                                                             .getToken());
   }
 
   private static class SingletonHolder {

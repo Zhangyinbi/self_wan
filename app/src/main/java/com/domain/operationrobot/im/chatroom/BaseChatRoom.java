@@ -31,6 +31,8 @@ public class BaseChatRoom extends Observable implements IChatRoom {
 
   private final Gson mGson;
   private String TAG = "---------";
+  private long tempTime;
+  private int  errCount;
 
   BaseChatRoom() {
     mGson = new Gson();
@@ -222,7 +224,11 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         break;
 
       case Socket.EVENT_CONNECT_ERROR:
-        ToastUtils.showToast("登陆聊天服务器失败");
+        if (System.currentTimeMillis() - tempTime > 7000 && errCount < 5) {
+          ToastUtils.showToast("登陆聊天服务器失败");
+          tempTime = System.currentTimeMillis();
+          errCount++;
+        }
         Log.e(TAG, "EVENT_CONNECT_ERROR");
 
         break;
@@ -255,6 +261,8 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         break;
       // Socket连接成功
       case Socket.EVENT_CONNECT:
+        errCount = 0;
+        tempTime = 0;
         Log.e(TAG, "链接成功，发送一条消息 确认加入房间");
         AppSocket.getInstance()
                  .setConnSure();

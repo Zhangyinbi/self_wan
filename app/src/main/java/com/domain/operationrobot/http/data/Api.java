@@ -138,7 +138,7 @@ public interface Api {
    */
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @DELETE("/api/v1/member")
-  Observable<User> outOfCompany(@Query("token") String token);
+  Observable<User> outOfCompany(@Query("token") String token, @Query("companyid") String companyid);
 
   /**
    * 上传头像
@@ -160,4 +160,9 @@ public interface Api {
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @PATCH("/api/v1/company")
   Observable<User> setDefaultCompany(@Body RequestBody requestBody);
+
+
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @GET("/api/v1/default")
+  Observable<User> checkDefaultCompany(@Query("token")  String token);
 }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.domain.library.GlideApp;
 import com.domain.library.base.AbsActivity;
+import com.domain.library.base.BasePresenter;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.exception.BaseException;
 import com.domain.library.ui.CommonDialog;
@@ -28,7 +29,10 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.company.ApplyActivity;
 import com.domain.operationrobot.app.company.UserApplyActivity;
+import com.domain.operationrobot.app.login.ChoiceCompanyDialog;
 import com.domain.operationrobot.app.login.LoginActivity;
+import com.domain.operationrobot.app.login.LoginContract;
+import com.domain.operationrobot.app.login.LoginPresenterImpl;
 import com.domain.operationrobot.app.operation.OperationActivity;
 import com.domain.operationrobot.app.operation.OperationManagerActivity;
 import com.domain.operationrobot.app.password.ModifyPwdActivity;
@@ -47,8 +51,9 @@ import static com.domain.library.GlideOptions.bitmapTransform;
 import static com.domain.operationrobot.app.operation.OperationActivity.ADD_OPERATION;
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
+import static com.domain.operationrobot.util.TimeUtil.FORMAT_DATE_CN;
 
-public class MainActivity extends AbsActivity {
+public class MainActivity extends AbsActivity implements LoginContract.LoginView<BasePresenter> {
   private static final String TAG = "------------";
   private Fragment mCurrentFragment;
   private ArrayList<Fragment> mFragments     = new ArrayList<>();
@@ -125,7 +130,8 @@ public class MainActivity extends AbsActivity {
               new ApplyDialog(MainActivity.this).show();
             } else {
               try {
-                new DelayDialog(MainActivity.this, new BigDecimal(mUser.getCompanyexpiredate())).show();
+                BigDecimal time = new BigDecimal(mUser.getCompanyexpiredate()).subtract(new BigDecimal(System.currentTimeMillis() / 1000));
+                new DelayDialog(MainActivity.this, time).show();
               } catch (NumberFormatException n) {
                 Log.e(TAG, "onViewClick: 服务器返回的过期时间不是时间戳--》" + mUser.getCompanyexpiredate());
               }
@@ -144,7 +150,9 @@ public class MainActivity extends AbsActivity {
       }
     }
   };
-  private SideInfo mSideInfo;
+  private ChoiceCompanyDialog mChoiceCompanyDialog;
+  private SideInfo            mSideInfo;
+  private TextView            mTv_time;
 
   private void openOrCloseDrawer() {
     if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -185,6 +193,7 @@ public class MainActivity extends AbsActivity {
     mTv_fragment1.setOnClickListener(listener);
     mTv_fragment2.setOnClickListener(listener);
 
+    mTv_time = findViewById(R.id.tv_time);
     mTvUserName = findViewById(R.id.tv_user_name);
     tv_company_name = findViewById(R.id.tv_company_name);
     tv_user_role = findViewById(R.id.tv_user_role);
@@ -205,6 +214,43 @@ public class MainActivity extends AbsActivity {
     ll_yunwei.setOnClickListener(listener);
     ll_sq.setOnClickListener(listener);
     showContent(0);
+    checkDefaultCompany();
+  }
+
+  private void checkDefaultCompany() {
+    RemoteMode.getInstance()
+              .checkDefaultCompany()
+              .subscribe(new BaseObserver<User>(compositeDisposable) {
+
+                @Override
+                public void onError(BaseException e) {
+
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(User user) {
+
+                  hideProgress();
+                  if (null != user.getChoice() && !user.getChoice()
+                                                       .getStatus() && user.getChoice()
+                                                                           .getCompanyinfo() != null && user.getChoice()
+                                                                                                            .getCompanyinfo()
+                                                                                                            .size() > 0) {
+                    mChoiceCompanyDialog = new ChoiceCompanyDialog(MainActivity.this, user.getChoice()
+                                                                                          .getCompanyinfo(),
+                      new LoginPresenterImpl(MainActivity.this), user.getToken());
+                    mChoiceCompanyDialog.setCancelable(false);
+                    mChoiceCompanyDialog.show();
+                  }
+                }
+
+                @Override
+                public void onComplete() {
+                  hideProgress();
+                }
+              });
   }
 
   private void showContent(int position) {
@@ -347,7 +393,8 @@ public class MainActivity extends AbsActivity {
         if (TextUtils.isEmpty(mUser.getCompanyexpiredate())) {
           tv_top.setText("升级成为正式用户，享受一站式运维 >");
         } else {
-          tv_top.setText("还有" + TimeUtil.getTimeDay(new BigDecimal(mUser.getCompanyexpiredate())) + "天就要过期了，请续费 >");
+          BigDecimal time = new BigDecimal(mUser.getCompanyexpiredate()).subtract(new BigDecimal(System.currentTimeMillis() / 1000));
+          tv_top.setText("还有" + TimeUtil.getTimeDay(time) + "天就要过期了，请续费 >");
         }
         mTv_fragment1.setVisibility(View.VISIBLE);
         break;
@@ -385,6 +432,13 @@ public class MainActivity extends AbsActivity {
   private void setSideData() {
     User user = BaseApplication.getInstance()
                                .getUser();
+
+    if (TextUtils.isEmpty(user.getCompanyexpiredate())) {
+      mTv_time.setVisibility(View.GONE);
+    } else {
+      mTv_time.setVisibility(View.VISIBLE);
+      mTv_time.setText("将于" + TimeUtil.strToDate(user.getCompanyexpiredate()) + "到期");
+    }
     if (mSideInfo != null) {
       user.setUsername(mSideInfo.getUsername());
       if (mSideInfo.getRole() == 1) {
@@ -430,13 +484,13 @@ public class MainActivity extends AbsActivity {
       if (mSideInfo.getJoinlist() > 0) {
         tv_join_num.setVisibility(View.VISIBLE);
         tv_join_num.setText(mSideInfo.getJoinlist() + "");
-      }else {
+      } else {
         tv_join_num.setVisibility(View.GONE);
       }
       if (mSideInfo.getMemberlist() > 0) {
         tv_admin_num.setVisibility(View.VISIBLE);
         tv_admin_num.setText("(" + mSideInfo.getMemberlist() + ")");
-      }else {
+      } else {
         tv_admin_num.setVisibility(View.GONE);
       }
       BaseApplication.getInstance()
@@ -476,5 +530,15 @@ public class MainActivity extends AbsActivity {
         break;
     }
     return userRoleName;
+  }
+
+  @Override
+  public void loginFail(String msg) {
+
+  }
+
+  @Override
+  public void LoginSuss() {
+
   }
 }

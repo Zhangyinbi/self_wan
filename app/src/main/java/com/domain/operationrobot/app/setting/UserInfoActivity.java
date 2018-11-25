@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.domain.library.GlideApp;
 import com.domain.library.base.AbsActivity;
+import com.domain.library.base.BasePresenter;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
@@ -29,6 +30,10 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.home.ChatRoomFragment;
 import com.domain.operationrobot.app.home.MainActivity;
+import com.domain.operationrobot.app.login.ChoiceCompanyDialog;
+import com.domain.operationrobot.app.login.LoginActivity;
+import com.domain.operationrobot.app.login.LoginContract;
+import com.domain.operationrobot.app.login.LoginPresenterImpl;
 import com.domain.operationrobot.app.password.VerifyPwdActivity;
 import com.domain.operationrobot.glide.CircleImageView;
 import com.domain.operationrobot.http.bean.ImageFileBean;
@@ -45,16 +50,17 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 import static com.domain.library.GlideOptions.bitmapTransform;
 import static com.domain.operationrobot.app.password.VerifyPwdActivity.FROM_USER_NAME_MODIFY;
 import static com.domain.operationrobot.app.password.VerifyPwdActivity.FROM_USER_PHONE_MODIFY;
+import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
-public class UserInfoActivity extends AbsActivity {
-
-  private TextView        mTvUserName;
-  private CircleImageView mCivUserImg;
-  private TextView        mTvMobile;
-  private LinearLayout    mLlModifyMobile;
-  private TextView        mTv_company_name;
-  private LinearLayout    mLl_company;
+public class UserInfoActivity extends AbsActivity implements LoginContract.LoginView<BasePresenter> {
+  private ChoiceCompanyDialog mChoiceCompanyDialog;
+  private TextView            mTvUserName;
+  private CircleImageView     mCivUserImg;
+  private TextView            mTvMobile;
+  private LinearLayout        mLlModifyMobile;
+  private TextView            mTv_company_name;
+  private LinearLayout        mLl_company;
   ThrottleLastClickListener listener = new ThrottleLastClickListener() {
     @Override
     public void onViewClick(View v) {
@@ -103,21 +109,70 @@ public class UserInfoActivity extends AbsActivity {
                 @Override
                 public void onSuss(User user) {
                   hideProgress();
-                  showToast("退出公司成功");
-                  User realUser = BaseApplication.getInstance()
-                                                 .getUser();
-                  realUser.setRole(user.getRole());
-                  realUser.setCompanyexpiredate("");
-                  realUser.setCompanyrole("");
-                  realUser.setCompanyname("");
-                  realUser.setCompanyid("");
-                  mLl_company.setVisibility(View.GONE);
-                  SpUtils.setObject(USER_SP_KEY, realUser);
+                  //showToast("退出公司成功");
+                  //User realUser = BaseApplication.getInstance()
+                  //                               .getUser();
+                  //realUser.setRole(user.getRole());
+                  //realUser.setCompanyexpiredate("");
+                  //realUser.setCompanyrole("");
+                  //realUser.setCompanyname("");
+                  //realUser.setCompanyid("");
+                  //mLl_company.setVisibility(View.GONE);
+                  //SpUtils.setObject(USER_SP_KEY, realUser);
+
+                  checkDefaultCompany();
                 }
 
                 @Override
                 public void onComplete() {
                   super.onComplete();
+                  hideProgress();
+                }
+              });
+  }
+
+  private void checkDefaultCompany() {
+    RemoteMode.getInstance()
+              .checkDefaultCompany()
+              .subscribe(new BaseObserver<User>(compositeDisposable) {
+
+                @Override
+                public void onError(BaseException e) {
+
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(User user) {
+
+                  hideProgress();
+                  if (null != user.getChoice() && !user.getChoice()
+                                                       .getStatus() && user.getChoice()
+                                                                           .getCompanyinfo() != null && user.getChoice()
+                                                                                                            .getCompanyinfo()
+                                                                                                            .size() > 0) {
+                    mChoiceCompanyDialog = new ChoiceCompanyDialog(UserInfoActivity.this, user.getChoice()
+                                                                                              .getCompanyinfo(),
+                      new LoginPresenterImpl(UserInfoActivity.this), user.getToken());
+                    mChoiceCompanyDialog.setCancelable(false);
+                    mChoiceCompanyDialog.show();
+                  } else if (!TextUtils.isEmpty(user.getCompany())) {
+                    BaseApplication.getInstance()
+                                   .setUser(user);
+                    mLl_company.setVisibility(View.VISIBLE);
+                    mTv_company_name.setText(user.getCompany());
+                    SpUtils.setObject(USER_SP_KEY, user);
+                  } else {
+                    mLl_company.setVisibility(View.GONE);
+                    BaseApplication.getInstance()
+                                   .setUser(user);
+                    SpUtils.setObject(USER_SP_KEY, user);
+                  }
+                }
+
+                @Override
+                public void onComplete() {
                   hideProgress();
                 }
               });
@@ -286,5 +341,15 @@ public class UserInfoActivity extends AbsActivity {
             .transition(withCrossFade())
             .apply(bitmapTransform(new CircleCrop()))
             .into(mCivUserImg);
+  }
+
+  @Override
+  public void loginFail(String msg) {
+
+  }
+
+  @Override
+  public void LoginSuss() {
+
   }
 }

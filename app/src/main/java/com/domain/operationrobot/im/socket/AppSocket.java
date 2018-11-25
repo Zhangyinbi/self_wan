@@ -1,5 +1,7 @@
 package com.domain.operationrobot.im.socket;
 
+import android.text.TextUtils;
+import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.im.listener.IConstants;
 import org.json.JSONException;
@@ -42,6 +44,14 @@ public class AppSocket extends BaseSocket {
                                              .getToken());
       jsonObject.put("type", type);
       jsonObject.put("msg", content);
+      String companyid = BaseApplication.getInstance()
+                                        .getUser()
+                                        .getCompanyid();
+      if (TextUtils.isEmpty(companyid)) {
+        ToastUtils.showToast("游客状态无法聊天");
+        return;
+      }
+      jsonObject.putOpt("companyid", companyid);
       jsonObject1.putOpt("data", jsonObject);
       mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
     } catch (JSONException e) {
@@ -58,6 +68,14 @@ public class AppSocket extends BaseSocket {
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
+      String companyid = BaseApplication.getInstance()
+                                        .getUser()
+                                        .getCompanyid();
+      if (TextUtils.isEmpty(companyid)) {
+        ToastUtils.showToast("游客状态无法聊天");
+        return;
+      }
+      jsonObject.putOpt("companyid", companyid);
       jsonObject.put("msg", content);
       mSocket.emit(IConstants.TALK, jsonObject);
     } catch (JSONException e) {
