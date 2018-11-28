@@ -9,10 +9,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.util.TimeUtil;
 import java.math.BigDecimal;
 
+import static com.domain.operationrobot.util.Constant.SERVER_MOBILE;
 import static com.domain.operationrobot.util.Constant.SERVER_PHONE;
 
 /**
@@ -27,6 +29,7 @@ public class DelayDialog extends AppCompatDialog {
   private TextView mTvTime;
   private BigDecimal     timeStamp;
   private TextView mTv_delay_time;
+  private TextView mTv_mobile;
 
   public DelayDialog(@NonNull Context context, BigDecimal timeStamp) {
     super(context, R.style.ROBOT_Dialog);
@@ -54,9 +57,20 @@ public class DelayDialog extends AppCompatDialog {
     mTvTime = findViewById(R.id.tv_time);
     setCanceledOnTouchOutside(true);
     mTv_delay_time.setText(TimeUtil.getTime(timeStamp));
+
+    mTv_mobile = findViewById(R.id.tv_mobile);
+    String string = SpUtils.getString(SERVER_MOBILE);
+    if (!TextUtils.isEmpty(string)){
+      SERVER_PHONE = string;
+    }
+    mTv_mobile.setText(SERVER_PHONE);
   }
 
   public void callPhone() {
+    String string = SpUtils.getString(SERVER_MOBILE);
+    if (!TextUtils.isEmpty(string)){
+      SERVER_PHONE = string;
+    }
     Intent intent = new Intent(Intent.ACTION_DIAL);
     Uri data = Uri.parse("tel:"+SERVER_PHONE);
     intent.setData(data);

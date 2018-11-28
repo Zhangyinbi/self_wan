@@ -90,4 +90,18 @@
         android:text="提交"
         android:textColor="@color/white"
         android:textSize="@dimen/dimens_18" />
+
+    <Button
+        android:id="@+id/btn_delete_user"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimens_17"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_blue_round_click_bg"
+        android:paddingBottom="@dimen/dimens_17"
+        android:paddingTop="@dimen/dimens_15"
+        android:text="删除"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimens_18" />
 </LinearLayout>

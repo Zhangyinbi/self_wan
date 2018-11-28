@@ -39,7 +39,7 @@ public class RootMessage8 {
   }
 
   public class Action {
-    private String time;
+    private String netDrive ;
     private String inNet;
     private String outNet;
 
@@ -51,8 +51,8 @@ public class RootMessage8 {
       return outNet == null ? "" : outNet;
     }
 
-    public String getTime() {
-      return time == null ? "" : time;
+    public String getNetDrive() {
+      return netDrive  == null ? "" : netDrive ;
     }
   }
 }

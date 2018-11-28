@@ -4,8 +4,17 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dimens_16"
     android:layout_marginRight="@dimen/dimens_16"
+    android:orientation="vertical"
     >
 
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="@dimen/dimens_16"
+      android:background="@color/code_blue"
+      android:padding="@dimen/dimens_17"
+      android:gravity="center"
+      android:text="选择公司进入"/>
   <android.support.v7.widget.RecyclerView
       android:id="@+id/rlv_recycler"
       android:layout_width="match_parent"

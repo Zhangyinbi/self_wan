@@ -95,6 +95,14 @@ public class OperationAdapter extends RecyclerView.Adapter<OperationAdapter.MyVi
         new OperationDialog(mContext, operationInfo, update).show();
       }
     });
+
+    if (BaseApplication.getInstance().getUser().getOprole()!=4){
+      holder.iv_edit_operation.setVisibility(View.INVISIBLE);
+      holder.btn_manger.setVisibility(View.INVISIBLE);
+    }else {
+      holder.iv_edit_operation.setVisibility(View.VISIBLE);
+      holder.btn_manger.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override

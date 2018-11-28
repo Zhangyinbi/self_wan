@@ -199,6 +199,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       }
     });
     mAdapter = new ChatAdapter(new ArrayList<ChatBean>(), getActivity());
+    mAdapter.setHostMsg(msg -> ChatRoomFragment.this.sendMsg(msg));
     mAdapter.setRecycler(mRecycler);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
     //linearLayoutManager.setStackFromEnd(true);
@@ -210,7 +211,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     }, 300);
     mRecycler.setLayoutManager(linearLayoutManager);
     mRecycler.setAdapter(mAdapter);
-    String list = SpUtils.getDataList("chat_data");
+    String list = SpUtils.getDataList("chat_data"+BaseApplication.getInstance().getUser().getMobile());
     if (!TextUtils.isEmpty(list)) {
       Gson gson = new Gson();
       ArrayList<ChatBean> chatBeans = gson.fromJson(list, new TypeToken<ArrayList<ChatBean>>() {}.getType());
@@ -220,7 +221,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mBtnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        sendMsg();
+        sendMsg(mEtMsg.getText()
+                      .toString()
+                      .trim());
       }
     });
     mRecycler.setOnTouchListener(new View.OnTouchListener() {
@@ -242,11 +245,12 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
   /**
    * 发送消息
+   * @param msg
    */
-  private void sendMsg() {
-    String msg = mEtMsg.getText()
-                       .toString()
-                       .trim();
+  private void sendMsg(String msg) {
+    //String msg = mEtMsg.getText()
+    //                   .toString()
+    //                   .trim();
     User user = BaseApplication.getInstance()
                                .getUser();
     String mUsername = user.getUsername();
@@ -435,19 +439,28 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    if (SpUtils.getObject(USER_SP_KEY, User.class) != null) {
-      ArrayList<ChatBean> list = mAdapter.getList();
-      if (list.size() > 20) {
-        for (int i = 0; i < list.size() - 19; i++) {
-          list.remove(i);
-        }
-      }
-      SpUtils.setDataList("chat_data", list);
-    }
+    setData();
     MainChatRoom.getInstance()
                 .deleteObserver(this);
     AppSocket.getInstance()
              .disConnnect();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+
+  }
+  public void setData(){
+    if (SpUtils.getObject(USER_SP_KEY, User.class) != null) {
+      ArrayList<ChatBean> list = mAdapter.getList();
+      if (list.size() > 190) {
+        for (int i = 0; i < list.size() - 189; i++) {
+          list.remove(i);
+        }
+      }
+      SpUtils.setDataList("chat_data"+BaseApplication.getInstance().getUser().getMobile(), list);
+    }
   }
 
   /**

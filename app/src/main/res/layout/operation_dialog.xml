@@ -99,87 +99,87 @@
         android:textColor="#C6C6C6"
         android:textSize="@dimen/dimens_11"
         />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dimens_20"
-        android:layout_marginTop="@dimen/dimens_8"
-        >
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:button="@drawable/operation_dialog_checkbox_style"
-          android:paddingLeft="@dimen/dimens_6"
-          android:text="重启服务器"
-          android:textColor="#807E7E"
-          android:textSize="@dimen/dimens_14"
-          />
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:button="@drawable/operation_dialog_checkbox_style"
-          android:paddingLeft="@dimen/dimens_6"
-          android:text="重启服务器"
-          android:textColor="#807E7E"
-          android:textSize="@dimen/dimens_14"
-          />
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginRight="@dimen/dimens_20"-->
+        <!--android:layout_marginTop="@dimen/dimens_8"-->
+        <!--&gt;-->
+      <!--<CheckBox-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:button="@drawable/operation_dialog_checkbox_style"-->
+          <!--android:paddingLeft="@dimen/dimens_6"-->
+          <!--android:text="重启服务器"-->
+          <!--android:textColor="#807E7E"-->
+          <!--android:textSize="@dimen/dimens_14"-->
+          <!--/>-->
+      <!--<CheckBox-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:layout_alignParentRight="true"-->
+          <!--android:button="@drawable/operation_dialog_checkbox_style"-->
+          <!--android:paddingLeft="@dimen/dimens_6"-->
+          <!--android:text="重启服务器"-->
+          <!--android:textColor="#807E7E"-->
+          <!--android:textSize="@dimen/dimens_14"-->
+          <!--/>-->
+    <!--</RelativeLayout>-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dimens_20"
-        android:layout_marginTop="@dimen/dimens_12"
-        >
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:button="@drawable/operation_dialog_checkbox_style"
-          android:paddingLeft="@dimen/dimens_6"
-          android:text="重启服务器"
-          android:textColor="#807E7E"
-          android:textSize="@dimen/dimens_14"
-          />
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:button="@drawable/operation_dialog_checkbox_style"
-          android:paddingLeft="@dimen/dimens_6"
-          android:text="重启服务器"
-          android:textColor="#807E7E"
-          android:textSize="@dimen/dimens_14"
-          />
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginRight="@dimen/dimens_20"-->
+        <!--android:layout_marginTop="@dimen/dimens_12"-->
+        <!--&gt;-->
+      <!--<CheckBox-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:button="@drawable/operation_dialog_checkbox_style"-->
+          <!--android:paddingLeft="@dimen/dimens_6"-->
+          <!--android:text="重启服务器"-->
+          <!--android:textColor="#807E7E"-->
+          <!--android:textSize="@dimen/dimens_14"-->
+          <!--/>-->
+      <!--<CheckBox-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:layout_alignParentRight="true"-->
+          <!--android:button="@drawable/operation_dialog_checkbox_style"-->
+          <!--android:paddingLeft="@dimen/dimens_6"-->
+          <!--android:text="重启服务器"-->
+          <!--android:textColor="#807E7E"-->
+          <!--android:textSize="@dimen/dimens_14"-->
+          <!--/>-->
+    <!--</RelativeLayout>-->
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dimens_20"
-        android:layout_marginTop="@dimen/dimens_12"
-        >
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:button="@drawable/operation_dialog_checkbox_style"
-          android:paddingLeft="@dimen/dimens_6"
-          android:text="重启服务器"
-          android:textColor="#807E7E"
-          android:textSize="@dimen/dimens_14"
-          />
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:button="@drawable/operation_dialog_checkbox_style"
-          android:paddingLeft="@dimen/dimens_6"
-          android:text="重启服务器"
-          android:textColor="#807E7E"
-          android:textSize="@dimen/dimens_14"
-          />
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginRight="@dimen/dimens_20"-->
+        <!--android:layout_marginTop="@dimen/dimens_12"-->
+        <!--&gt;-->
+      <!--<CheckBox-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:button="@drawable/operation_dialog_checkbox_style"-->
+          <!--android:paddingLeft="@dimen/dimens_6"-->
+          <!--android:text="重启服务器"-->
+          <!--android:textColor="#807E7E"-->
+          <!--android:textSize="@dimen/dimens_14"-->
+          <!--/>-->
+      <!--<CheckBox-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:layout_alignParentRight="true"-->
+          <!--android:button="@drawable/operation_dialog_checkbox_style"-->
+          <!--android:paddingLeft="@dimen/dimens_6"-->
+          <!--android:text="重启服务器"-->
+          <!--android:textColor="#807E7E"-->
+          <!--android:textSize="@dimen/dimens_14"-->
+          <!--/>-->
+    <!--</RelativeLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -195,6 +195,7 @@
           android:layout_weight="1"
           android:background="@drawable/blue_round_stroke"
           android:text="取消"
+          android:visibility="gone"
           android:textColor="#18B495"
           android:textSize="14sp"
           />

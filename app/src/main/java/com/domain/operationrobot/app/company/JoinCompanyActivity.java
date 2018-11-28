@@ -121,6 +121,7 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
     if (companyList == null) {
       return;
     }
+    this.companyList = companyList;
     adapter.updateData(companyList, targetName);
   }
 

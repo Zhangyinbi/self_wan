@@ -48,7 +48,7 @@ public class RootBean8Adapter extends RecyclerView.Adapter<RootBean8Adapter.MyVi
     int realPosition = position - 1;
     RootMessage8.Action action = mActions.get(realPosition);
     holder.tv_in.setText(action.getIn());
-    holder.tv_time.setText(action.getTime());
+    holder.tv_time.setText(action.getNetDrive());
     holder.tv_out.setText(action.getOut());
   }
 

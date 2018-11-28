@@ -280,6 +280,11 @@ public class BaseChatRoom extends Observable implements IChatRoom {
       // Socket重新连接
       case Socket.EVENT_RECONNECT:
         Log.d(TAG, "EVENT_RECONNECT");
+        errCount = 0;
+        tempTime = 0;
+        Log.e(TAG, "链接成功，发送一条消息 确认加入房间");
+        AppSocket.getInstance()
+                 .setConnSure();
         break;
 
       case Socket.EVENT_RECONNECT_ATTEMPT:

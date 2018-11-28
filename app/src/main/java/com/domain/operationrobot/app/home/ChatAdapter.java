@@ -57,6 +57,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
   private ArrayList<String> imgs = new ArrayList<>();
   private Activity mActivity;
   private String   mRegex;
+  private HostInterface mHostInterface;
 
   public ChatAdapter(ArrayList<ChatBean> list, Activity activity) {
     mList.clear();
@@ -65,6 +66,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     mGson = new Gson();
     mRegex = mActivity.getString(R.string.regex);
     notifyDataSetChanged();
+  }
+
+  public void setHostMsg(HostInterface hostMsg){
+    mHostInterface = hostMsg;
   }
 
   @NonNull
@@ -143,7 +148,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         }
       });
       ArrayList<RootMessage2.Action> actions = chatBean.getActions();
-      holder.rlv_recycler.setAdapter(new RootBean2Adapter(actions));
+      holder.rlv_recycler.setAdapter(new RootBean2Adapter(actions,mHostInterface));
     } else if (type == 6) {
       holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
         @Override

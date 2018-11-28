@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".app.home.server.ServerMonitorActivity"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="64dp"
+      android:background="@color/code_blue"
+      android:paddingTop="@dimen/dimens_20"
+      >
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/dimens_17"
+        android:paddingLeft="@dimen/dimens_17"
+        android:paddingRight="@dimen/dimens_17"
+        android:src="@drawable/back_icon_white"
+        />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimens_10"
+        android:text="监控服务器"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="@dimen/dimens_12"
+        android:paddingLeft="@dimen/dimens_10"
+        android:paddingRight="@dimen/dimens_17"
+        android:paddingTop="@dimen/dimens_12"
+        android:text="保存"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        />
+  </RelativeLayout>
+
+  <FrameLayout
+      android:id="@+id/fl_view"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="223"
+      >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rlv_in"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:visibility="gone"
+        />
+  </FrameLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="398"
+      android:background="@color/white"
+      android:orientation="vertical"
+      >
+    <EditText
+        android:id="@+id/et_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimens_10"
+        android:layout_marginRight="@dimen/dimens_10"
+        android:layout_marginTop="@dimen/dimens_15"
+        android:paddingRight="@dimen/dimens_5"
+        android:background="@drawable/bg_gray_round"
+        android:hint="输入关键字或者IP地址过滤服务器"
+        android:paddingBottom="@dimen/dimens_11"
+        android:paddingLeft="@dimen/dimens_15"
+        android:paddingTop="@dimen/dimens_11"
+        android:singleLine="true"
+        android:textColor="@color/text_333"
+        android:textColorHint="#C6C6C6"
+        android:textSize="14sp"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rlv_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        />
+  </LinearLayout>
+
+
+</LinearLayout>

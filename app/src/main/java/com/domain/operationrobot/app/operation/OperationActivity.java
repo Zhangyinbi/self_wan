@@ -12,15 +12,20 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.library.ui.CommonDialog;
+import com.domain.library.ui.SureInterface;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.widgets.DeleteEdit;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.http.bean.OperationBean;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
@@ -63,9 +68,37 @@ public class OperationActivity extends AbsActivity {
             editOperation(phone, name, operationBean.getUserId(), operationBean.getOpCompanyId());
           }
           break;
+        case R.id.btn_delete_user:
+          String phone1 = de_phone.getValue();
+          if (isEmpty(phone1)) {
+            return;
+          }
+          if (!InputUtils.isMobileNumber(phone1)) {
+            showToast("手机号码格式不正确");
+            return;
+          }
+          String name1 = de_name.getValue();
+          if (isEmpty(name1)) {
+            return;
+          }
+
+
+          new CommonDialog.Builder(OperationActivity.this).setContent("确定要删除此运维用户吗？")
+                                                     .setCancelText("取消", null)
+                                                     .setSureText("确定", new SureInterface() {
+                                                       @Override
+                                                       public void onSureClick() {
+                                                         delete(phone1, name1, operationBean.getUserId(), operationBean.getOpCompanyId());
+                                                       }
+                                                     })
+                                                     .build()
+                                                     .show();
+
+          break;
       }
     }
   };
+  private Button mBtn_delete;
 
   public static void start(Activity activity, int type, OperationBean operationBean) {
     Intent intent = new Intent(activity, OperationActivity.class);
@@ -82,7 +115,7 @@ public class OperationActivity extends AbsActivity {
   private void editOperation(String phone, String name, String id, String companyId) {
     showProgress();
     RemoteMode.getInstance()
-              .editOperation(phone, name, id,companyId)
+              .editOperation(phone, name, id, companyId)
               .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
                 @Override
                 public void onError(BaseException e) {
@@ -152,6 +185,8 @@ public class OperationActivity extends AbsActivity {
       finish();
       return;
     }
+    mBtn_delete = findViewById(R.id.btn_delete_user);
+    mBtn_delete.setOnClickListener(listener);
     findViewById(R.id.iv_back).setOnClickListener(listener);
     findViewById(R.id.btn_commit).setOnClickListener(listener);
     TextView tv_name = findViewById(R.id.tv_name);
@@ -177,7 +212,41 @@ public class OperationActivity extends AbsActivity {
       de_name.setSelection(length);
       de_phone.setSelection(operationBean.getOpMobile()
                                          .length());
+      if (BaseApplication.getInstance()
+                         .getUser()
+                         .getOprole() == 4) {
+        mBtn_delete.setVisibility(View.VISIBLE);
+      }
     }
+  }
+
+  /**
+   * 删除运维用户
+   */
+  private void delete(String phone, String name, String id, String companyId) {
+    showProgress();
+    RemoteMode.getInstance()
+              .delete(phone, name, id, companyId)
+              .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
+                @Override
+                public void onError(BaseException e) {
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(BaseEntry baseEntry) {
+                  hideProgress();
+                  setResult(RESULT_OK);
+                  finish();
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  hideProgress();
+                }
+              });
   }
 
   @Override

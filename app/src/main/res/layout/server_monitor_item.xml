@@ -165,10 +165,5 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimens_10"
-        android:visibility="gone" />
 
 </LinearLayout>

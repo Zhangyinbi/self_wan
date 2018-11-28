@@ -10,7 +10,6 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dimens_17"
-      android:layout_marginRight="@dimen/dimens_17"
       android:orientation="horizontal"
       >
 
@@ -38,14 +37,13 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="刘德华"
             android:textColor="#333333"
-            android:textSize="@dimen/dimens_18"
+            android:textSize="@dimen/dimens_16"
             />
 
         <TextView
@@ -53,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
+            android:layout_marginLeft="@dimen/dimens_8"
             android:text="15326598654"
             android:textColor="#BBB"
             android:textSize="@dimen/dimens_16sp"
@@ -76,30 +75,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|end"
         >
 
       <Button
           android:id="@+id/btn_refuse"
-          android:layout_width="46dp"
-          android:layout_height="@dimen/dimens_24"
+          android:layout_width="44dp"
+          android:layout_height="@dimen/dimens_22"
           android:background="@drawable/yhsq_jj"
+
           />
 
       <Button
           android:id="@+id/btn_agree"
           android:layout_width="44dp"
-          android:layout_height="@dimen/dimens_24"
+          android:layout_height="@dimen/dimens_22"
           android:layout_marginLeft="@dimen/dimens_4"
+          android:layout_marginRight="@dimen/dimens_17"
           android:background="@drawable/yhsq_ty"
+
           />
 
       <Button
           android:id="@+id/btn_result"
           android:layout_width="67dp"
+          android:layout_marginRight="@dimen/dimens_12"
           android:layout_height="36dp"
-          android:background="@drawable/yhsq_img_tongyi"
           android:visibility="gone"
+          android:background="@drawable/yhsq_img_tongyi"
           />
 
     </LinearLayout>

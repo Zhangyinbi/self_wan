@@ -10,9 +10,13 @@ import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.OperationList;
+import com.domain.operationrobot.http.bean.ServerInfo;
+import com.domain.operationrobot.http.bean.ServerMachineBean;
+import com.domain.operationrobot.http.bean.ServerMobile;
 import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
 
+import com.google.gson.Gson;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -23,6 +27,7 @@ import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import retrofit2.http.Field;
@@ -35,6 +40,7 @@ import retrofit2.http.Field;
  * Create at : 2018/10/12 22:41
  */
 public class RemoteMode implements BaseMode {
+
   private RemoteMode() {
   }
 
@@ -92,6 +98,21 @@ public class RemoteMode implements BaseMode {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .sendCode(requestBody);
+  } /**
+   * 忘记密码发送验证码
+   */
+  public Observable<BaseEntry> sendCodeForget(String phone) {
+    JSONObject root = new JSONObject();
+    try {
+      root.put("mobile", phone);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .sendCodeForget(requestBody);
   }
 
   /**
@@ -295,6 +316,22 @@ public class RemoteMode implements BaseMode {
   }
 
   /**
+   * 删除运维账户
+   */
+  public Observable<BaseEntry> delete(String phone, String name, String id, String companyId) {
+    Map<String, String> map = new HashMap<>();
+      map.put("opmobile", phone);
+      map.put("companyid", companyId);
+      map.put("token", BaseApplication.getInstance()
+                                       .getUser()
+                                       .getToken());
+
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .delete(map);
+  }
+
+  /**
    * 添加运维账户
    */
   public Observable<BaseEntry> addOperation(String phone, String name) {
@@ -466,6 +503,43 @@ public class RemoteMode implements BaseMode {
                          .checkDefaultCompany(BaseApplication.getInstance()
                                                              .getUser()
                                                              .getToken());
+  }/**
+   * 检查默认公司
+   * @return
+   */
+  public Observable<ServerMobile> getServerMobile() {
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getServerMobile(BaseApplication.getInstance()
+                                                             .getUser()
+                                                             .getToken());
+  }
+
+  public Observable<ServerInfo> getServerMachine() {
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getServerMachine(BaseApplication.getInstance()
+                                                          .getUser()
+                                                          .getToken(),BaseApplication.getInstance()
+                                                                                     .getUser()
+                                                                                     .getCompanyid());
+  }
+
+  public Observable<BaseEntry> save(ArrayList<ServerMachineBean> inhosts) {
+
+    JSONObject root = new JSONObject();
+    try {
+      root.put("companyid", BaseApplication.getInstance().getUser().getCompanyid());
+      root.put("token", BaseApplication.getInstance().getUser().getToken());
+      JSONArray jsonArray = new JSONArray(new Gson().toJson(inhosts));
+      root.put("hostinfo",jsonArray);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .save(requestBody);
   }
 
   private static class SingletonHolder {

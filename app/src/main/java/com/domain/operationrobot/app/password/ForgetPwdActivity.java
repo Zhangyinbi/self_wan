@@ -194,7 +194,7 @@ public class ForgetPwdActivity extends AbsActivity {
     showProgress();
     timer.start();
     RemoteMode.getInstance()
-              .sendCode(accountPhone)
+              .sendCodeForget(accountPhone)
               .subscribe(new BaseObserver<BaseEntry>(compositeDisposable) {
                 @Override
                 public void onError(BaseException e) {

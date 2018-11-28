@@ -17,6 +17,7 @@ import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.http.bean.OperationBean;
@@ -70,6 +71,9 @@ public class OperationManagerActivity extends AbsActivity {
   protected void initView() {
     mTvAddAdmin = findViewById(R.id.tv_add_admin);
     mTvAddAdmin.setOnClickListener(listener);
+    if (BaseApplication.getInstance().getUser().getOprole()!=4){
+      mTvAddAdmin.setVisibility(View.INVISIBLE);
+    }
     ivBack = findViewById(R.id.iv_back);
     ivBack.setOnClickListener(listener);
     mEtAdminName = findViewById(R.id.et_admin_name);

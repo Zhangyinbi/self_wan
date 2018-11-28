@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.domain.library.base.AbsActivity;
 import com.domain.library.base.BasePresenter;
+import com.domain.library.http.consumer.BaseObserver;
+import com.domain.library.http.exception.BaseException;
 import com.domain.library.utils.ActivityStackManager;
 import com.domain.library.utils.InputUtils;
 import com.domain.library.utils.SpUtils;
@@ -25,8 +28,14 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.UserServiceProtocolActivity;
 import com.domain.operationrobot.app.company.RegisterSussActivity;
+import com.domain.operationrobot.app.home.MainActivity;
+import com.domain.operationrobot.app.login.ChoiceCompanyDialog;
 import com.domain.operationrobot.app.login.LoginActivity;
+import com.domain.operationrobot.app.login.LoginContract;
+import com.domain.operationrobot.app.login.LoginPresenterImpl;
+import com.domain.operationrobot.app.setting.UserInfoActivity;
 import com.domain.operationrobot.http.bean.User;
+import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 import java.lang.ref.WeakReference;
 
@@ -42,16 +51,16 @@ import static com.domain.operationrobot.util.Constant.VERITY_CODE_LENGTH;
  * @author : yinbi.zhang.o
  * Create at : 2018/10/13 00:48
  */
-public class AccountActivity extends AbsActivity implements AccountContract.AccountView<BasePresenter> {
-  private DeleteEdit                       accountPhone;
-  private Button                           btnCommit;
-  private Button                           btnToggle;
-  private EditText                         etPwd;
-  private EditText                         etCode;
-  private Button                           btnCreate;
-  private RelativeLayout                   rlToggle;
-  private ImageView                        ivIcon;
-  private boolean                          check = true;
+public class AccountActivity extends AbsActivity implements AccountContract.AccountView<BasePresenter>, LoginContract.LoginView<BasePresenter> {
+  private DeleteEdit     accountPhone;
+  private Button         btnCommit;
+  private Button         btnToggle;
+  private EditText       etPwd;
+  private EditText       etCode;
+  private Button         btnCreate;
+  private RelativeLayout rlToggle;
+  private ImageView      ivIcon;
+  private boolean check = true;
   private TextView                         tvUserServiceProtocol;
   private TextView                         tvSendCode;
   private AccountContract.AccountPresenter presenter;
@@ -111,11 +120,17 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
           if (etPwd.getInputType() == 129) {
             btnToggle.setBackgroundResource(R.drawable.img_yj);
             etPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            etPwd.setSelection(etPwd.getText().toString().trim().length());
+            etPwd.setSelection(etPwd.getText()
+                                    .toString()
+                                    .trim()
+                                    .length());
           } else {
             etPwd.setInputType(129);
             btnToggle.setBackgroundResource(R.drawable.img_by);
-            etPwd.setSelection(etPwd.getText().toString().trim().length());
+            etPwd.setSelection(etPwd.getText()
+                                    .toString()
+                                    .trim()
+                                    .length());
           }
           break;
         default:
@@ -123,6 +138,7 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
       }
     }
   };
+  private ChoiceCompanyDialog mChoiceCompanyDialog;
 
   /**
    * 前往用户协议页面
@@ -223,11 +239,65 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
     SpUtils.setObject(USER_SP_KEY, user);
     BaseApplication.getInstance()
                    .setUser(user);
-    SpUtils.putBoolean(IS_LOGIN, true);
-    startActivity(new Intent(this, RegisterSussActivity.class));
-    finish();
-    ActivityStackManager.getInstance()
-                        .killActivity(LoginActivity.class);
+    //检查用户
+    checkDefaultCompany();
+  }
+
+  private void checkDefaultCompany() {
+    RemoteMode.getInstance()
+              .checkDefaultCompany()
+              .subscribe(new BaseObserver<User>(compositeDisposable) {
+
+                @Override
+                public void onError(BaseException e) {
+
+                  hideProgress();
+                  showToast(e.getMsg());
+                }
+
+                @Override
+                public void onSuss(User user) {
+
+                  hideProgress();
+                  if (null != user.getChoice() && !user.getChoice()
+                                                       .getStatus() && user.getChoice()
+                                                                           .getCompanyinfo() != null && user.getChoice()
+                                                                                                            .getCompanyinfo()
+                                                                                                            .size() > 0) {
+                    LoginPresenterImpl loginPresenter = new LoginPresenterImpl(AccountActivity.this);
+                    mChoiceCompanyDialog = new ChoiceCompanyDialog(AccountActivity.this, user.getChoice()
+                                                                                             .getCompanyinfo(),
+                      loginPresenter, user.getToken());
+                    loginPresenter.setChoiceCompanyDialog(mChoiceCompanyDialog);
+
+                    mChoiceCompanyDialog.setCancelable(false);
+                    mChoiceCompanyDialog.show();
+                  } else if (!TextUtils.isEmpty(user.getCompany())) {
+                    BaseApplication.getInstance()
+                                   .setUser(user);
+                    SpUtils.setObject(USER_SP_KEY, user);
+                    SpUtils.putBoolean(IS_LOGIN, true);
+                    startActivity(new Intent(AccountActivity.this, MainActivity.class));
+                    finish();
+                    ActivityStackManager.getInstance()
+                                        .killActivity(LoginActivity.class);
+                  } else {
+                    SpUtils.setObject(USER_SP_KEY, user);
+                    BaseApplication.getInstance()
+                                   .setUser(user);
+                    SpUtils.putBoolean(IS_LOGIN, true);
+                    startActivity(new Intent(AccountActivity.this, RegisterSussActivity.class));
+                    finish();
+                    ActivityStackManager.getInstance()
+                                        .killActivity(LoginActivity.class);
+                  }
+                }
+
+                @Override
+                public void onComplete() {
+                  hideProgress();
+                }
+              });
   }
 
   /**
@@ -257,5 +327,16 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
       btnCommit.setBackground(getResources().getDrawable(R.drawable.login_blue_round_not_click_bg));
       btnCommit.setClickable(false);
     }
+  }
+
+  @Override
+  public void loginFail(String msg) {
+
+  }
+
+  @Override
+  public void LoginSuss() {
+    startActivity(new Intent(this, MainActivity.class));
+    finish();
   }
 }

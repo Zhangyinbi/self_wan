@@ -76,7 +76,7 @@ public class UserApplyAdapter extends RecyclerView.Adapter<UserApplyAdapter.MyVi
 
     holder.tv_name.setText(info.getRequest_username());
     holder.tv_mobile.setText(info.getRequest_mobile());
-    holder.tv_time.setText("申请时间：" + TimeUtil.formatTimeMillis(info.getRequest_createtime()));
+    holder.tv_time.setText("申请时间：" + TimeUtil.formatTimeMillis(info.getRequest_createtime()*1000));
     GlideApp.with(context)
             .load(info.getRequest_img())
             .placeholder(R.drawable.round_88)//图片加载出来前，显示的图片

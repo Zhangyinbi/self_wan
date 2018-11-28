@@ -72,7 +72,7 @@ public class OperationDialog extends AppCompatDialog {
     mBtn_cancel.setOnClickListener(view -> dismiss());
     mBtn_sure.setOnClickListener(view -> {
       //TODO
-      showToast("暂无此功能");
+      dismiss();
     });
     updateUI();
     mBtn_update_status.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +92,42 @@ public class OperationDialog extends AppCompatDialog {
                                           .setCancelText("取消", null)
                                           .build()
                                           .show();
+      }
+    });
+
+    mBtn_shy_status.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        int lastRole = 0;
+        if (role == 3) {
+          lastRole = 6;
+        } else {
+          lastRole = 3;
+        }
+        RemoteMode.getInstance()
+                  .updateStatus(lastRole, operationInfo.getUserid(), operationInfo.getOpcompanyid())
+                  .subscribe(new BaseObserver<BaseEntry>(new CompositeDisposable()) {
+                    @Override
+                    public void onError(BaseException e) {
+                      showToast(e.getMsg());
+                    }
+
+                    @Override
+                    public void onSuss(BaseEntry baseEntry) {
+                      update.updateData();
+                      if (role == 3) {
+                        role = 6;
+                      } else {
+                        role = 3;
+                      }
+                      updateUI();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                      super.onComplete();
+                    }
+                  });
       }
     });
   }
@@ -117,7 +153,7 @@ public class OperationDialog extends AppCompatDialog {
     //  lastRole = 6;
     //}
     RemoteMode.getInstance()
-              .updateStatus(6, operationInfo.getUserid(), operationInfo.getOpcompanyid())
+              .updateStatus(4, operationInfo.getUserid(), operationInfo.getOpcompanyid())
               .subscribe(new BaseObserver<BaseEntry>(new CompositeDisposable()) {
                 @Override
                 public void onError(BaseException e) {
@@ -127,11 +163,7 @@ public class OperationDialog extends AppCompatDialog {
                 @Override
                 public void onSuss(BaseEntry baseEntry) {
                   update.updateData();
-                  if (role == 6) {
-                    role = 4;
-                  } else {
-                    role = 6;
-                  }
+                  role = 4;
                   updateUI();
                 }
 

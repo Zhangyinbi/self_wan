@@ -10,12 +10,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import com.domain.library.utils.SpUtils;
 import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.company.JoinCompanyContract;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
+import static com.domain.operationrobot.util.Constant.SERVER_MOBILE;
 import static com.domain.operationrobot.util.Constant.SERVER_PHONE;
 
 /**
@@ -26,6 +28,8 @@ import static com.domain.operationrobot.util.Constant.SERVER_PHONE;
  * Create at : 2018/10/13 19:08
  */
 public class ApplyDialog extends AppCompatDialog {
+
+  private TextView mTv_mobile;
 
   public ApplyDialog(@NonNull Context context) {
     super(context, R.style.ROBOT_Dialog);
@@ -49,9 +53,19 @@ public class ApplyDialog extends AppCompatDialog {
       }
     });
     setCanceledOnTouchOutside(true);
+    mTv_mobile = findViewById(R.id.tv_mobile);
+    String string = SpUtils.getString(SERVER_MOBILE);
+    if (!TextUtils.isEmpty(string)){
+      SERVER_PHONE = string;
+    }
+    mTv_mobile.setText(SERVER_PHONE);
   }
 
   public void callPhone() {
+    String string = SpUtils.getString(SERVER_MOBILE);
+    if (!TextUtils.isEmpty(string)){
+      SERVER_PHONE = string;
+    }
     Intent intent = new Intent(Intent.ACTION_DIAL);
     Uri data = Uri.parse("tel:"+SERVER_PHONE);
     intent.setData(data);

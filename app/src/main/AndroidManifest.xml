@@ -19,11 +19,11 @@
       android:allowBackup="true"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
-      tools:replace="android:allowBackup"
       android:largeHeap="true"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+      tools:replace="android:allowBackup">
     <activity android:name=".app.login.LoginActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -71,10 +71,11 @@
     <activity android:name=".app.operation.OperationManagerActivity">
     </activity>
 
-
-
-    <!--<meta-data android:name="com.domain.library.MyAppGlideModule"-->
-      <!--android:value="GlideModule"/>-->
+    <!-- <meta-data android:name="com.domain.library.MyAppGlideModule" -->
+    <!-- android:value="GlideModule"/> -->
+    //服务器列表监控页面
+    <activity android:name=".app.home.server.ServerMonitorActivity">
+    </activity>
   </application>
 
 </manifest>

@@ -6,6 +6,9 @@ import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.OperationList;
+import com.domain.operationrobot.http.bean.ServerInfo;
+import com.domain.operationrobot.http.bean.ServerMachineBean;
+import com.domain.operationrobot.http.bean.ServerMobile;
 import com.domain.operationrobot.http.bean.SideInfo;
 import com.domain.operationrobot.http.bean.User;
 
@@ -61,6 +64,13 @@ public interface Api {
   @POST("/api/v1/sms")
   Observable<BaseEntry> sendCode(@Body RequestBody requestBody);
 
+  /**
+   * 忘记密码验证码
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @POST("/api/v1/forgetsms")
+  Observable<BaseEntry> sendCodeForget(@Body RequestBody requestBody);
+
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @GET("/api/v1/companys")
   Observable<CompanyList> getCompanyList(@QueryMap Map<String, String> params);
@@ -102,6 +112,13 @@ public interface Api {
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @PATCH("/api/v1/opuser")
   Observable<BaseEntry> editOperation(@Body RequestBody requestBody);
+
+  /**
+   * 删除运维用户
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @DELETE("/api/v1/opuser")
+  Observable<BaseEntry> delete(@QueryMap Map<String, String> params);
 
   /**
    * 添加运维用户
@@ -161,8 +178,23 @@ public interface Api {
   @PATCH("/api/v1/company")
   Observable<User> setDefaultCompany(@Body RequestBody requestBody);
 
-
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @GET("/api/v1/default")
-  Observable<User> checkDefaultCompany(@Query("token")  String token);
+  Observable<User> checkDefaultCompany(@Query("token") String token);
+
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @GET("/api/v1/custommobile")
+  Observable<ServerMobile> getServerMobile(@Query("token") String token);
+
+  /**
+   * 获取所有的主机
+   */
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @GET("/api/v1/hosts")
+  Observable<ServerInfo> getServerMachine(@Query("token") String token, @Query("companyid") String companyid);
+
+
+  @Headers({ "Content-Type: application/json;charset=UTF-8" })
+  @POST("/api/v1/zabbixmonitor")
+  Observable<BaseEntry> save(@Body RequestBody  requestBody);
 }

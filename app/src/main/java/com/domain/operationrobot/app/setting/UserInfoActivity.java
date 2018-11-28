@@ -34,6 +34,7 @@ import com.domain.operationrobot.app.login.ChoiceCompanyDialog;
 import com.domain.operationrobot.app.login.LoginActivity;
 import com.domain.operationrobot.app.login.LoginContract;
 import com.domain.operationrobot.app.login.LoginPresenterImpl;
+import com.domain.operationrobot.app.password.ModifyUserNameActivity;
 import com.domain.operationrobot.app.password.VerifyPwdActivity;
 import com.domain.operationrobot.glide.CircleImageView;
 import com.domain.operationrobot.http.bean.ImageFileBean;
@@ -152,9 +153,11 @@ public class UserInfoActivity extends AbsActivity implements LoginContract.Login
                                                                            .getCompanyinfo() != null && user.getChoice()
                                                                                                             .getCompanyinfo()
                                                                                                             .size() > 0) {
+                    LoginPresenterImpl loginPresenter = new LoginPresenterImpl(UserInfoActivity.this);
                     mChoiceCompanyDialog = new ChoiceCompanyDialog(UserInfoActivity.this, user.getChoice()
                                                                                               .getCompanyinfo(),
-                      new LoginPresenterImpl(UserInfoActivity.this), user.getToken());
+                      loginPresenter , user.getToken());
+                    loginPresenter.setChoiceCompanyDialog(mChoiceCompanyDialog);
                     mChoiceCompanyDialog.setCancelable(false);
                     mChoiceCompanyDialog.show();
                   } else if (!TextUtils.isEmpty(user.getCompany())) {
@@ -189,7 +192,8 @@ public class UserInfoActivity extends AbsActivity implements LoginContract.Login
    * 修改用户名
    */
   private void modifyUserName() {
-    VerifyPwdActivity.start(this, FROM_USER_NAME_MODIFY);
+    //VerifyPwdActivity.start(this, FROM_USER_NAME_MODIFY);
+    startActivity(new Intent(this, ModifyUserNameActivity.class));
   }
 
   /**
@@ -254,7 +258,7 @@ public class UserInfoActivity extends AbsActivity implements LoginContract.Login
     if (user.getRole() == 1) {
       return;
     }
-    if (!TextUtils.isEmpty(user.getCompany())) {
+    if (user.getRole()==0) {
       mLl_company.setVisibility(View.VISIBLE);
       mTv_company_name.setText(user.getCompany());
     }

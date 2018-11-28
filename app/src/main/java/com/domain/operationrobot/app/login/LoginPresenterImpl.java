@@ -1,5 +1,6 @@
 package com.domain.operationrobot.app.login;
 
+import android.text.TextUtils;
 import com.domain.library.base.BasePresenter;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.exception.BaseException;
@@ -27,6 +28,12 @@ public class LoginPresenterImpl extends LoginContract.LoginPresenter<LoginContra
 
   public LoginPresenterImpl(LoginContract.LoginView<BasePresenter> mView) {
     this.mView = mView;
+    mView.setPresenter(this);
+  }
+
+  public LoginPresenterImpl(LoginContract.LoginView<BasePresenter> mView, ChoiceCompanyDialog mChoiceCompanyDialog) {
+    this.mView = mView;
+    this.mChoiceCompanyDialog = mChoiceCompanyDialog;
     mView.setPresenter(this);
   }
 
@@ -78,8 +85,8 @@ public class LoginPresenterImpl extends LoginContract.LoginPresenter<LoginContra
                                                                                                             .getCompanyinfo()
                                                                                                             .size() > 0) {
                     mChoiceCompanyDialog = new ChoiceCompanyDialog(((LoginActivity) mView), user.getChoice()
-                                                                                                                        .getCompanyinfo(),
-                      LoginPresenterImpl.this, user.getToken());
+                                                                                                .getCompanyinfo(), LoginPresenterImpl.this,
+                      user.getToken());
                     mChoiceCompanyDialog.show();
                   } else {
                     BaseApplication.getInstance()
@@ -97,10 +104,19 @@ public class LoginPresenterImpl extends LoginContract.LoginPresenter<LoginContra
               });
   }
 
+  public void setChoiceCompanyDialog(ChoiceCompanyDialog choiceCompanyDialog) {
+    mChoiceCompanyDialog = choiceCompanyDialog;
+  }
+
   @Override
   public void setDefaultCompany(String companyId, String token) {
     showProgress();
     mChoiceCompanyDialog.dismiss();
+    if (TextUtils.isEmpty(token)) {
+      token = BaseApplication.getInstance()
+                             .getUser()
+                             .getToken();
+    }
     RemoteMode.getInstance()
               .setDefaultCompany(companyId, token)
               .subscribe(new BaseObserver<User>(getCompositeDisposable()) {
