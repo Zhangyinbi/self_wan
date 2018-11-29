@@ -47,10 +47,6 @@ public class AppSocket extends BaseSocket {
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();
-      if (TextUtils.isEmpty(companyid)) {
-        ToastUtils.showToast("游客状态无法聊天");
-        return;
-      }
       jsonObject.putOpt("companyid", companyid);
       jsonObject1.putOpt("data", jsonObject);
       mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
@@ -71,10 +67,6 @@ public class AppSocket extends BaseSocket {
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();
-      if (TextUtils.isEmpty(companyid)) {
-        ToastUtils.showToast("游客状态无法聊天");
-        return;
-      }
       jsonObject.putOpt("companyid", companyid);
       jsonObject.put("msg", content);
       mSocket.emit(IConstants.TALK, jsonObject);

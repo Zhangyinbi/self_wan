@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".app.order.SelectTimeActivity"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="64dp"
+      android:background="@color/code_blue"
+      android:paddingTop="@dimen/dimens_20"
+      >
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/dimens_17"
+        android:paddingLeft="@dimen/dimens_17"
+        android:paddingRight="@dimen/dimens_17"
+        android:src="@drawable/back_icon_white"
+        />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimens_10"
+        android:text="选择操作时间"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="@dimen/dimens_12"
+        android:paddingLeft="@dimen/dimens_10"
+        android:paddingRight="@dimen/dimens_17"
+        android:paddingTop="@dimen/dimens_12"
+        android:text="完成"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        />
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="15dp"
+        >
+
+      <com.domain.library.widgets.DatePickerView
+          android:id="@+id/year_pv"
+          android:layout_width="0dp"
+          android:layout_height="160dp"
+          android:layout_weight="2"
+          />
+
+
+      <com.domain.library.widgets.DatePickerView
+          android:id="@+id/month_pv"
+          android:layout_width="0dp"
+          android:layout_height="160dp"
+          android:layout_weight="2"
+          />
+
+
+      <com.domain.library.widgets.DatePickerView
+          android:id="@+id/day_pv"
+          android:layout_width="0dp"
+          android:layout_height="160dp"
+          android:layout_weight="2"
+          />
+
+
+    </LinearLayout>
+
+  </RelativeLayout>
+
+</LinearLayout>

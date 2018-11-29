@@ -76,6 +76,8 @@
     //服务器列表监控页面
     <activity android:name=".app.home.server.ServerMonitorActivity">
     </activity>
+    <activity android:name=".app.order.SelectTimeActivity">
+    </activity>
   </application>
 
 </manifest>

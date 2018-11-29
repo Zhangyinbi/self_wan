@@ -25,6 +25,7 @@ import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.app.order.SelectTimeActivity;
 import com.domain.operationrobot.http.bean.ChatBean;
 import com.domain.operationrobot.http.bean.ImageBean;
 import com.domain.operationrobot.http.bean.User;
@@ -140,6 +141,11 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       }
     });
 
+    view.findViewById(R.id.tv_demo)
+        .setOnClickListener((v) -> {
+          startActivity(new Intent(getActivity(), SelectTimeActivity.class));
+        });
+
     mIvRobot.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -211,7 +217,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     }, 300);
     mRecycler.setLayoutManager(linearLayoutManager);
     mRecycler.setAdapter(mAdapter);
-    String list = SpUtils.getDataList("chat_data"+BaseApplication.getInstance().getUser().getMobile());
+    String list = SpUtils.getDataList("chat_data" + BaseApplication.getInstance()
+                                                                   .getUser()
+                                                                   .getMobile());
     if (!TextUtils.isEmpty(list)) {
       Gson gson = new Gson();
       ArrayList<ChatBean> chatBeans = gson.fromJson(list, new TypeToken<ArrayList<ChatBean>>() {}.getType());
@@ -245,7 +253,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
   /**
    * 发送消息
-   * @param msg
    */
   private void sendMsg(String msg) {
     //String msg = mEtMsg.getText()
@@ -449,9 +456,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   @Override
   public void onPause() {
     super.onPause();
-
   }
-  public void setData(){
+
+  public void setData() {
     if (SpUtils.getObject(USER_SP_KEY, User.class) != null) {
       ArrayList<ChatBean> list = mAdapter.getList();
       if (list.size() > 190) {
@@ -459,7 +466,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
           list.remove(i);
         }
       }
-      SpUtils.setDataList("chat_data"+BaseApplication.getInstance().getUser().getMobile(), list);
+      SpUtils.setDataList("chat_data" + BaseApplication.getInstance()
+                                                       .getUser()
+                                                       .getMobile(), list);
     }
   }
 
