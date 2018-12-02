@@ -127,8 +127,13 @@ public interface Api {
   @POST("/api/v1/opuser")
   Observable<BaseEntry> addOperation(@Body RequestBody requestBody);
 
+  /**
+   * 获取用户请求信息
+   * @param token
+   * @return
+   */
   @GET("/api/v1/joininfo")
-  Observable<ApplyInfo> getJoinInfo(@Query("token") String token);
+  Observable<ApplyInfo> getJoinInfo(@Query("token") String token,@Query("companyid") String companyId);
 
   /**
    * 处理用户申请
@@ -137,9 +142,20 @@ public interface Api {
   @POST("/api/v1/joininfo")
   Observable<BaseEntry> disposeJoinInfo(@Body RequestBody requestBody);
 
+  /**
+   * 获取侧边栏信息
+   * @param token
+   * @return
+   */
   @GET("/api/v1/sidebar")
   Observable<SideInfo> getSide(@Query("token") String token);
 
+  /**
+   * 获取运维用户信息
+   * @param token
+   * @param companyid
+   * @return
+   */
   @GET("/api/v1/opusers")
   Observable<OperationList> getOperationInfo(@Query("token") String token, @Query("companyid") String companyid);
 
@@ -178,10 +194,16 @@ public interface Api {
   @PATCH("/api/v1/company")
   Observable<User> setDefaultCompany(@Body RequestBody requestBody);
 
+  /**
+   * 检查有没有默认公司
+   */
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @GET("/api/v1/default")
   Observable<User> checkDefaultCompany(@Query("token") String token);
 
+  /**
+   * 查询服务电话
+   */
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @GET("/api/v1/custommobile")
   Observable<ServerMobile> getServerMobile(@Query("token") String token);
@@ -193,8 +215,10 @@ public interface Api {
   @GET("/api/v1/hosts")
   Observable<ServerInfo> getServerMachine(@Query("token") String token, @Query("companyid") String companyid);
 
-
+  /**
+   * 保存主机
+   */
   @Headers({ "Content-Type: application/json;charset=UTF-8" })
   @POST("/api/v1/zabbixmonitor")
-  Observable<BaseEntry> save(@Body RequestBody  requestBody);
+  Observable<BaseEntry> save(@Body RequestBody requestBody);
 }

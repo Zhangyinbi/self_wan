@@ -21,4 +21,8 @@
 #-renamesourcefileattribute SourceFile
 -keep class com.qiniu.**{*;}
 -keep class com.qiniu.**{public <init>();}
+
+-keep com.domain.operationrobot.mipush.MiMessageReceiver {*;}
+
+
 -ignorewarnings

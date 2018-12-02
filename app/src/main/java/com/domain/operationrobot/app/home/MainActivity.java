@@ -120,9 +120,9 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
           if (drawer.isDrawerOpen(GravityCompat.START)) {
             return;
           }
-          if (mRole == 1) {//游客
+          if (mRole == 1 || mRole == 3) {//游客
             startActivity(new Intent(MainActivity.this, ApplyActivity.class));
-          } else if (mRole == 2 || mRole == 3) {
+          } else if (mRole == 2 ) {
             //申请等待同意
             //new DelayDialog(MainActivity.this, new BigDecimal("987876756")).show();//测试代码
           } else if (mRole == 0) {
@@ -460,7 +460,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
         mTv_fragment1.setVisibility(View.VISIBLE);
         break;
       case 3://被拒绝
-        tv_top.setText("已申请公司，请等待公司管理员审核");
+        tv_top.setText("加入/创建公司，享受一站式运维");
         tv_company_name.setText("(被拒绝)" + mUser.getCompany());
         break;
     }
@@ -592,7 +592,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     tv_company_name.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (mSideInfo.getRole() == 1) {
+        if (mSideInfo.getRole() == 1||mSideInfo.getRole()==3) {
           openOrCloseDrawer();
           drawer.postDelayed(new Runnable() {
             @Override

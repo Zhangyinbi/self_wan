@@ -363,7 +363,8 @@ public class RemoteMode implements BaseMode {
                                   .getToken();
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .getJoinInfo(token);
+                         .getJoinInfo(token,BaseApplication.getInstance()
+                                                           .getUser().getCompanyid());
   }
 
   /**
