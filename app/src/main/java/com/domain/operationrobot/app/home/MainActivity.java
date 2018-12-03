@@ -634,6 +634,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     return userRoleName;
   }
 
+
   @Override
   public void loginFail(String msg) {
 

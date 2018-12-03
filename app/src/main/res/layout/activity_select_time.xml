@@ -53,16 +53,73 @@
         />
   </RelativeLayout>
 
-  <RelativeLayout
+  <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
+      android:background="@color/white"
+      android:orientation="vertical"
       >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimens_11"
+        android:paddingRight="@dimen/dimens_11"
+        >
+
+      <TextView
+          android:id="@+id/tv_start_time"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_gravity="center_horizontal"
+          android:layout_weight="1"
+          android:background="@drawable/shape_bottom_selected"
+          android:gravity="bottom|center"
+          android:hint="开始时间"
+          android:paddingBottom="@dimen/dimens_15"
+          android:textColor="#23AF8C"
+          android:textColorHint="#C0C0C0"
+          android:textSize="14sp"
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/dimens_14"
+          android:layout_marginLeft="@dimen/dimens_45"
+          android:layout_marginRight="@dimen/dimens_45"
+          android:layout_marginTop="31dp"
+          android:text="至"
+          android:textColor="#878787"
+          android:textSize="@dimen/dimens_14sp"
+          />
+      <TextView
+          android:id="@+id/tv_end_time"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_gravity="center_horizontal"
+          android:layout_weight="1"
+          android:background="@drawable/shape_bottom_normal"
+          android:gravity="bottom|center"
+          android:hint="结束时间"
+          android:paddingBottom="@dimen/dimens_15"
+          android:textColor="#23AF8C"
+          android:textColorHint="#C0C0C0"
+          android:textSize="14sp"
+          />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_clear"
+        android:layout_width="@dimen/dimens_40"
+        android:layout_height="@dimen/dimens_40"
+        android:layout_gravity="right"
+        android:padding="@dimen/dimens_13"
+        android:src="@drawable/xzsj_delete"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:background="@color/white"
         android:orientation="horizontal"
         android:paddingBottom="15dp"
         android:paddingLeft="20dp"
@@ -96,6 +153,6 @@
 
     </LinearLayout>
 
-  </RelativeLayout>
+  </LinearLayout>
 
 </LinearLayout>

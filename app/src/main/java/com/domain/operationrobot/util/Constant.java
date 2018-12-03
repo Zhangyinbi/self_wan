@@ -19,6 +19,8 @@ public class Constant {
   public static final String SERVER_MOBILE = "server_mobile";
   public static  String SERVER_PHONE="028-23658965";
 
+  public static final int GET_TIME = 00000;
+
   public static final int OPERATION_REQUEST_CODE = 00001;
 
   public static final String IS_LOGIN = "sp_login_status";

@@ -56,6 +56,30 @@ public class AppSocket extends BaseSocket {
   }
 
   /**
+   * fasong机器人消息,重启服务器
+   */
+  public void sendRobotMessage(String content,String action) {
+    try {
+      JSONObject jsonObject = new JSONObject();
+      JSONObject jsonObject1 = new JSONObject();
+      jsonObject.put("token", BaseApplication.getInstance()
+                                             .getUser()
+                                             .getToken());
+      jsonObject.put("type", 10);
+      jsonObject.put("msg", content);
+      jsonObject.put("action", action);
+      String companyid = BaseApplication.getInstance()
+                                        .getUser()
+                                        .getCompanyid();
+      jsonObject.putOpt("companyid", companyid);
+      jsonObject1.putOpt("data", jsonObject);
+      mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
    * 发送消息
    */
   public void sendMessage(String content) {

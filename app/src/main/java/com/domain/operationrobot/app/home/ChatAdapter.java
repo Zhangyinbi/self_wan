@@ -1,30 +1,26 @@
 package com.domain.operationrobot.app.home;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.domain.library.GlideApp;
+import com.domain.library.recycleview.holder.ViewHolder;
 import com.domain.library.utils.DisplaysUtil;
 import com.domain.library.utils.GalleryUtil;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.app.home.holder.ViewHolder11;
 import com.domain.operationrobot.http.bean.ChatBean;
 import com.domain.operationrobot.http.bean.ImageBean;
 import com.domain.operationrobot.im.bean.RootMessage2;
@@ -36,8 +32,6 @@ import com.domain.operationrobot.util.TimeUtil;
 //import com.jelly.mango.MultiplexImage;
 import com.google.gson.Gson;
 import java.util.ArrayList;
-import java.util.logging.Handler;
-import org.json.JSONObject;
 
 import static com.domain.operationrobot.util.Constant.MESSAGE_OTHER;
 import static com.domain.operationrobot.util.Constant.MESSAGE_SELF;
@@ -49,15 +43,16 @@ import static com.domain.operationrobot.util.Constant.MESSAGE_SELF;
  * @author : yinbi.zhang.o
  * Create at : 2018/10/21 16:34
  */
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private final Gson mGson;
   private ArrayList<ChatBean> mList = new ArrayList<>();
   private RecyclerView mRecyclerView;
   //private ArrayList<MultiplexImage> images = new ArrayList<>();
   private ArrayList<String> imgs = new ArrayList<>();
-  private Activity mActivity;
-  private String   mRegex;
+  private Activity      mActivity;
+  private String        mRegex;
   private HostInterface mHostInterface;
+  private OnViewClick   mOnViewClick;
 
   public ChatAdapter(ArrayList<ChatBean> list, Activity activity) {
     mList.clear();
@@ -68,13 +63,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     notifyDataSetChanged();
   }
 
-  public void setHostMsg(HostInterface hostMsg){
+  public void setHostMsg(HostInterface hostMsg) {
     mHostInterface = hostMsg;
   }
 
   @NonNull
   @Override
-  public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
+  public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
     View layout = null;
     if (type == MESSAGE_SELF) {//自己
       layout = LayoutInflater.from(viewGroup.getContext())
@@ -85,18 +80,32 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     } else if (type == 1) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_1, viewGroup, false);
-    } else if (type == 2 || type == 6 || type == 34||type==8) {
+    } else if (type == 2 || type == 6 || type == 34 || type == 8) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_2, viewGroup, false);
+    } else if (type == 11) {
+      return ViewHolder.createViewHolder(mActivity, viewGroup, R.layout.root_item_11);
     }
     return new MyViewHolder(layout);
   }
 
+  public void setOnViewClick(OnViewClick onViewClick) {
+    mOnViewClick = onViewClick;
+  }
+
   @Override
-  public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder1, int position) {
+    MyViewHolder holder = null;
     ChatBean chatBean = mList.get(position);
     int type = chatBean.getType();
     long time = chatBean.getTime();
+    if (holder1 instanceof MyViewHolder) {
+      holder = (MyViewHolder) holder1;
+    } else if (type == 11) {
+      ViewHolder11.covert((ViewHolder) holder1, chatBean, position);
+      return;
+    }
+
     if (position == 0) {
       holder.tv_time.setVisibility(View.VISIBLE);
       holder.tv_time.setText(TimeUtil.getTimeStr(time));
@@ -112,6 +121,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
     holder.tv_name.setText(chatBean.getUserName());
 
+    if (chatBean.getTargetId() == null || chatBean.getTargetId()
+                                                  .equals(BaseApplication.getInstance()
+                                                                         .getUser()
+                                                                         .getUserId())) {
+      holder.iv_user_img.setOnLongClickListener(null);
+    } else {
+      holder.iv_user_img.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+          if (mOnViewClick != null) {
+            mOnViewClick.viewClick(view, chatBean, position);
+          }
+          return true;
+        }
+      });
+    }
     if (type == -1) {
       Glide.with(holder.itemView.getContext())
            .load(chatBean.getUrl())
@@ -148,7 +173,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         }
       });
       ArrayList<RootMessage2.Action> actions = chatBean.getActions();
-      holder.rlv_recycler.setAdapter(new RootBean2Adapter(actions,mHostInterface));
+      holder.rlv_recycler.setAdapter(new RootBean2Adapter(actions, mHostInterface));
     } else if (type == 6) {
       holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
         @Override
@@ -167,7 +192,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
       });
       ArrayList<RootMessage34.Action> actions = chatBean.getActions34();
       holder.rlv_recycler.setAdapter(new RootBean34Adapter(actions));
-    }else if (type == 8) {
+    } else if (type == 8) {
       holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
         @Override
         public boolean canScrollVertically() {
@@ -337,6 +362,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
       }
       return;
     }
+  }
+
+  public interface OnViewClick {
+    void viewClick(View view, ChatBean chatBean, int position);
   }
 
   public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -63,8 +63,13 @@ public class EditIpDialog extends AppCompatDialog {
           return;
         }
         hostInterface.sendMsg(host);
-        AppSocket.getInstance()
-                 .sendMessage(type, host);
+        if (type == 10) {
+          AppSocket.getInstance()
+                   .sendRobotMessage(host, "request");
+        } else {
+          AppSocket.getInstance()
+                   .sendMessage(type, host);
+        }
         dismiss();
       }
     });

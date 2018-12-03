@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,16 +21,15 @@ import com.domain.library.ui.CommonDialog;
 import com.domain.library.utils.MyPermissionUtils;
 import com.domain.library.utils.SoftInputUtil;
 import com.domain.library.utils.SpUtils;
-import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
-import com.domain.operationrobot.app.order.SelectTimeActivity;
+import com.domain.operationrobot.app.order.CommandOperationActivity;
 import com.domain.operationrobot.http.bean.ChatBean;
-import com.domain.operationrobot.http.bean.ImageBean;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
+import com.domain.operationrobot.im.bean.RootMessage11;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
@@ -143,7 +141,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
     view.findViewById(R.id.tv_demo)
         .setOnClickListener((v) -> {
-          startActivity(new Intent(getActivity(), SelectTimeActivity.class));
+          startActivity(new Intent(getActivity(), CommandOperationActivity.class));
         });
 
     mIvRobot.setOnClickListener(new View.OnClickListener() {
@@ -205,6 +203,16 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       }
     });
     mAdapter = new ChatAdapter(new ArrayList<ChatBean>(), getActivity());
+    mAdapter.setOnViewClick(new ChatAdapter.OnViewClick() {
+      @Override
+      public void viewClick(View view, ChatBean chatBean, int position) {
+        String trim = mEtMsg.getText()
+                            .toString()
+                            .trim();
+        trim += "@" + chatBean.getUserName();
+        mEtMsg.setText(trim);
+      }
+    });
     mAdapter.setHostMsg(msg -> ChatRoomFragment.this.sendMsg(msg));
     mAdapter.setRecycler(mRecycler);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -357,10 +365,24 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
             case ROOT_MESSAGE_TYPE_8:
               rootMsg8(model);
               break;
+            case IEventType.ROOT_MESSAGE_TYPE_11:
+              rootMsg11(model);
+              break;
           }
         }
       }
     });
+  }
+
+  private void rootMsg11(ObserverModel model) {
+    ChatBean chatBean = new ChatBean();
+    chatBean.setType(11);
+    RootMessage11 rootMessage = model.getRootMessage11();
+    chatBean.setTime(rootMessage.getTime());
+    chatBean.setUserName("机器人");
+    chatBean.setContent(rootMessage.getMsg());
+    chatBean.setIp(rootMessage.getIp());
+    mAdapter.addBeanToEnd(chatBean);
   }
 
   private void rootMsg8(ObserverModel model) {

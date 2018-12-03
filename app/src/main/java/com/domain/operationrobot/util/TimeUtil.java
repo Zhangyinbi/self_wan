@@ -3,6 +3,7 @@ package com.domain.operationrobot.util;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,14 +18,14 @@ public class TimeUtil {
   public static final String FORMAT_DATE_EN = "yyyy-MM-dd";
   public static final String FORMAT_DATE_CN = "yyyy年MM月dd日";
 
-  public static final String FORMAT_TIME_CN = "yyyy年MM月dd HH时mm分ss秒";
+  public static final String FORMAT_TIME_CN   = "yyyy年MM月dd HH时mm分ss秒";
   public static final String FORMAT_TIME_CN_2 = "yyyy年MM月dd HH时mm分";
-  public static final String FORMAT_TIME_EN = "yyyy-MM-dd HH:mm:ss";
+  public static final String FORMAT_TIME_EN   = "yyyy-MM-dd HH:mm:ss";
   public static final String FORMAT_TIME_EN_2 = "yyyy-MM-dd HH:mm";
 
-  public static final String FORMAT_DAY_CN = "HH时mm分ss秒";
+  public static final String FORMAT_DAY_CN   = "HH时mm分ss秒";
   public static final String FORMAT_DAY_CN_2 = "HH时mm分";
-  public static final String FORMAT_DAY_EN = "HH:mm:ss";
+  public static final String FORMAT_DAY_EN   = "HH:mm:ss";
   public static final String FORMAT_DAY_EN_2 = "HH:mm";
   public static final String FORMAT_DAY_EN_3 = "mm:ss";
 
@@ -222,9 +223,18 @@ public class TimeUtil {
     int i = Integer.parseInt(time);
     String times = sdr.format(new Date(i * 1000L));
     return times;
-
   }
 
-
-
+  public static long getTime(String user_time) {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date d;
+    long l = 0;
+    try {
+      d = sdf.parse(user_time);
+      l = d.getTime();
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block e.printStackTrace();
+    }
+    return l;
+  }
 }

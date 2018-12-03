@@ -21,6 +21,10 @@ public class ChatBean {
   public  String url;
   private String token;
   private String targetId;
+
+  //重启服务需要
+  private String hostip;
+  private String result;
   private int type = -1;//默认正常聊天信息  1-> 机器人消息 2
   private ArrayList<RootMessage2.Action>  actions;
   /**
@@ -31,8 +35,23 @@ public class ChatBean {
    * cpu 和 内存
    */
   private ArrayList<RootMessage34.Action> actions34;
+  private ArrayList<RootMessage8.Action>  actions8;
 
-  private ArrayList<RootMessage8.Action> actions8;
+  public String getIp() {
+    return hostip == null ? "" : hostip;
+  }
+
+  public void setIp(String ip) {
+    this.hostip = ip;
+  }
+
+  public String getResult() {
+    return result == null ? "" : result;
+  }
+
+  public void setResult(String result) {
+    this.result = result;
+  }
 
   public String getTargetId() {
     return targetId;

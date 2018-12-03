@@ -1,11 +1,11 @@
 package com.domain.operationrobot.im.chatroom;
 
 import android.util.Log;
-import android.widget.Toast;
 import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
+import com.domain.operationrobot.im.bean.RootMessage11;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
@@ -15,7 +15,6 @@ import com.domain.operationrobot.im.listener.IConstants;
 import com.domain.operationrobot.im.listener.IEventType;
 import com.domain.operationrobot.im.socket.AppSocket;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
 import java.util.Observable;
@@ -139,7 +138,19 @@ public class BaseChatRoom extends Observable implements IChatRoom {
       case 8:
         parse_type_8(rootBean);
         break;
+      case 11:
+        parse_type_11(rootBean);
+        break;
     }
+  }
+
+  private void parse_type_11(JSONObject rootBean) {
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.ROOT_MESSAGE_TYPE_11);
+    RootMessage11 newMessage = mGson.fromJson(rootBean.toString(), RootMessage11.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setRootMessage10(newMessage);
+    notifyObservers(model);
   }
 
   /**

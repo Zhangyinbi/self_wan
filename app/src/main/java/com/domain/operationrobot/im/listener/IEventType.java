@@ -21,6 +21,9 @@ public interface IEventType {
   //网络状况
   String ROOT_MESSAGE_TYPE_8 = "root_message_type_8";
 
+  //重启服务器
+  String ROOT_MESSAGE_TYPE_11 = "root_message_type_11";
+
   /*** ****************    无效的    ***********************/
   String LOGIN       = "login";
   String ADD_USER    = "connTest";

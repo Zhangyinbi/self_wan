@@ -1,33 +1,36 @@
 package com.domain.operationrobot.im.bean;
 
-import org.json.JSONObject;
-
 /**
  * @author silencezwm on 2017/8/25 下午12:06
  * @email silencezwm@gmail.com
  * @description 观察者实体类
  */
 public class ObserverModel {
+  private RootMessage11 mRootMessage11;
   //有效的
-  private String mEventType;
-
-  private NewMessage mNewMessage;
-
-  private RootMessage1 mRootMessage1;
-
+  private String        mEventType;
+  private NewMessage    mNewMessage;
+  private RootMessage1  mRootMessage1;
   private RootMessage2  mRootMessage2;
   //磁盘使用
   private RootMessage6  mRootMessage6;
   //cpu 和 内存
   private RootMessage34 mRootMessage34;
-  private RootMessage8 mRootMessage8;
-
+  private RootMessage8  mRootMessage8;
   //      无效的
-  private Login      mLogin;
-  private UserJoined mUserJoined;
-  private UserLeft   mUserLeft;
-  private Typing     mTyping;
-  private StopTyping mStopTyping;
+  private Login         mLogin;
+  private UserJoined    mUserJoined;
+  private UserLeft      mUserLeft;
+  private Typing        mTyping;
+  private StopTyping    mStopTyping;
+
+  public RootMessage11 getRootMessage11() {
+    return mRootMessage11;
+  }
+
+  public void setRootMessage10(RootMessage11 mRootMessage11) {
+    this.mRootMessage11 = mRootMessage11;
+  }
 
   public RootMessage8 getRootMessage8() {
     return mRootMessage8;
