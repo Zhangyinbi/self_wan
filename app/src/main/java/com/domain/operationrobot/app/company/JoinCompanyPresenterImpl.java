@@ -1,5 +1,6 @@
 package com.domain.operationrobot.app.company;
 
+import android.app.Activity;
 import com.domain.library.base.BasePresenter;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
@@ -12,6 +13,7 @@ import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 
+import com.domain.operationrobot.util.ToastU;
 import java.util.ArrayList;
 
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
@@ -82,6 +84,38 @@ public class JoinCompanyPresenterImpl extends JoinCompanyContract.JoinCompanyPre
               });
   }
 
+  @Override
+  public void getCompanyTargetList(String companyName) {
+    mView.setCompanyList(null);
+    RemoteMode.getInstance()
+              .getCompanyTargetList(companyName)
+              .subscribe(new BaseObserver<CompanyList>(getCompositeDisposable()) {
+                @Override
+                public void onError(BaseException e) {
+                  if (mView == null) {
+                    return;
+                  }
+                }
+
+                @Override
+                public void onSuss(CompanyList companyList) {
+                  if (mView == null) {
+                    return;
+                  }
+                  mView.setCompanyList(companyList.getCompanys());
+                }
+
+                @Override
+                public void onComplete() {
+                  super.onComplete();
+                  if (mView == null) {
+                    return;
+                  }
+                  hideProgress();
+                }
+              });
+  }
+
   /**
    * 加入公司 当前用户id可以本地获取或者传名字出去
    */
@@ -106,7 +140,7 @@ public class JoinCompanyPresenterImpl extends JoinCompanyContract.JoinCompanyPre
                     return;
                   }
                   mView.joinSuss();
-
+                  ToastU.ToastLoginSussMessage((Activity) mView,"申请成功,请耐心等待");
                   User user = BaseApplication.getInstance()
                                              .getUser();
                   user.setRole(company.getRole());

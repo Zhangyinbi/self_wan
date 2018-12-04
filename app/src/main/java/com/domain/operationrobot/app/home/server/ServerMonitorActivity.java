@@ -28,6 +28,15 @@ import java.util.ArrayList;
 
 public class ServerMonitorActivity extends AbsActivity {
 
+  private RecyclerView                 mRlv_in;
+  private RecyclerView                 mRlv_all;
+  private ServerAllAdapter             mAllAdapter;
+  private ServerInAdapter              mInAdapter;
+  private TextView                     mTv_title;
+  private TextView                     tv_no_data;
+  private View                         view;
+  private FrameLayout                  mFl_view;
+  private ArrayList<ServerMachineBean> mInhosts;
   ThrottleLastClickListener listener = new ThrottleLastClickListener() {
     @Override
     public void onViewClick(View v) {
@@ -41,15 +50,6 @@ public class ServerMonitorActivity extends AbsActivity {
       }
     }
   };
-  private RecyclerView                 mRlv_in;
-  private RecyclerView                 mRlv_all;
-  private ServerAllAdapter             mAllAdapter;
-  private ServerInAdapter              mInAdapter;
-  private TextView                     mTv_title;
-  private TextView                     tv_no_data;
-  private View                         view;
-  private FrameLayout                  mFl_view;
-  private ArrayList<ServerMachineBean> mInhosts;
   private ArrayList<ServerMachineBean> mAllHosts;
   private ArrayList<ServerMachineBean> mTempAllHosts;
   private EditText                     mEt_host;
@@ -68,8 +68,7 @@ public class ServerMonitorActivity extends AbsActivity {
 
                 @Override
                 public void onSuss(BaseEntry baseEntry) {
-                  ToastU.ToastLoginSussMessage(ServerMonitorActivity.this,"保存成功");
-
+                  ToastU.ToastLoginSussMessage(ServerMonitorActivity.this, "保存成功");
                 }
 
                 @Override

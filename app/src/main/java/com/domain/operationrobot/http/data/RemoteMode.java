@@ -10,6 +10,7 @@ import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.OperationList;
+import com.domain.operationrobot.http.bean.ServerBean;
 import com.domain.operationrobot.http.bean.ServerInfo;
 import com.domain.operationrobot.http.bean.ServerMachineBean;
 import com.domain.operationrobot.http.bean.ServerMobile;
@@ -131,13 +132,35 @@ public class RemoteMode implements BaseMode {
     //}
     //RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
     Map<String, String> map = new HashMap<>();
-    map.put("companyname", companyName);
+
     map.put("token", BaseApplication.getInstance()
                                     .getUser()
                                     .getToken());
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .getCompanyList(map);
+  }
+
+  /**
+   * 获取公司列表
+   */
+  public Observable<CompanyList> getCompanyTargetList(String companyName) {
+
+    //JSONObject root = new JSONObject();
+    //try {
+    //  root.put("companyname", companyName);
+    //  root.put("token", BaseApplication.getInstance()
+    //                                   .getUser()
+    //                                   .getToken());
+    //} catch (JSONException e) {
+    //  e.printStackTrace();
+    //}
+    //RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getCompanyTargetList(companyName,BaseApplication.getInstance()
+                                                                          .getUser()
+                                                                          .getToken());
   }
 
   /**
@@ -541,6 +564,21 @@ public class RemoteMode implements BaseMode {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .save(requestBody);
+  }
+
+  public Observable<ServerBean> getDataMonitorInfo() {
+
+    JSONObject root = new JSONObject();
+    try {
+      root.put("companyid", BaseApplication.getInstance().getUser().getCompanyid());
+      root.put("usertoken", BaseApplication.getInstance().getUser().getToken());
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getDataMonitorInfo(requestBody);
   }
 
   private static class SingletonHolder {

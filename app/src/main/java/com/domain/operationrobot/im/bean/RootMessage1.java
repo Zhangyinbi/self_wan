@@ -11,6 +11,22 @@ public class RootMessage1 {
   private String msg;
   private long   time;
 
+  private String username;
+  private String imageUrl;
+  private String userid;
+
+  public String getUserid() {
+    return userid == null ? "" : userid;
+  }
+
+  public String getImageUrl() {
+    return imageUrl == null ? "" : imageUrl;
+  }
+
+  public String getUsername() {
+    return username == null ? "" : username;
+  }
+
   public long getTime() {
     return time;
   }

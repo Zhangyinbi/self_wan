@@ -99,29 +99,23 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ChatBean chatBean = mList.get(position);
     int type = chatBean.getType();
     long time = chatBean.getTime();
+
+    TextView tvTime = null;
+
     if (holder1 instanceof MyViewHolder) {
       holder = (MyViewHolder) holder1;
+      tvTime = holder.tv_time;
+      setTime(tvTime,time,position);
     } else if (type == 11) {
       ViewHolder11.covert((ViewHolder) holder1, chatBean, position);
+      tvTime = ((ViewHolder) holder1).getView(R.id.tv_time);
+      setTime(tvTime,time,position);
       return;
     }
 
-    if (position == 0) {
-      holder.tv_time.setVisibility(View.VISIBLE);
-      holder.tv_time.setText(TimeUtil.getTimeStr(time));
-    } else {
-      ChatBean pre = mList.get(position - 1);
-      long preTime = pre.getTime();
-      if (time - preTime < 5 * 60 * 1000) {
-        holder.tv_time.setVisibility(View.GONE);
-      } else {
-        holder.tv_time.setVisibility(View.VISIBLE);
-        holder.tv_time.setText(TimeUtil.getTimeStr(time));
-      }
-    }
     holder.tv_name.setText(chatBean.getUserName());
 
-    if (chatBean.getTargetId() == null || chatBean.getTargetId()
+    if (chatBean.getTargetId() != null && chatBean.getTargetId()
                                                   .equals(BaseApplication.getInstance()
                                                                          .getUser()
                                                                          .getUserId())) {
@@ -137,13 +131,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
       });
     }
-    if (type == -1) {
-      Glide.with(holder.itemView.getContext())
-           .load(chatBean.getUrl())
-           .into(holder.iv_user_img);
-    } else {
-      holder.iv_user_img.setImageResource(R.drawable.root_40);
-    }
+    //if (type == -1) {
+    GlideApp.with(holder.itemView.getContext())
+            .load(chatBean.getUrl())
+            .placeholder(R.drawable.root_40)
+            .error(R.drawable.root_40)
+            .into(holder.iv_user_img);
+    //} else {
+    //  holder.iv_user_img.setImageResource(R.drawable.root_40);
+    //}
 
     String msg = chatBean.getContent();
     if (holder.iv_image_msg != null) {
@@ -201,6 +197,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       });
       ArrayList<RootMessage8.Action> actions = chatBean.getActions8();
       holder.rlv_recycler.setAdapter(new RootBean8Adapter(actions));
+    }
+  }
+
+  private void setTime(TextView tvTime, long time, int position) {
+    if (position == 0) {
+      tvTime.setVisibility(View.VISIBLE);
+      tvTime.setText(TimeUtil.getTimeStr(time));
+    } else {
+      ChatBean pre = mList.get(position - 1);
+      long preTime = pre.getTime();
+      if (time - preTime < 5 * 60 * 1000) {
+        tvTime.setVisibility(View.GONE);
+      } else {
+        tvTime.setVisibility(View.VISIBLE);
+        tvTime.setText(TimeUtil.getTimeStr(time));
+      }
     }
   }
 

@@ -24,11 +24,22 @@ public class ObserverModel {
   private Typing        mTyping;
   private StopTyping    mStopTyping;
 
+
+  private UpDataMsg upDataMsg;
+
+  public UpDataMsg getUpDataMsg() {
+    return  upDataMsg;
+  }
+
+  public void setUpDataMsg(UpDataMsg upDataMsg) {
+    this.upDataMsg = upDataMsg;
+  }
+
   public RootMessage11 getRootMessage11() {
     return mRootMessage11;
   }
 
-  public void setRootMessage10(RootMessage11 mRootMessage11) {
+  public void setRootMessage11(RootMessage11 mRootMessage11) {
     this.mRootMessage11 = mRootMessage11;
   }
 

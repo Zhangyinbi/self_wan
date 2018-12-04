@@ -6,6 +6,7 @@ package com.domain.operationrobot.im.listener;
  * @description
  */
 public interface IEventType {
+  String UP_DATE_MESSAGE         = "updateMessage";
   String NEW_MESSAGE         = "newMessage";
   //普通模式
   String ROOT_MESSAGE_TYPE_1 = "root_message_type_1";

@@ -21,6 +21,7 @@ import java.util.List;
  * Create at : 2018/12/2 17:12
  */
 public abstract class RecyclerComAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
+  public  Context               mContext;
   private LayoutInflater        mInflater;
   private int                   mLayoutId;
   private List<T>               mData;
@@ -36,6 +37,7 @@ public abstract class RecyclerComAdapter<T> extends RecyclerView.Adapter<ViewHol
    * @param layoutId 布局Id
    */
   public RecyclerComAdapter(Context context, List<T> data, int layoutId) {
+    this.mContext = context;
     this.mData = data;
     this.mLayoutId = layoutId;
     mInflater = LayoutInflater.from(context);
@@ -111,7 +113,6 @@ public abstract class RecyclerComAdapter<T> extends RecyclerView.Adapter<ViewHol
    */
   @Override
   public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-    convert(viewHolder, mData.get(position), position);
     //处理点击事件
     viewHolder.itemView.setOnClickListener(view -> {
       if (mItemClickListener != null) {
@@ -125,6 +126,7 @@ public abstract class RecyclerComAdapter<T> extends RecyclerView.Adapter<ViewHol
       }
       return false;
     });
+    convert(viewHolder, mData.get(position), position);
   }
 
   /**

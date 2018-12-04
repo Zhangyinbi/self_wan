@@ -1,8 +1,6 @@
 package com.domain.operationrobot.app.home;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDialog;
 import android.text.TextUtils;
@@ -10,14 +8,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import com.domain.library.utils.SoftInputUtil;
 import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.R;
-import com.domain.operationrobot.im.bean.ObserverModel;
-import com.domain.operationrobot.im.bean.RootMessage6;
-import com.domain.operationrobot.im.chatroom.BaseChatRoom;
-import com.domain.operationrobot.im.listener.IEventType;
 import com.domain.operationrobot.im.socket.AppSocket;
 
 /**
@@ -62,10 +55,10 @@ public class EditIpDialog extends AppCompatDialog {
           ToastUtils.showToast("请输入机器查询所需信息");
           return;
         }
-        hostInterface.sendMsg(host);
+        //hostInterface.sendMsg(host);
         if (type == 10) {
           AppSocket.getInstance()
-                   .sendRobotMessage(host, "request");
+                   .sendRobotMessage(host, "request", "");
         } else {
           AppSocket.getInstance()
                    .sendMessage(type, host);

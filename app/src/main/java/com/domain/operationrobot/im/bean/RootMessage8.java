@@ -13,6 +13,20 @@ public class RootMessage8 {
   private long                           time;
   private String                         msg;
   private ArrayList<RootMessage8.Action> actions;
+  private String username;
+  private String imageUrl;
+  private String userid;
+
+  public String getUserid() {
+    return userid == null ? "" : userid;
+  }
+  public String getImageUrl() {
+    return imageUrl == null ? "" : imageUrl;
+  }
+
+  public String getUsername() {
+    return username == null ? "" : username;
+  }
 
   public ArrayList<Action> getActions() {
     return actions;

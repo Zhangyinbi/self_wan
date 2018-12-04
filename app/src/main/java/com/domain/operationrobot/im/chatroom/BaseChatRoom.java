@@ -10,6 +10,7 @@ import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
 import com.domain.operationrobot.im.bean.RootMessage8;
+import com.domain.operationrobot.im.bean.UpDataMsg;
 import com.domain.operationrobot.im.listener.IChatRoom;
 import com.domain.operationrobot.im.listener.IConstants;
 import com.domain.operationrobot.im.listener.IEventType;
@@ -108,10 +109,21 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   private void upDataRoot(JSONObject jsonObject) {
     setChanged();
     int type = jsonObject.optInt("type");
+    String imageUrl = jsonObject.optString("imageUrl");
+    String username = jsonObject.optString("username");
+    String userid = jsonObject.optString("userid");
     JSONObject rootBean = jsonObject.optJSONObject("rootbean");
     if (rootBean == null) {
       upData(jsonObject);
       return;
+    } else {
+      try {
+        rootBean.put("imageUrl", imageUrl);
+        rootBean.put("username", username);
+        rootBean.put("userid", userid);
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
     }
     switch (type) {
       case 1:
@@ -137,6 +149,8 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         break;
       case 8:
         parse_type_8(rootBean);
+      case 10:
+        parse_type_10(rootBean);
         break;
       case 11:
         parse_type_11(rootBean);
@@ -144,12 +158,36 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     }
   }
 
+  private void parse_type_10(JSONObject rootBean) {
+    String action = rootBean.optString("action");
+    String msgId = rootBean.optString("msgid");
+    if (!"request".equals(action)) {
+      upDataChatBean(action,msgId);
+      return;
+    }
+    setChanged();
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.NEW_MESSAGE);
+    NewMessage newMessage = mGson.fromJson(rootBean.toString(), NewMessage.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setNewMessage(newMessage);
+    notifyObservers(model);
+  }
+
+  private void upDataChatBean(String action, String msgId) {
+    setChanged();
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.UP_DATE_MESSAGE);
+    model.setUpDataMsg(new UpDataMsg(action,msgId));
+    notifyObservers(model);
+  }
+
   private void parse_type_11(JSONObject rootBean) {
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_11);
     RootMessage11 newMessage = mGson.fromJson(rootBean.toString(), RootMessage11.class);
     newMessage.setTime(System.currentTimeMillis());
-    model.setRootMessage10(newMessage);
+    model.setRootMessage11(newMessage);
     notifyObservers(model);
   }
 

@@ -1,7 +1,6 @@
 package com.domain.operationrobot.im.socket;
 
 import android.text.TextUtils;
-import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.im.listener.IConstants;
 import org.json.JSONException;
@@ -58,7 +57,7 @@ public class AppSocket extends BaseSocket {
   /**
    * fasong机器人消息,重启服务器
    */
-  public void sendRobotMessage(String content,String action) {
+  public void sendRobotMessage(String hosdip, String action, String msgId) {
     try {
       JSONObject jsonObject = new JSONObject();
       JSONObject jsonObject1 = new JSONObject();
@@ -66,12 +65,17 @@ public class AppSocket extends BaseSocket {
                                              .getUser()
                                              .getToken());
       jsonObject.put("type", 10);
-      jsonObject.put("msg", content);
-      jsonObject.put("action", action);
+      JSONObject jsonObject2 = new JSONObject();
+      jsonObject2.put("msg", hosdip);
+      jsonObject2.put("action", action);
+      if (!TextUtils.isEmpty(msgId)) {
+        jsonObject2.put("msgid", msgId);
+      }
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();
       jsonObject.putOpt("companyid", companyid);
+      jsonObject.put("rootbean", jsonObject2);
       jsonObject1.putOpt("data", jsonObject);
       mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
     } catch (JSONException e) {
@@ -115,7 +119,11 @@ public class AppSocket extends BaseSocket {
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
+      String companyid = BaseApplication.getInstance()
+                                        .getUser()
+                                        .getCompanyid();
       jsonObject.put("msg", "joinroom");
+      jsonObject.putOpt("companyid", companyid);
       mSocket.emit(IConstants.TALK, jsonObject);
     } catch (JSONException e) {
       e.printStackTrace();

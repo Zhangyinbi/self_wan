@@ -34,6 +34,7 @@ import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
 import com.domain.operationrobot.im.bean.RootMessage8;
+import com.domain.operationrobot.im.bean.UpDataMsg;
 import com.domain.operationrobot.im.chatroom.BaseChatRoom;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.im.listener.IEventType;
@@ -57,6 +58,7 @@ import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_34;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_6;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_8;
+import static com.domain.operationrobot.im.listener.IEventType.UP_DATE_MESSAGE;
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 /**
@@ -67,15 +69,15 @@ import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
  * Create at : 2018/10/21 13:51
  */
 public class ChatRoomFragment extends AbsFragment implements Observer {
-  boolean clear = false;
+  boolean         clear            = false;
+  IUpLoadCallBack mIUpLoadCallBack = (url, outWidth, outHeight) -> setImageMsg(url, outWidth, outHeight);
   private TextView     mBtnSend;
   private EditText     mEtMsg;
   private RecyclerView mRecycler;
   private ChatAdapter  mAdapter;
-  IUpLoadCallBack mIUpLoadCallBack = (url, outWidth, outHeight) -> setImageMsg(url, outWidth, outHeight);
-  private ImageView mIvRobot;
-  private ImageView mImageView;
-  private boolean   mSingle;
+  private ImageView    mIvRobot;
+  private ImageView    mImageView;
+  private boolean      mSingle;
 
   public static ChatRoomFragment newInstance() {
     ChatRoomFragment fragment = new ChatRoomFragment();
@@ -293,7 +295,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
       AppSocket.getInstance()
                .sendMessage(msg);
     }
-    addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), user.getUserId());
+    //addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), user.getUserId());
     mEtMsg.setText("");
   }
 
@@ -336,11 +338,14 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         if (observable instanceof BaseChatRoom) {
           final ObserverModel model = (ObserverModel) o;
           switch (model.getEventType()) {
+            case UP_DATE_MESSAGE:
+              upDateMsg(model.getUpDataMsg());
+              break;
             case IEventType.NEW_MESSAGE:
               NewMessage newMessage = model.getNewMessage();
-              if (isSelfMsg(newMessage.getTargetId())) {
-                return;
-              }
+              //if (isSelfMsg(newMessage.getTargetId())) {
+              //  return;
+              //}
               String username = newMessage.getUsername()
                                           .isEmpty() ? newMessage.getMobile()
                                                                  .isEmpty() ? "未知" : newMessage.getMobile() : newMessage.getUsername();
@@ -374,14 +379,28 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     });
   }
 
+  private void upDateMsg(UpDataMsg upDataMsg) {
+    ArrayList<ChatBean> list = mAdapter.getList();
+    for (ChatBean chatBean : list) {
+      if (!TextUtils.isEmpty(chatBean.getMsgid()) && chatBean.getMsgid()
+                                                             .equals(upDataMsg.getMsgid())) {
+        chatBean.setAction(upDataMsg.getAction());
+        mAdapter.notifyDataSetChanged();
+        return;
+      }
+    }
+  }
+
   private void rootMsg11(ObserverModel model) {
     ChatBean chatBean = new ChatBean();
     chatBean.setType(11);
     RootMessage11 rootMessage = model.getRootMessage11();
     chatBean.setTime(rootMessage.getTime());
-    chatBean.setUserName("机器人");
+    chatBean.setUserName(rootMessage.getUsername());
+    chatBean.setUrl(rootMessage.getImageUrl());
     chatBean.setContent(rootMessage.getMsg());
     chatBean.setIp(rootMessage.getIp());
+    chatBean.setMsgid(rootMessage.getMsgid());
     mAdapter.addBeanToEnd(chatBean);
   }
 
@@ -389,7 +408,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     ChatBean chatBean = new ChatBean();
     chatBean.setType(8);
     RootMessage8 rootMessage = model.getRootMessage8();
-    chatBean.setUserName("机器人");
+    chatBean.setUrl(rootMessage.getImageUrl());
+    chatBean.setUserName(rootMessage.getUsername());
     chatBean.setTime(rootMessage.getTime());
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage8.Action> actions = rootMessage.getActions();
@@ -404,7 +424,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     ChatBean chatBean = new ChatBean();
     chatBean.setType(34);
     RootMessage34 rootMessage = model.getRootMessage34();
-    chatBean.setUserName("机器人");
+    chatBean.setUserName(rootMessage.getUsername());
+    chatBean.setUrl(rootMessage.getImageUrl());
     chatBean.setTime(rootMessage.getTime());
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage34.Action> actions = rootMessage.getActions();
@@ -419,7 +440,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     ChatBean chatBean = new ChatBean();
     chatBean.setType(6);
     RootMessage6 rootMessage = model.getRootMessage6();
-    chatBean.setUserName("机器人");
+    chatBean.setUserName(rootMessage.getUsername());
+    chatBean.setUrl(rootMessage.getImageUrl());
     chatBean.setTime(rootMessage.getTime());
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage6.Action> actions = rootMessage.getActions();
@@ -434,7 +456,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     ChatBean chatBean = new ChatBean();
     chatBean.setType(2);
     RootMessage2 rootMessage = model.getRootMessage2();
-    chatBean.setUserName("机器人");
+    chatBean.setUserName(rootMessage.getUsername());
+    chatBean.setUrl(rootMessage.getImageUrl());
     chatBean.setTime(rootMessage.getTime());
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage2.Action> actions = rootMessage.getActions();
@@ -449,7 +472,8 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     ChatBean chatBean = new ChatBean();
     chatBean.setType(1);
     RootMessage1 rootMessage = model.getRootMessage1();
-    chatBean.setUserName("机器人");
+    chatBean.setUserName(rootMessage.getUsername());
+    chatBean.setUrl(rootMessage.getImageUrl());
     chatBean.setTime(rootMessage.getTime());
     chatBean.setContent(rootMessage.getMsg());
     mAdapter.addBeanToEnd(chatBean);
@@ -536,7 +560,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     String regex = getContext().getString(R.string.regex);
     String realMsg = "{\"url\":\"" + path + "\",\"width\":" + outWidth + ",\"height\":" + outHeight + "}";
     String imgMsg = regex + realMsg + regex;
-    addBeanToRecycler(user.getUsername(), user.getImage(), imgMsg, System.currentTimeMillis(), user.getUserId());
+    //addBeanToRecycler(user.getUsername(), user.getImage(), imgMsg, System.currentTimeMillis(), user.getUserId());
     AppSocket.getInstance()
              .sendMessage(imgMsg);
   }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -96,7 +97,11 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
   @Override
   public void afterTextChanged(Editable editable) {
     targetName = autoSearchCompany.getValue();
-    presenter.getCompanyList(targetName);
+    if (TextUtils.isEmpty(targetName)) {
+      presenter.getCompanyList(targetName);
+    }else {
+      presenter.getCompanyTargetList(targetName);
+    }
   }
 
   @Override

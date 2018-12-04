@@ -57,7 +57,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
   private static final String TAG = "------------";
   private Fragment mCurrentFragment;
   private ArrayList<Fragment> mFragments     = new ArrayList<>();
-  private boolean[]           mFragmentAdded = new boolean[] { false, false };
+  private boolean[]           mFragmentAdded = new boolean[] {false, false};
   private TextView       mTv_fragment1;
   private TextView       mTv_fragment2;
   private DrawerLayout   drawer;
@@ -122,7 +122,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
           }
           if (mRole == 1 || mRole == 3) {//游客
             startActivity(new Intent(MainActivity.this, ApplyActivity.class));
-          } else if (mRole == 2 ) {
+          } else if (mRole == 2) {
             //申请等待同意
             //new DelayDialog(MainActivity.this, new BigDecimal("987876756")).show();//测试代码
           } else if (mRole == 0) {
@@ -438,16 +438,15 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
         break;
       case 0://普通公司用户
         //已加入公司试用中用户（管理员）
-        if (mUser.getOprole() == 4 && "1".equals(mUser.getCompanyrole())) {
+        if ((mUser.getOprole() == 4 && "1".equals(mUser.getCompanyrole())) || (mUser.getOprole() != 4 && "1".equals(mUser.getCompanyrole()))) {
           tv_top.setText("升级成为正式用户，享受一站式运维 >");
-        } else if (mUser.getOprole() != 4 && "1".equals(mUser.getCompanyrole())) {
-          tv_top.setText("升级成为正式用户，享受一站式运维 >");
-        } else if (mUser.getOprole() == 4 && "2".equals(mUser.getCompanyrole())) {
-          BigDecimal time = new BigDecimal(mUser.getCompanyexpiredate()).subtract(new BigDecimal(System.currentTimeMillis() / 1000));
-          tv_top.setText("还有" + TimeUtil.getTimeDay(time) + "天就要过期了，请续费 >");
-        } else if (mUser.getOprole() != 4 && "2".equals(mUser.getCompanyrole())) {
-          BigDecimal time = new BigDecimal(mUser.getCompanyexpiredate()).subtract(new BigDecimal(System.currentTimeMillis() / 1000));
-          tv_top.setText("还有" + TimeUtil.getTimeDay(time) + "天就要过期了，请续费 >");
+        } else if ((mUser.getOprole() == 4 && "2".equals(mUser.getCompanyrole())) || (mUser.getOprole() != 4 && "2".equals(mUser.getCompanyrole()))) {
+          try {
+            BigDecimal time = new BigDecimal(mUser.getCompanyexpiredate()).subtract(new BigDecimal(System.currentTimeMillis() / 1000));
+            tv_top.setText("还有" + TimeUtil.getTimeDay(time) + "天就要过期了，请续费 >");
+          } catch (Exception e) {
+            tv_top.setText("即将过期，请续费 >");
+          }
         }
         tv_company_name.setText(mUser.getCompany());
 
@@ -523,7 +522,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
         user.setCompanyname(mSideInfo.getCompanyname());
         user.setCompanyid(mSideInfo.getCompanyid());
         user.setCompanyrole(mSideInfo.getCompanyrole());
-        if (TextUtils.isEmpty(mSideInfo.getCompanyexpiredate())) {
+        if (!TextUtils.isEmpty(mSideInfo.getCompanyexpiredate())) {
           user.setCompanyexpiredate(mSideInfo.getCompanyexpiredate());
         }
       }
@@ -592,7 +591,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     tv_company_name.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (mSideInfo.getRole() == 1||mSideInfo.getRole()==3) {
+        if (mSideInfo.getRole() == 1 || mSideInfo.getRole() == 3) {
           openOrCloseDrawer();
           drawer.postDelayed(new Runnable() {
             @Override
@@ -633,7 +632,6 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     }
     return userRoleName;
   }
-
 
   @Override
   public void loginFail(String msg) {

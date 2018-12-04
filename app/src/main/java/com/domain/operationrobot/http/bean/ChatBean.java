@@ -24,9 +24,27 @@ public class ChatBean {
 
   //重启服务需要
   private String hostip;
-  private String result;
+  private String msgid;
+  private String action;
   private int type = -1;//默认正常聊天信息  1-> 机器人消息 2
   private ArrayList<RootMessage2.Action>  actions;
+
+  public String getHostip() {
+    return hostip == null ? "" : hostip;
+  }
+
+  public String getMsgid() {
+    return msgid == null ? "" : msgid;
+  }
+
+  public void setHostip(String hostip) {
+    this.hostip = hostip;
+  }
+
+  public void setMsgid(String msgid) {
+    this.msgid = msgid;
+  }
+
   /**
    * 磁盘
    */
@@ -45,12 +63,12 @@ public class ChatBean {
     this.hostip = ip;
   }
 
-  public String getResult() {
-    return result == null ? "" : result;
+  public String getAction() {
+    return action == null ? "" : action;
   }
 
-  public void setResult(String result) {
-    this.result = result;
+  public void setAction(String action) {
+    this.action = action;
   }
 
   public String getTargetId() {

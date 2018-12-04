@@ -24,6 +24,7 @@ public interface JoinCompanyContract {
     public abstract class JoinCompanyPresenter<T extends JoinCompanyView> extends BasePresenter<T> {
 
         public abstract void getCompanyList(String value);
+        public abstract void getCompanyTargetList(String value);
 
         public abstract void join(String admin,String companyName);
     }
