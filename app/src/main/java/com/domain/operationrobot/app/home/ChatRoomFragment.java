@@ -43,6 +43,7 @@ import com.domain.operationrobot.im.listener.IEventType;
 import com.domain.operationrobot.im.socket.AppSocket;
 import com.domain.operationrobot.util.FileUpLoadUtils;
 import com.domain.operationrobot.util.IUpLoadCallBack;
+import com.domain.operationrobot.util.ToastU;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
@@ -332,14 +333,14 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   /**
    * 往列表的adapter中添加数据
    */
-  public void addBeanToRecycler(String username, String url, String content, long l, String targetId) {
+  public void addBeanToRecycler(String username, String url, String content, long l, String targetId, boolean flag) {
     ChatBean message = new ChatBean();
     message.setUserName(username);
     message.setContent(content);
     message.setUrl(url);
     message.setTime(l);
     message.setTargetId(targetId);
-    mAdapter.addBeanToEnd(message);
+    mAdapter.addBeanToEnd(message,flag);
   }
 
   @Override
@@ -365,7 +366,11 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     getActivity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        if (observable instanceof BaseChatRoom) {
+        if (observable instanceof BaseChatRoom  ) {
+          if (!(o instanceof ObserverModel)){
+            ToastU.ToastLoginSussMessage(getActivity(),"正在为您更新离线数据，请耐心等待！");
+            return;
+          }
           final ObserverModel model = (ObserverModel) o;
           switch (model.getEventType()) {
             case UP_DATE_MESSAGE:
@@ -383,7 +388,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               String msg = newMessage.getMsg();
               long time = newMessage.getTime();
               String targetId = newMessage.getTargetId();
-              addBeanToRecycler(username, url, msg, time, targetId);
+              addBeanToRecycler(username, url, msg, time, targetId,model.getFlag());
               break;
             case ROOT_MESSAGE_TYPE_1:
               rootMsg1(model);
@@ -432,7 +437,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     chatBean.setIp(rootMessage.getIp());
     chatBean.setMsgid(rootMessage.getMsgid());
-    mAdapter.addBeanToEnd(chatBean);
+    mAdapter.addBeanToEnd(chatBean,model.getFlag());
   }
 
   private void rootMsg8(ObserverModel model) {
@@ -445,7 +450,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage8.Action> actions = rootMessage.getActions();
     chatBean.setActions8(actions);
-    mAdapter.addBeanToEnd(chatBean);
+    mAdapter.addBeanToEnd(chatBean,model.getFlag());
   }
 
   /**
@@ -461,7 +466,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage34.Action> actions = rootMessage.getActions();
     chatBean.setActions34(actions);
-    mAdapter.addBeanToEnd(chatBean);
+    mAdapter.addBeanToEnd(chatBean,model.getFlag());
   }
 
   /**
@@ -477,7 +482,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage6.Action> actions = rootMessage.getActions();
     chatBean.setActions6(actions);
-    mAdapter.addBeanToEnd(chatBean);
+    mAdapter.addBeanToEnd(chatBean,model.getFlag());
   }
 
   /**
@@ -493,7 +498,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage2.Action> actions = rootMessage.getActions();
     chatBean.setActions(actions);
-    mAdapter.addBeanToEnd(chatBean);
+    mAdapter.addBeanToEnd(chatBean,model.getFlag());
   }
 
   /**
@@ -507,17 +512,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setUrl(rootMessage.getImageUrl());
     chatBean.setTime(rootMessage.getTime());
     chatBean.setContent(rootMessage.getMsg());
-    mAdapter.addBeanToEnd(chatBean);
-  }
-
-  /**
-   * 是不是自己发出的消息
-   */
-  private boolean isSelfMsg(String userId) {
-    return BaseApplication.getInstance()
-                          .getUser()
-                          .getUserId()
-                          .equals(userId);
+    mAdapter.addBeanToEnd(chatBean,model.getFlag());
   }
 
   @Override

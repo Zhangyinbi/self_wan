@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.domain.library.GlideApp;
@@ -328,17 +327,20 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     return mList != null ? mList.size() : 0;
   }
 
-  public void addBeanToEnd(ChatBean message) {
+  public void addBeanToEnd(ChatBean message, boolean flag) {
     setImgs(message.content);
     mList.add(message);
-    notifyItemInserted(getItemCount());
+    if (!flag) {
+      notifyItemInserted(getItemCount());
+      if (mRecyclerView != null) {
+        mRecyclerView.scrollToPosition(getItemCount() - 1);
+      }
+      saveData();
+    }
     //new android.os.Handler().postDelayed(new Runnable() {
     //  @Override
     //  public void run() {
-    if (mRecyclerView != null) {
-      mRecyclerView.scrollToPosition(getItemCount() - 1);
-    }
-    saveData();
+
     //}
     //}, 200);
 
@@ -354,9 +356,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   public void saveData() {
     if (SpUtils.getObject(USER_SP_KEY, User.class) != null) {
-      ArrayList<ChatBean> list = getList();
-      if (list.size() > 1000) {
-        for (int i = 0; i < list.size() - 999; i++) {
+      ArrayList<ChatBean> list = new ArrayList<>();
+      list.addAll(getList());
+      int size = list.size();
+      if (size > 1000) {
+        for (int i = 0; i < size - 999; i++) {
           list.remove(i);
         }
       }

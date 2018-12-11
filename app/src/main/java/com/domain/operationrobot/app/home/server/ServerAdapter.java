@@ -62,7 +62,7 @@ public class ServerAdapter extends RecyclerComAdapter<ServerBean.ServerList> {
 
     LinearLayout ll = holder.getView(R.id.ll_content);
     holder.setText(R.id.tv_host_name, itemData.getHost());
-
+    ll.removeAllViews();
     for (ServerBean.ServerList.MonitorInfo monitorInfo : itemData.getItem()) {
       View inflate = LayoutInflater.from(mContext)
                                    .inflate(R.layout.server_item_monitor, null);

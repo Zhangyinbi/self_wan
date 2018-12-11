@@ -24,6 +24,15 @@ public class ObserverModel {
   private Typing        mTyping;
   private StopTyping    mStopTyping;
 
+  private boolean flag;
+
+  public boolean getFlag(){
+    return flag;
+  }
+
+  public void setFlag(boolean flag) {
+    this.flag = flag;
+  }
 
   private UpDataMsg upDataMsg;
 

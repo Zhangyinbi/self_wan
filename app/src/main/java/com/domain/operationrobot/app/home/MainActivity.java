@@ -396,18 +396,23 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     if (drawer.isDrawerOpen(GravityCompat.START)) {
       drawer.closeDrawer(GravityCompat.START);
     } else {
-      if (!again) {
-        ToastUtils.showToast("再次点击退出");
-        again = true;
-        drawer.postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            again = false;
-          }
-        }, 2000);
-      } else {
-        super.onBackPressed();
-      }
+      Intent intent = new Intent(Intent.ACTION_MAIN);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      intent.addCategory(Intent.CATEGORY_HOME);
+      startActivity(intent);
+      //if (!again) {
+      //  ToastUtils.showToast("再次点击退出");
+      //  again = true;
+      //  drawer.postDelayed(new Runnable() {
+      //    @Override
+      //    public void run() {
+      //      again = false;
+      //    }
+      //  }, 2000);
+      //} else {
+      //  //super.onBackPressed();
+      //
+      //}
     }
   }
 

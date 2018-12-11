@@ -5,8 +5,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
+import com.domain.library.widgets.loading.LoadingView;
 import com.domain.operationrobot.BaseApplication;
-import com.domain.operationrobot.app.home.ChatRoomFragment;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
@@ -29,6 +29,8 @@ import io.reactivex.disposables.Disposable;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
 import java.util.Observable;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,9 +55,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   /**
    * 更新普通信息
    */
-  private void upData(JSONObject data) {
+  private void upData(JSONObject data, boolean flag) {
     setChanged();
     ObserverModel model = new ObserverModel();
+    model.setFlag(flag);
     model.setEventType(IEventType.NEW_MESSAGE);
     NewMessage newMessage = mGson.fromJson(data.toString(), NewMessage.class);
     newMessage.setTime(System.currentTimeMillis());
@@ -64,21 +67,27 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   }
 
   private void handlerMsg(JSONObject content) {
+    this.handlerMsg(content, false);
+  }
+
+  private void handlerMsg(JSONObject content, boolean flag) {
     setChanged();
     //存本地
-    SpUtils.putString("msgid", content.optString("msgid"+BaseApplication.getInstance().getUser().getUserId()));
+    SpUtils.putString("msgid" + BaseApplication.getInstance()
+                                               .getUser()
+                                               .getUserId(), content.optString("msgid"));
     int type = content.optInt("type", -1);
     if (type == -1) {
-      upData(content);
+      upData(content, flag);
     } else {
-      upDataRoot(content);
+      upDataRoot(content, flag);
     }
   }
 
   /**
    * 更新机器人消息
    */
-  private void upDataRoot(JSONObject jsonObject) {
+  private void upDataRoot(JSONObject jsonObject, boolean flag) {
     setChanged();
     int type = jsonObject.optInt("type");
     String imageUrl = jsonObject.optString("imageUrl");
@@ -86,7 +95,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     String userid = jsonObject.optString("userid");
     JSONObject rootBean = jsonObject.optJSONObject("rootbean");
     if (rootBean == null) {
-      upData(jsonObject);
+      upData(jsonObject, flag);
       return;
     } else {
       try {
@@ -99,43 +108,44 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     }
     switch (type) {
       case 1:
-        parse_type_1(rootBean);
+        parse_type_1(rootBean, flag);
         break;
       case 2:
-        parse_type_2(rootBean);
+        parse_type_2(rootBean, flag);
         break;
       case 3://cpu
-        parse_type_34(rootBean);
+        parse_type_34(rootBean, flag);
         break;
       case 4:
-        parse_type_34(rootBean);
+        parse_type_34(rootBean, flag);
         break;
       case 5:
-        parse_type_2(rootBean);
+        parse_type_2(rootBean, flag);
         break;
       case 6://磁盘
-        parse_type_6(rootBean);
+        parse_type_6(rootBean, flag);
         break;
       case 7:
-        parse_type_2(rootBean);
+        parse_type_2(rootBean, flag);
         break;
       case 8:
-        parse_type_8(rootBean);
+        parse_type_8(rootBean, flag);
       case 10:
-        parse_type_10(rootBean);
+        parse_type_10(rootBean, flag);
         break;
       case 11:
-        parse_type_11(rootBean);
+        parse_type_11(rootBean, flag);
         break;
     }
   }
 
-  private void parse_type_10(JSONObject rootBean) {
+  private void parse_type_10(JSONObject rootBean, boolean flag) {
     setChanged();
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.NEW_MESSAGE);
     NewMessage newMessage = mGson.fromJson(rootBean.toString(), NewMessage.class);
     newMessage.setTime(System.currentTimeMillis());
+    model.setFlag(flag);
     model.setNewMessage(newMessage);
     notifyObservers(model);
     if (!TextUtils.isEmpty(rootBean.optString("action"))) {
@@ -147,12 +157,13 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     setChanged();
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.UP_DATE_MESSAGE);
+    model.setFlag(flag);
     UpDataMsg upDataMsg = new UpDataMsg(action, msgId);
     model.setUpDataMsg(upDataMsg);
     notifyObservers(model);
   }
 
-  private void parse_type_11(JSONObject rootBean) {
+  private void parse_type_11(JSONObject rootBean, boolean flag) {
     setChanged();
     ObserverModel model = new ObserverModel();
 
@@ -161,6 +172,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
                                        .getUser()
                                        .getUserId())) {
       model.setEventType(IEventType.NEW_MESSAGE);
+      model.setFlag(flag);
       NewMessage newMessage = mGson.fromJson(rootBean.toString(), NewMessage.class);
       newMessage.setTime(System.currentTimeMillis());
       model.setNewMessage(newMessage);
@@ -168,6 +180,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
       return;
     }
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_11);
+    model.setFlag(flag);
     RootMessage11 newMessage = mGson.fromJson(rootBean.toString(), RootMessage11.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setRootMessage11(newMessage);
@@ -177,9 +190,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   /**
    * 查看网络状况
    */
-  private void parse_type_8(JSONObject rootBean) {
+  private void parse_type_8(JSONObject rootBean, boolean flag) {
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_8);
+    model.setFlag(flag);
     RootMessage8 newMessage = mGson.fromJson(rootBean.toString(), RootMessage8.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setRootMessage8(newMessage);
@@ -189,9 +203,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   /**
    * 解析第二种数据类型
    */
-  private void parse_type_2(JSONObject rootBean) {
+  private void parse_type_2(JSONObject rootBean, boolean flag) {
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_2);
+    model.setFlag(flag);
     RootMessage2 newMessage = mGson.fromJson(rootBean.toString(), RootMessage2.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setRootMessage2(newMessage);
@@ -201,9 +216,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   /**
    * cpu  内存
    */
-  private void parse_type_34(JSONObject rootBean) {
+  private void parse_type_34(JSONObject rootBean, boolean flag) {
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_34);
+    model.setFlag(flag);
     RootMessage34 newMessage = mGson.fromJson(rootBean.toString(), RootMessage34.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setRootMessage34(newMessage);
@@ -213,9 +229,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   /**
    * 磁盘使用状况
    */
-  private void parse_type_6(JSONObject rootBean) {
+  private void parse_type_6(JSONObject rootBean, boolean flag) {
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_6);
+    model.setFlag(flag);
     RootMessage6 newMessage = mGson.fromJson(rootBean.toString(), RootMessage6.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setRootMessage6(newMessage);
@@ -225,8 +242,9 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   /**
    * 机器人普通消息
    */
-  private void parse_type_1(JSONObject rootBean) {
+  private void parse_type_1(JSONObject rootBean, boolean flag) {
     ObserverModel model = new ObserverModel();
+    model.setFlag(flag);
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_1);
     RootMessage1 newMessage = mGson.fromJson(rootBean.toString(), RootMessage1.class);
     newMessage.setTime(System.currentTimeMillis());
@@ -334,8 +352,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   }
 
   private void getOffLinMsg() {
-    String msgid = SpUtils.getString("msgid"+BaseApplication.getInstance().getUser().getUserId());
-
+    String msgid = SpUtils.getString("msgid" + BaseApplication.getInstance()
+                                                              .getUser()
+                                                              .getUserId());
+    if (TextUtils.isEmpty(msgid))return;
     RemoteMode.getInstance()
               .getOffLineMsg(msgid)
               .subscribe(new Observer<String>() {
@@ -352,12 +372,20 @@ public class BaseChatRoom extends Observable implements IChatRoom {
                     if (status == 0) {
                       JSONArray jsonArray = jsonObject.getJSONArray("data");
                       int length = jsonArray.length();
+                      if (length == 0) {
+                        return;
+                      }
+                      notifyObserversOffMsg();
                       for (int i = 0; i < length; i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         if (!jsonObject1.isNull("data")) {
                           jsonObject1 = jsonObject1.getJSONObject("data");
                         }
-                        handlerMsg(jsonObject1);
+                        if (i == length - 1) {
+                          handlerMsg(jsonObject1, false);
+                        }else {
+                          handlerMsg(jsonObject1, true);
+                        }
                       }
                     } else {
                       ToastUtils.showToast(jsonObject.optString("msg"));
@@ -377,6 +405,11 @@ public class BaseChatRoom extends Observable implements IChatRoom {
 
                 }
               });
+  }
+
+  private void notifyObserversOffMsg() {
+    setChanged();
+    notifyObservers(1);
   }
 
   @Override
