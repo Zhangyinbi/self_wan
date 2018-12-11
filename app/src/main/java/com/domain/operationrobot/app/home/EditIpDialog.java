@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import com.domain.library.utils.SoftInputUtil;
 import com.domain.library.utils.ToastUtils;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.im.socket.AppSocket;
 
@@ -26,11 +28,13 @@ public class EditIpDialog extends AppCompatDialog {
   private Button        mBtnSend;
   private int           type;
   private HostInterface hostInterface;
+  private String        actionName;
 
-  public EditIpDialog(@NonNull Context context, int type, HostInterface hostInterface) {
+  public EditIpDialog(@NonNull Context context, int type, HostInterface hostInterface, String actionName) {
     super(context, R.style.ROBOT_Dialog);
     this.type = type;
     this.hostInterface = hostInterface;
+    this.actionName = actionName;
     init();
   }
 
@@ -45,6 +49,8 @@ public class EditIpDialog extends AppCompatDialog {
     setCanceledOnTouchOutside(true);
     mEditText = findViewById(R.id.et_host);
     mBtnSend = findViewById(R.id.btn_send);
+    TextView textView = findViewById(R.id.tv_action);
+    textView.setText("申请 " + actionName);
     mBtnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -57,8 +63,16 @@ public class EditIpDialog extends AppCompatDialog {
         }
         //hostInterface.sendMsg(host);
         if (type == 10) {
-          AppSocket.getInstance()
-                   .sendRobotMessage(host, "request", "");
+          int oprole = BaseApplication.getInstance()
+                                      .getUser()
+                                      .getOprole();
+          if (oprole == 4 || oprole == 6) {
+            AppSocket.getInstance()
+                     .sendRobotMessage11(host, "agree", "");
+          } else {
+            AppSocket.getInstance()
+                     .sendRobotMessage(host);
+          }
         } else {
           AppSocket.getInstance()
                    .sendMessage(type, host);

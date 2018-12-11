@@ -226,4 +226,8 @@ public interface Api {
   @Headers({"Content-Type: application/json;charset=UTF-8"})
   @POST("/api/v1/zabbixmonitor/getcompanyallhostvalue")
   Observable<ServerBean> getDataMonitorInfo(@Body RequestBody requestBody);
+
+  @Headers({"Content-Type: application/json;charset=UTF-8"})
+  @GET("/api/v1/message")
+  Observable<String> getOffLineMsg(@Query("token") String token, @Query("companyid") String companyId, @Query("msgid") String msgid);
 }

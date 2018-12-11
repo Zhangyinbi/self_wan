@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,8 +43,11 @@ import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+import com.domain.operationrobot.server.LocalService;
 import com.domain.operationrobot.util.TimeUtil;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -190,7 +194,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
 
   @Override
   protected void newInstancePresenter() {
-    MainChatRoom.init();
+    MainChatRoom.getInstance().initAppSocket();
   }
 
   @Override
@@ -225,6 +229,8 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     checkDefaultCompany();
     getSide();
     getServerMobile();
+    //守护进程
+    startService(new Intent(this, LocalService.class));
   }
 
   /**
@@ -374,7 +380,6 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
   private void outLogin() {
     ChatRoomFragment fragment = (ChatRoomFragment) getSupportFragmentManager().getFragments()
                                                                               .get(0);
-    fragment.setData();
     SpUtils.removeData(IS_LOGIN);
     SpUtils.removeData(USER_SP_KEY);
     startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -460,7 +465,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
         break;
       case 3://被拒绝
         tv_top.setText("加入/创建公司，享受一站式运维");
-        tv_company_name.setText("(被拒绝)" + mUser.getCompany());
+        tv_company_name.setText("您还未加入公司,点击加入/创建");
         break;
     }
   }
@@ -529,7 +534,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
       tv_company_name.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          if (mSideInfo.getRole() == 1) {
+          if (mSideInfo.getRole() == 1||mSideInfo.getRole() == 3) {
             openOrCloseDrawer();
             drawer.postDelayed(new Runnable() {
               @Override
@@ -561,17 +566,59 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
                                                     .getUser());
       return;
     }
-    setSideUI(user.getRole());
+    setSideUIUseUserInfo(user.getRole());
 
     tv_join_num.setVisibility(View.GONE);
     tv_admin_num.setVisibility(View.GONE);
     tv_user_role.setText(getRoleName(mUser.getOprole()));
   }
 
+  private void setSideUIUseUserInfo(int role) {
+    if (role == 3) {
+      tv_user_indication.setVisibility(View.GONE);
+      tv_company_name.setText("您还未加入公司,点击加入/创建");
+      tv_top.setText("加入/创建公司，享受一站式运维");
+      ll_yunwei.setVisibility(View.GONE);
+      ll_sq.setVisibility(View.GONE);
+    } else if (role == 2) {
+      tv_user_indication.setVisibility(View.GONE);
+      tv_company_name.setText("(待审核)" + mUser.getCompanyname());
+      ll_yunwei.setVisibility(View.GONE);
+      ll_sq.setVisibility(View.GONE);
+    } else if (role == 0) {
+      ll_yunwei.setVisibility(View.VISIBLE);
+      ll_sq.setVisibility(View.VISIBLE);
+      tv_company_name.setText(mUser.getCompanyname());
+    } else {
+      ll_yunwei.setVisibility(View.GONE);
+      ll_sq.setVisibility(View.GONE);
+      tv_company_name.setText("您还未加入公司,点击加入/创建");
+      tv_top.setText("加入/创建公司，享受一站式运维");
+    }
+    tv_company_name.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (mUser.getRole() == 1 || mUser.getRole() == 3) {
+          openOrCloseDrawer();
+          drawer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              startActivity(new Intent(MainActivity.this, ApplyActivity.class));
+            }
+          }, 300);
+        }
+      }
+    });
+    if (mUser.getOprole() != 4) {
+      ll_sq.setVisibility(View.GONE);
+    }
+  }
+
   private void setSideUI(int role) {
     if (role == 3) {
       tv_user_indication.setVisibility(View.GONE);
-      tv_company_name.setText("(被拒绝)" + mSideInfo.getCompanyname());
+      tv_company_name.setText("您还未加入公司,点击加入/创建");
+      tv_top.setText("加入/创建公司，享受一站式运维");
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
     } else if (role == 2) {
@@ -587,6 +634,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
       tv_company_name.setText("您还未加入公司,点击加入/创建");
+      tv_top.setText("加入/创建公司，享受一站式运维");
     }
     tv_company_name.setOnClickListener(new View.OnClickListener() {
       @Override

@@ -66,7 +66,7 @@ public class ViewHolder11 {
       @Override
       public void onClick(View view) {
         AppSocket.getInstance()
-                 .sendRobotMessage(chatBean.getIp(), "denied", chatBean.getMsgid());
+                 .sendRobotMessage12(chatBean.getIp(), "denied", chatBean.getMsgid());
       }
     });
 
@@ -74,7 +74,7 @@ public class ViewHolder11 {
       @Override
       public void onClick(View view) {
         AppSocket.getInstance()
-                 .sendRobotMessage(chatBean.getIp(), "agree", chatBean.getMsgid());
+                 .sendRobotMessage12(chatBean.getIp(), "agree", chatBean.getMsgid());
       }
     });
   }

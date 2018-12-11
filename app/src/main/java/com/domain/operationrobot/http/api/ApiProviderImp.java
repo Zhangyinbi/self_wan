@@ -2,6 +2,7 @@ package com.domain.operationrobot.http.api;
 
 import com.domain.operationrobot.http.env.EnvManager;
 
+import static com.domain.operationrobot.http.Constant.BASE_API;
 import static com.domain.operationrobot.http.Constant.BASE_API_QA;
 
 public class ApiProviderImp implements IApiProvider {
@@ -26,7 +27,7 @@ public class ApiProviderImp implements IApiProvider {
       case QA:
         return BASE_API_QA;
       default:
-        return BASE_API_QA;
+        return BASE_API;
     }
   }
 
@@ -48,6 +49,6 @@ public class ApiProviderImp implements IApiProvider {
   }
 
   public String getBaseUrl() {
-    return getSchema() + "://" + getDomain() + ":5000/";
+    return getSchema() + "://" + getDomain() ;
   }
 }

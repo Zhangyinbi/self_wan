@@ -1,7 +1,13 @@
 package com.domain.operationrobot.im.chatroom;
 
+import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
+import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
+import com.domain.operationrobot.BaseApplication;
+import com.domain.operationrobot.app.home.ChatRoomFragment;
+import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
@@ -15,10 +21,15 @@ import com.domain.operationrobot.im.listener.IChatRoom;
 import com.domain.operationrobot.im.listener.IConstants;
 import com.domain.operationrobot.im.listener.IEventType;
 import com.domain.operationrobot.im.socket.AppSocket;
+import com.domain.operationrobot.server.LocalService;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
 import java.util.Observable;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +41,7 @@ import org.json.JSONObject;
 public class BaseChatRoom extends Observable implements IChatRoom {
 
   private final Gson mGson;
+  boolean flag = true;
   private String TAG = "---------";
   private long tempTime;
   private int  errCount;
@@ -38,69 +50,29 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     mGson = new Gson();
   }
 
-  private void login(int numUsers) {
-    setChanged();
-    ObserverModel model = new ObserverModel();
-    model.setEventType(IEventType.LOGIN);
-    ObserverModel.Login login = new ObserverModel.Login();
-    login.setNumUsers(numUsers);
-    model.setLogin(login);
-    notifyObservers(model);
-  }
-
-  private void userJoined(String username, int numUsers) {
-    setChanged();
-    ObserverModel model = new ObserverModel();
-    model.setEventType(IEventType.USER_JOINED);
-    ObserverModel.UserJoined userJoined = new ObserverModel.UserJoined();
-    userJoined.setUsername(username);
-    userJoined.setNumUsers(numUsers);
-    model.setUserJoined(userJoined);
-    notifyObservers(model);
-  }
-
-  private void userLeft(String username, int numUsers) {
-    setChanged();
-    ObserverModel model = new ObserverModel();
-    model.setEventType(IEventType.USER_LEFT);
-    ObserverModel.UserLeft userLeft = new ObserverModel.UserLeft();
-    userLeft.setUsername(username);
-    userLeft.setNumUsers(numUsers);
-    model.setUserLeft(userLeft);
-    notifyObservers(model);
-  }
-
-  private void typing(String username) {
-    setChanged();
-    ObserverModel model = new ObserverModel();
-    model.setEventType(IEventType.TYPING);
-    ObserverModel.Typing typing = new ObserverModel.Typing();
-    typing.setUsername(username);
-    model.setTyping(typing);
-    notifyObservers(model);
-  }
-
-  private void stopTyping(String username) {
-    setChanged();
-    ObserverModel model = new ObserverModel();
-    model.setEventType(IEventType.STOP_TYPING);
-    ObserverModel.StopTyping stopTyping = new ObserverModel.StopTyping();
-    stopTyping.setUsername(username);
-    model.setStopTyping(stopTyping);
-    notifyObservers(model);
-  }
-
   /**
    * 更新普通信息
    */
-  private void upData(JSONObject content) {
+  private void upData(JSONObject data) {
     setChanged();
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.NEW_MESSAGE);
-    NewMessage newMessage = mGson.fromJson(content.toString(), NewMessage.class);
+    NewMessage newMessage = mGson.fromJson(data.toString(), NewMessage.class);
     newMessage.setTime(System.currentTimeMillis());
     model.setNewMessage(newMessage);
     notifyObservers(model);
+  }
+
+  private void handlerMsg(JSONObject content) {
+    setChanged();
+    //存本地
+    SpUtils.putString("msgid", content.optString("msgid"+BaseApplication.getInstance().getUser().getUserId()));
+    int type = content.optInt("type", -1);
+    if (type == -1) {
+      upData(content);
+    } else {
+      upDataRoot(content);
+    }
   }
 
   /**
@@ -159,12 +131,6 @@ public class BaseChatRoom extends Observable implements IChatRoom {
   }
 
   private void parse_type_10(JSONObject rootBean) {
-    String action = rootBean.optString("action");
-    String msgId = rootBean.optString("msgid");
-    if (!"request".equals(action)) {
-      upDataChatBean(action,msgId);
-      return;
-    }
     setChanged();
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.NEW_MESSAGE);
@@ -172,18 +138,35 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     newMessage.setTime(System.currentTimeMillis());
     model.setNewMessage(newMessage);
     notifyObservers(model);
+    if (!TextUtils.isEmpty(rootBean.optString("action"))) {
+      upDataChatBean(rootBean.optString("action"), rootBean.optString("msgid"));
+    }
   }
 
   private void upDataChatBean(String action, String msgId) {
     setChanged();
     ObserverModel model = new ObserverModel();
     model.setEventType(IEventType.UP_DATE_MESSAGE);
-    model.setUpDataMsg(new UpDataMsg(action,msgId));
+    UpDataMsg upDataMsg = new UpDataMsg(action, msgId);
+    model.setUpDataMsg(upDataMsg);
     notifyObservers(model);
   }
 
   private void parse_type_11(JSONObject rootBean) {
+    setChanged();
     ObserverModel model = new ObserverModel();
+
+    if (rootBean.opt("userid")
+                .equals(BaseApplication.getInstance()
+                                       .getUser()
+                                       .getUserId())) {
+      model.setEventType(IEventType.NEW_MESSAGE);
+      NewMessage newMessage = mGson.fromJson(rootBean.toString(), NewMessage.class);
+      newMessage.setTime(System.currentTimeMillis());
+      model.setNewMessage(newMessage);
+      notifyObservers(model);
+      return;
+    }
     model.setEventType(IEventType.ROOT_MESSAGE_TYPE_11);
     RootMessage11 newMessage = mGson.fromJson(rootBean.toString(), RootMessage11.class);
     newMessage.setTime(System.currentTimeMillis());
@@ -201,20 +184,6 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     newMessage.setTime(System.currentTimeMillis());
     model.setRootMessage8(newMessage);
     notifyObservers(model);
-  }
-
-  /**
-   * 模拟机器人发送的消息
-   */
-  public void moni(String json) {
-    JSONObject rootData = null;
-    try {
-      rootData = new JSONObject(json);
-      JSONObject jsonObject = rootData.optJSONObject("data");
-      upDataRoot(jsonObject);
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
   }
 
   /**
@@ -289,14 +258,16 @@ public class BaseChatRoom extends Observable implements IChatRoom {
       case IConstants.TALK_STATUS:
         JSONObject content = (JSONObject) args[0];
         Log.e(TAG, "接收到其他人消息: " + content.toString());
-        JSONObject jsonObject1 = content.optJSONObject("data");
-        upData(jsonObject1);
+        JSONObject contentTalk = content.optJSONObject("data");
+        handlerMsg(contentTalk);
+        //upData(content);
         break;
       case IConstants.CHAT_BOT_STATUS:
         JSONObject rootData = (JSONObject) args[0];
         Log.e(TAG, "接收到机器人消息: " + rootData.toString());
-        JSONObject jsonObject = rootData.optJSONObject("data");
-        upDataRoot(jsonObject);
+        //upDataRoot(rootData);
+        JSONObject msg = rootData.optJSONObject("data");
+        handlerMsg(msg);
         break;
 
       case IConstants.CONNECT_STATUS:
@@ -315,10 +286,17 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         Log.e(TAG, "链接成功，发送一条消息 确认加入房间");
         AppSocket.getInstance()
                  .setConnSure();
+        if (flag) {
+          flag = false;
+          getOffLinMsg();
+        }
         break;
       // Socket断开连接
       case Socket.EVENT_DISCONNECT:
+        flag = true;
         Log.e(TAG, "EVENT_DISCONNECT");
+        BaseApplication.getInstance()
+                       .stopService(new Intent(BaseApplication.getInstance(), LocalService.class));
         break;
       // Socket连接错误
       case Socket.EVENT_ERROR:
@@ -334,6 +312,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         Log.e(TAG, "链接成功，发送一条消息 确认加入房间");
         AppSocket.getInstance()
                  .setConnSure();
+        getOffLinMsg();
         break;
 
       case Socket.EVENT_RECONNECT_ATTEMPT:
@@ -352,6 +331,52 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         Log.e(TAG, "EVENT_RECONNECTING");
         break;
     }
+  }
+
+  private void getOffLinMsg() {
+    String msgid = SpUtils.getString("msgid"+BaseApplication.getInstance().getUser().getUserId());
+
+    RemoteMode.getInstance()
+              .getOffLineMsg(msgid)
+              .subscribe(new Observer<String>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(String s) {
+                  try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    int status = jsonObject.optInt("status", -1);
+                    if (status == 0) {
+                      JSONArray jsonArray = jsonObject.getJSONArray("data");
+                      int length = jsonArray.length();
+                      for (int i = 0; i < length; i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        if (!jsonObject1.isNull("data")) {
+                          jsonObject1 = jsonObject1.getJSONObject("data");
+                        }
+                        handlerMsg(jsonObject1);
+                      }
+                    } else {
+                      ToastUtils.showToast(jsonObject.optString("msg"));
+                    }
+                  } catch (JSONException e) {
+                    e.printStackTrace();
+                  }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+              });
   }
 
   @Override

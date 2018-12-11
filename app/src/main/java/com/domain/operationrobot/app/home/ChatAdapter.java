@@ -18,11 +18,13 @@ import com.domain.library.GlideApp;
 import com.domain.library.recycleview.holder.ViewHolder;
 import com.domain.library.utils.DisplaysUtil;
 import com.domain.library.utils.GalleryUtil;
+import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.home.holder.ViewHolder11;
 import com.domain.operationrobot.http.bean.ChatBean;
 import com.domain.operationrobot.http.bean.ImageBean;
+import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 
 import static com.domain.operationrobot.util.Constant.MESSAGE_OTHER;
 import static com.domain.operationrobot.util.Constant.MESSAGE_SELF;
+import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
 /**
  * Project Name : OperationRobot
@@ -101,36 +104,25 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     long time = chatBean.getTime();
 
     TextView tvTime = null;
+    ImageView ivUserUrl = null;
 
     if (holder1 instanceof MyViewHolder) {
       holder = (MyViewHolder) holder1;
       tvTime = holder.tv_time;
-      setTime(tvTime,time,position);
+      ivUserUrl = holder.iv_user_img;
+      setLongClick(ivUserUrl, chatBean, position);
+      setTime(tvTime, time, position);
     } else if (type == 11) {
       ViewHolder11.covert((ViewHolder) holder1, chatBean, position);
       tvTime = ((ViewHolder) holder1).getView(R.id.tv_time);
-      setTime(tvTime,time,position);
+      ivUserUrl = ((ViewHolder) holder1).getView(R.id.iv_user_img);
+      setTime(tvTime, time, position);
+      setLongClick(ivUserUrl, chatBean, position);
       return;
     }
 
     holder.tv_name.setText(chatBean.getUserName());
 
-    if (chatBean.getTargetId() != null && chatBean.getTargetId()
-                                                  .equals(BaseApplication.getInstance()
-                                                                         .getUser()
-                                                                         .getUserId())) {
-      holder.iv_user_img.setOnLongClickListener(null);
-    } else {
-      holder.iv_user_img.setOnLongClickListener(new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-          if (mOnViewClick != null) {
-            mOnViewClick.viewClick(view, chatBean, position);
-          }
-          return true;
-        }
-      });
-    }
     //if (type == -1) {
     GlideApp.with(holder.itemView.getContext())
             .load(chatBean.getUrl())
@@ -197,6 +189,26 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       });
       ArrayList<RootMessage8.Action> actions = chatBean.getActions8();
       holder.rlv_recycler.setAdapter(new RootBean8Adapter(actions));
+    }
+  }
+
+  private void setLongClick(ImageView ivUserUrl, ChatBean chatBean, int position) {
+
+    if (chatBean.getTargetId() != null && chatBean.getTargetId()
+                                                  .equals(BaseApplication.getInstance()
+                                                                         .getUser()
+                                                                         .getUserId())) {
+      ivUserUrl.setOnLongClickListener(null);
+    } else {
+      ivUserUrl.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+          if (mOnViewClick != null) {
+            mOnViewClick.viewClick(view, chatBean, position);
+          }
+          return true;
+        }
+      });
     }
   }
 
@@ -326,6 +338,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     if (mRecyclerView != null) {
       mRecyclerView.scrollToPosition(getItemCount() - 1);
     }
+    saveData();
     //}
     //}, 200);
 
@@ -337,6 +350,20 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //    }
     //  }
     //}, 100);
+  }
+
+  public void saveData() {
+    if (SpUtils.getObject(USER_SP_KEY, User.class) != null) {
+      ArrayList<ChatBean> list = getList();
+      if (list.size() > 1000) {
+        for (int i = 0; i < list.size() - 999; i++) {
+          list.remove(i);
+        }
+      }
+      SpUtils.setDataList("chat_data" + BaseApplication.getInstance()
+                                                       .getUser()
+                                                       .getMobile(), list);
+    }
   }
 
   public void addAll(ArrayList<ChatBean> list) {

@@ -21,6 +21,15 @@ public class ChatBean {
   public  String url;
   private String token;
   private String targetId;
+  private String userid;
+
+  public String getUserid() {
+    return userid == null ? "" : userid;
+  }
+
+  public void setUserid(String userid) {
+    this.userid = userid;
+  }
 
   //重启服务需要
   private String hostip;

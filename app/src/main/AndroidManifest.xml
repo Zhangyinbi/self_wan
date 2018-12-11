@@ -22,7 +22,6 @@
         tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.REORDER_TASKS"/>
 
-
     <!-- MiPush 权限列表 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     ​
@@ -46,6 +45,7 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:persistent="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity android:name=".app.login.LoginActivity">
@@ -152,6 +152,20 @@
 
         <activity android:name=".app.order.CommandOperationActivity">
         </activity>
+        <activity android:name=".app.home.SelectOperationActivity">
+        </activity>
+
+
+
+        <service
+            android:name=".server.LocalService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".server.RemoteService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":RemoteProcess"/>
     </application>
 
 </manifest>

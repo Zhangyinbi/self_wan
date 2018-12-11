@@ -12,7 +12,7 @@
       android:id="@+id/tv_key"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="4"
+      android:layout_weight="5"
       android:singleLine="true"
       android:text="CPUCPUCPU"
       android:textColor="#333"

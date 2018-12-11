@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import android.util.Log;
 import com.domain.library.utils.App;
 import com.domain.operationrobot.app.login.LoginActivity;
 import com.xiaomi.mipush.sdk.ErrorCode;
@@ -95,6 +96,7 @@ public class MiMessageReceiver extends PushMessageReceiver {
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
                 mRegId = cmdArg1;
+                Log.e("-----1111", "onCommandResult: "+mRegId );
             }
         } else if (MiPushClient.COMMAND_SET_ALIAS.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
@@ -129,6 +131,7 @@ public class MiMessageReceiver extends PushMessageReceiver {
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
                 mRegId = cmdArg1;
+                Log.e("-----22222", "onCommandResult: "+mRegId );
             }
         }
     }

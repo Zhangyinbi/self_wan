@@ -40,11 +40,12 @@
         android:background="@drawable/blue_shape_gray"
         android:gravity="center"
         android:padding="@dimen/dimens_9"
-        android:text="快捷查询"
+        android:text="命令"
         android:textColor="#23AF8C"
         android:textSize="14sp"
         />
     <TextView
+        android:id="@+id/tv_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -73,9 +74,14 @@
         android:textSize="14sp"
         />
   </LinearLayout>
-  <LinearLayout
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/rlv_recycler_view"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@color/white"
+      android:layout_height="wrap_content"
+      android:background="@android:color/white"
+      android:overScrollMode="never"
+      android:paddingLeft="@dimen/dimens_17"
+      android:paddingRight="@dimen/dimens_17"
+      android:scrollbars="none"
       />
 </LinearLayout>

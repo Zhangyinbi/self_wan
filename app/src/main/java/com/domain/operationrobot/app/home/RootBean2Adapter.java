@@ -47,7 +47,7 @@ public class RootBean2Adapter extends RecyclerView.Adapter<RootBean2Adapter.MyVi
     myViewHolder.tv_action_name.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        new EditIpDialog(view.getContext(), Integer.parseInt(type),hostInterface).show();
+        new EditIpDialog(view.getContext(), Integer.parseInt(type),hostInterface,name).show();
 
         //TODO 测试代码
         //switch (Integer.parseInt(type)) {

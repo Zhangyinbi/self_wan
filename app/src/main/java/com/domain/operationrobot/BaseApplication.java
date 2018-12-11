@@ -17,7 +17,10 @@ import com.domain.library.exception.SdcardConfig;
 import com.domain.library.http.RetrofitHelper;
 import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.http.UpLoadFileHelper;
+import com.domain.operationrobot.http.api.ApiProviderImp;
 import com.domain.operationrobot.http.bean.User;
+import com.domain.operationrobot.http.env.EnvManager;
+import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -139,10 +142,10 @@ public class BaseApplication extends Application {
     //EnvManager.updateENV(SpUtils.getObject(BASE_API, String.class));
     //RetrofitHelper.getInstance().initUrl(new ApiProviderImp(EnvManager.getENV()).getBaseUrl()).builder();
     RetrofitHelper.getInstance()
-                  .initUrl("http://139.196.107.14:5000/")
+                  .initUrl(new ApiProviderImp(EnvManager.getENV()).getBaseUrl())
                   .builder();
     UpLoadFileHelper.getInstance()
-                    .initUrl("http://139.196.107.14:6000/")
+                    .initUrl(new ApiProviderImp(EnvManager.getENV()).getBaseUrl())
                     .builder();
   }
 

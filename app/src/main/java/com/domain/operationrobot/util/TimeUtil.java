@@ -217,12 +217,17 @@ public class TimeUtil {
   }
 
   public static String strToDate(String time) {
-    SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日");
-    @SuppressWarnings("unused")
-    long lcc = Long.valueOf(time);
-    int i = Integer.parseInt(time);
-    String times = sdr.format(new Date(i * 1000L));
-    return times;
+    try {
+      SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日");
+      @SuppressWarnings("unused")
+      long lcc = Long.valueOf(time);
+      int i = Integer.parseInt(time);
+      String times = sdr.format(new Date(i * 1000L));
+      return times;
+    }catch (NumberFormatException e){
+      return  time;
+    }
+
   }
 
   public static long getTime(String user_time) {

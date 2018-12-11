@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -69,6 +71,7 @@ import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
  * Create at : 2018/10/21 13:51
  */
 public class ChatRoomFragment extends AbsFragment implements Observer {
+  private static final int SELECT_OPERATION = 1021;
   boolean         clear            = false;
   IUpLoadCallBack mIUpLoadCallBack = (url, outWidth, outHeight) -> setImageMsg(url, outWidth, outHeight);
   private TextView     mBtnSend;
@@ -78,6 +81,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   private ImageView    mIvRobot;
   private ImageView    mImageView;
   private boolean      mSingle;
+  private ArrayList<String> names = new ArrayList<>();
 
   public static ChatRoomFragment newInstance() {
     ChatRoomFragment fragment = new ChatRoomFragment();
@@ -149,35 +153,60 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mIvRobot.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        String s = mEtMsg.getText()
-                         .toString();
-        s += "@机器人";
-        clear = true;
-        mEtMsg.setText(s);
-        mEtMsg.setSelection(s.length());
+        getActivity().startActivityForResult(new Intent(getActivity(), SelectOperationActivity.class), SELECT_OPERATION);
+        //String s = mEtMsg.getText()
+        //                 .toString();
+        //s += "@机器人";
+        //clear = true;
+        //mEtMsg.setText(s);
+        //mEtMsg.setSelection(s.length());
       }
     });
     mEtMsg.setOnKeyListener(new View.OnKeyListener() {
       @Override
       public boolean onKey(View view, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-          if ("@机器人".contains(mEtMsg.getText()
-                                    .toString()) && clear) {
-            mEtMsg.setText("");
-            clear = false;
-            return true;
+          String content = mEtMsg.getText()
+                                 .toString();
+          if (!content.contains("@")) {
+            return false;
+          }
+          String[] split = content.split("@");
+          if (split != null && split.length > 1) {
+            if (names.size() >= 1) {
+              String lastName = split[split.length - 1];
+              String last = names.get(names.size() - 1);
+              if (last.equals(lastName)) {
+                int i = content.lastIndexOf(lastName);
+                names.remove(last);
+                mEtMsg.setText(content.substring(0, i - 1));
+                mEtMsg.setSelection(content.substring(0, i - 1)
+                                           .length());
+                return true;
+              }
+            }
           }
         }
         return false;
       }
     });
+
+    InputFilter filter = new InputFilter() {
+      @Override
+      public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+        if (source.equals("@")) {
+          getActivity().startActivityForResult(new Intent(getActivity(), SelectOperationActivity.class), SELECT_OPERATION);
+          return "";
+        } else {
+          return null;
+        }
+      }
+    };
+    mEtMsg.setFilters(new InputFilter[] {filter});
     mEtMsg.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (charSequence.toString()
-                        .equals("@机器人")) {
-          clear = true;
-        }
+
       }
 
       @Override
@@ -211,6 +240,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         String trim = mEtMsg.getText()
                             .toString()
                             .trim();
+        names.add(chatBean.getUserName());
         trim += "@" + chatBean.getUserName();
         mEtMsg.setText(trim);
       }
@@ -280,7 +310,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     }
     if (!AppSocket.getInstance()
                   .isConnected()) {
-      MainChatRoom.init();
+      MainChatRoom.getInstance().initAppSocket();
       return;
     }
 
@@ -302,7 +332,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   /**
    * 往列表的adapter中添加数据
    */
-  private void addBeanToRecycler(String username, String url, String content, long l, String targetId) {
+  public void addBeanToRecycler(String username, String url, String content, long l, String targetId) {
     ChatBean message = new ChatBean();
     message.setUserName(username);
     message.setContent(content);
@@ -331,7 +361,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
    * 接收消息
    */
   @Override
-  public void update(final Observable observable, final Object o) {
+  public void update( Observable observable,  Object o) {
     getActivity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -398,6 +428,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setTime(rootMessage.getTime());
     chatBean.setUserName(rootMessage.getUsername());
     chatBean.setUrl(rootMessage.getImageUrl());
+    chatBean.setTargetId(rootMessage.getUserid());
     chatBean.setContent(rootMessage.getMsg());
     chatBean.setIp(rootMessage.getIp());
     chatBean.setMsgid(rootMessage.getMsgid());
@@ -492,7 +523,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    setData();
     MainChatRoom.getInstance()
                 .deleteObserver(this);
     AppSocket.getInstance()
@@ -504,19 +534,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     super.onPause();
   }
 
-  public void setData() {
-    if (SpUtils.getObject(USER_SP_KEY, User.class) != null) {
-      ArrayList<ChatBean> list = mAdapter.getList();
-      if (list.size() > 190) {
-        for (int i = 0; i < list.size() - 189; i++) {
-          list.remove(i);
-        }
-      }
-      SpUtils.setDataList("chat_data" + BaseApplication.getInstance()
-                                                       .getUser()
-                                                       .getMobile(), list);
-    }
-  }
+
 
   /**
    * 接收选择图片回收的结果
@@ -536,8 +554,22 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
             uploadImage(filePath);
           }
           break;
+        case SELECT_OPERATION:
+          String name = data.getStringExtra("name");
+          setMsgText(name);
+          names.add(name);
+          break;
       }
     }
+  }
+
+  private void setMsgText(String name) {
+    String s = mEtMsg.getText()
+                     .toString();
+    s += "@" + name;
+    clear = true;
+    mEtMsg.setText(s);
+    mEtMsg.setSelection(s.length());
   }
 
   /**

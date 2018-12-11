@@ -2,6 +2,7 @@ package com.domain.operationrobot.im.socket;
 
 import android.text.TextUtils;
 import com.domain.operationrobot.BaseApplication;
+import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.listener.IConstants;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +39,7 @@ public class AppSocket extends BaseSocket {
     try {
       JSONObject jsonObject = new JSONObject();
       JSONObject jsonObject1 = new JSONObject();
+      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
@@ -55,25 +57,89 @@ public class AppSocket extends BaseSocket {
   }
 
   /**
-   * fasong机器人消息,重启服务器
+   * fasong机器人消息,重启服务器 其他人点击重启服务器
    */
-  public void sendRobotMessage(String hosdip, String action, String msgId) {
+  public void sendRobotMessage(String hosdip) {
+    User user = BaseApplication.getInstance()
+                               .getUser();
     try {
+      JSONObject jsonObject = new JSONObject();
+      JSONObject jsonObject1 = new JSONObject();
+      jsonObject.put("token", user.getToken());
+      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("type", 11);
+      JSONObject jsonObject2 = new JSONObject();
+      jsonObject2.put("hostip", hosdip);
+      jsonObject2.put("msg", "我需要执行 重启服务器 " + hosdip + "（hostip：" + hosdip + "）" + "的命令");
+      jsonObject2.put("msgid", String.valueOf(System.currentTimeMillis()));
+
+      String companyid = BaseApplication.getInstance()
+                                        .getUser()
+                                        .getCompanyid();
+      jsonObject.putOpt("companyid", companyid);
+      jsonObject.put("rootbean", jsonObject2);
+      jsonObject1.putOpt("data", jsonObject);
+      mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * fasong机器人消息,重启服务器 同意拒绝 运维用户自己点击重启
+   */
+  public void sendRobotMessage11(String hosdip, String action, String msgId) {
+    try {
+      User user = BaseApplication.getInstance()
+                                 .getUser();
       JSONObject jsonObject = new JSONObject();
       JSONObject jsonObject1 = new JSONObject();
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
+      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
       jsonObject.put("type", 10);
       JSONObject jsonObject2 = new JSONObject();
-      jsonObject2.put("msg", hosdip);
+      jsonObject2.put("hostip", hosdip);
+      String msg = "重启服务器 " + hosdip + "（hostip:" + hosdip + "）";
+      jsonObject2.put("msg", msg);
       jsonObject2.put("action", action);
-      if (!TextUtils.isEmpty(msgId)) {
-        jsonObject2.put("msgid", msgId);
-      }
-      String companyid = BaseApplication.getInstance()
-                                        .getUser()
-                                        .getCompanyid();
+
+      jsonObject2.put("msgid", msgId);
+
+      String companyid = user.getCompanyid();
+      jsonObject.putOpt("companyid", companyid);
+      jsonObject.put("rootbean", jsonObject2);
+      jsonObject1.putOpt("data", jsonObject);
+      mSocket.emit(IConstants.CHAT_BOT, jsonObject1);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * fasong机器人消息,重启服务器 同意拒绝 运维用户自己点击重启
+   */
+  public void sendRobotMessage12(String hosdip, String action, String msgId) {
+    try {
+      User user = BaseApplication.getInstance()
+                                 .getUser();
+      JSONObject jsonObject = new JSONObject();
+      JSONObject jsonObject1 = new JSONObject();
+      jsonObject.put("token", BaseApplication.getInstance()
+                                             .getUser()
+                                             .getToken());
+      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("type", 10);
+      JSONObject jsonObject2 = new JSONObject();
+      jsonObject2.put("hostip", hosdip);
+      String msg = action.equals("agree") ? "同意 重启服务器 " + hosdip + "（hostip:" + hosdip + "）的命令" : "拒绝 重启服务器 " + hosdip + "（hostip:" + hosdip + "）的命令";
+      jsonObject2.put("msg", msg);
+      jsonObject2.put("action", action);
+
+      jsonObject2.put("msgid", msgId);
+
+      String companyid = user.getCompanyid();
       jsonObject.putOpt("companyid", companyid);
       jsonObject.put("rootbean", jsonObject2);
       jsonObject1.putOpt("data", jsonObject);
@@ -92,6 +158,7 @@ public class AppSocket extends BaseSocket {
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
+      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();
@@ -119,6 +186,7 @@ public class AppSocket extends BaseSocket {
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
+      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();

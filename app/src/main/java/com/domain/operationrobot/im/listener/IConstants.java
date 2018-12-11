@@ -7,7 +7,7 @@ package com.domain.operationrobot.im.listener;
  */
 public interface IConstants {
 
-  // 该地址为Socket.IO官方测试地址，实际项目中请更换
+
   String CHAT_SERVER_URL = "http://139.196.107.14:5001/";
   //--------------------发送的type----------------
   String CONN            = "conn";

@@ -19,6 +19,8 @@ import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.util.ToastU;
 import com.google.gson.Gson;
 import com.luck.picture.lib.immersive.RomUtils;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +71,6 @@ public class ServerMonitorFragment extends AbsFragment {
 
   @Override
   protected void initData() {
-
   }
 
   @Override
@@ -90,6 +91,7 @@ public class ServerMonitorFragment extends AbsFragment {
 
                 @Override
                 public void onSuss(ServerBean serverBean) {
+
                   mData.clear();
                   ArrayList<ServerBean.ServerList> result = serverBean.getResult();
                   if (result == null) {

@@ -1,5 +1,6 @@
 package com.domain.operationrobot.http.data;
 
+import android.text.TextUtils;
 import com.domain.library.base.BaseMode;
 import com.domain.library.http.RetrofitHelper;
 import com.domain.library.http.entry.BaseEntry;
@@ -64,6 +65,20 @@ public class RemoteMode implements BaseMode {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .login(requestBody);
+  }
+
+  /**
+   * 登陆接口
+   */
+  public Observable<String> getOffLineMsg(String msgid) {
+   User user = BaseApplication.getInstance().getUser();
+   String companyId = "";
+   if (!TextUtils.isEmpty(user.getCompanyid())){
+     companyId=user.getCompanyid();
+   }
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getOffLineMsg(user.getToken(),companyId,msgid);
   }
 
   /**

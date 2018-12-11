@@ -7,10 +7,6 @@ import com.domain.library.utils.SpUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.data.RemoteMode;
-import com.qiniu.android.http.ResponseInfo;
-import com.qiniu.android.storage.UpCompletionHandler;
-import com.qiniu.android.storage.UploadManager;
-import com.qiniu.android.storage.UploadOptions;
 import io.reactivex.disposables.CompositeDisposable;
 import javax.crypto.spec.SecretKeySpec;
 import org.json.JSONObject;
@@ -32,7 +28,6 @@ public class FileUpLoadUtils {
   private static final String bucket    = "robot";
   private static final String host      = "http://phwvb3fdu.bkt.clouddn.com/";
 
-  private static UploadManager uploadManager;
 
   private FileUpLoadUtils() {
   }
