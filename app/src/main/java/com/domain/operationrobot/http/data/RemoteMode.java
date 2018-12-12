@@ -7,6 +7,7 @@ import com.domain.library.http.entry.BaseEntry;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.http.UpLoadFileHelper;
 import com.domain.operationrobot.http.bean.ApplyInfo;
+import com.domain.operationrobot.http.bean.CommandBean;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.ImageFileBean;
@@ -71,14 +72,15 @@ public class RemoteMode implements BaseMode {
    * 登陆接口
    */
   public Observable<String> getOffLineMsg(String msgid) {
-   User user = BaseApplication.getInstance().getUser();
-   String companyId = "";
-   if (!TextUtils.isEmpty(user.getCompanyid())){
-     companyId=user.getCompanyid();
-   }
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    String companyId = "";
+    if (!TextUtils.isEmpty(user.getCompanyid())) {
+      companyId = user.getCompanyid();
+    }
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .getOffLineMsg(user.getToken(),companyId,msgid);
+                         .getOffLineMsg(user.getToken(), companyId, msgid);
   }
 
   /**
@@ -114,7 +116,9 @@ public class RemoteMode implements BaseMode {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .sendCode(requestBody);
-  } /**
+  }
+
+  /**
    * 忘记密码发送验证码
    */
   public Observable<BaseEntry> sendCodeForget(String phone) {
@@ -173,9 +177,9 @@ public class RemoteMode implements BaseMode {
     //RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .getCompanyTargetList(companyName,BaseApplication.getInstance()
-                                                                          .getUser()
-                                                                          .getToken());
+                         .getCompanyTargetList(companyName, BaseApplication.getInstance()
+                                                                           .getUser()
+                                                                           .getToken());
   }
 
   /**
@@ -358,11 +362,11 @@ public class RemoteMode implements BaseMode {
    */
   public Observable<BaseEntry> delete(String phone, String name, String id, String companyId) {
     Map<String, String> map = new HashMap<>();
-      map.put("opmobile", phone);
-      map.put("companyid", companyId);
-      map.put("token", BaseApplication.getInstance()
-                                       .getUser()
-                                       .getToken());
+    map.put("opmobile", phone);
+    map.put("companyid", companyId);
+    map.put("token", BaseApplication.getInstance()
+                                    .getUser()
+                                    .getToken());
 
     return RetrofitHelper.getInstance()
                          .create(Api.class)
@@ -401,8 +405,9 @@ public class RemoteMode implements BaseMode {
                                   .getToken();
     return RetrofitHelper.getInstance()
                          .create(Api.class)
-                         .getJoinInfo(token,BaseApplication.getInstance()
-                                                           .getUser().getCompanyid());
+                         .getJoinInfo(token, BaseApplication.getInstance()
+                                                            .getUser()
+                                                            .getCompanyid());
   }
 
   /**
@@ -534,7 +539,6 @@ public class RemoteMode implements BaseMode {
 
   /**
    * 检查默认公司
-   * @return
    */
   public Observable<User> checkDefaultCompany() {
     return RetrofitHelper.getInstance()
@@ -542,16 +546,17 @@ public class RemoteMode implements BaseMode {
                          .checkDefaultCompany(BaseApplication.getInstance()
                                                              .getUser()
                                                              .getToken());
-  }/**
+  }
+
+  /**
    * 检查默认公司
-   * @return
    */
   public Observable<ServerMobile> getServerMobile() {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .getServerMobile(BaseApplication.getInstance()
-                                                             .getUser()
-                                                             .getToken());
+                                                         .getUser()
+                                                         .getToken());
   }
 
   public Observable<ServerInfo> getServerMachine() {
@@ -559,19 +564,23 @@ public class RemoteMode implements BaseMode {
                          .create(Api.class)
                          .getServerMachine(BaseApplication.getInstance()
                                                           .getUser()
-                                                          .getToken(),BaseApplication.getInstance()
-                                                                                     .getUser()
-                                                                                     .getCompanyid());
+                                                          .getToken(), BaseApplication.getInstance()
+                                                                                      .getUser()
+                                                                                      .getCompanyid());
   }
 
   public Observable<BaseEntry> save(ArrayList<ServerMachineBean> inhosts) {
 
     JSONObject root = new JSONObject();
     try {
-      root.put("companyid", BaseApplication.getInstance().getUser().getCompanyid());
-      root.put("token", BaseApplication.getInstance().getUser().getToken());
+      root.put("companyid", BaseApplication.getInstance()
+                                           .getUser()
+                                           .getCompanyid());
+      root.put("token", BaseApplication.getInstance()
+                                       .getUser()
+                                       .getToken());
       JSONArray jsonArray = new JSONArray(new Gson().toJson(inhosts));
-      root.put("hostinfo",jsonArray);
+      root.put("hostinfo", jsonArray);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -585,8 +594,14 @@ public class RemoteMode implements BaseMode {
 
     JSONObject root = new JSONObject();
     try {
-      root.put("companyid", BaseApplication.getInstance().getUser().getCompanyid());
-      root.put("usertoken", BaseApplication.getInstance().getUser().getToken());
+      root.put("companyid", BaseApplication.getInstance()
+                                           .getUser()
+                                           .getCompanyid());
+      root.put("usertoken", BaseApplication.getInstance()
+                                           .getUser()
+                                           .getToken());
+      //root.put("oprole", BaseApplication.getInstance().getUser().getOprole());
+      //root.put("companyrole", BaseApplication.getInstance().getUser().getCompanyrole());
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -594,6 +609,29 @@ public class RemoteMode implements BaseMode {
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .getDataMonitorInfo(requestBody);
+  }
+
+  public Observable<CommandBean> getOrderLog(String id, String startTime, String endTime, String orderId, int page) {
+    JSONObject root = new JSONObject();
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    try {
+      root.put("companyid", user.getCompanyid());
+      root.put("usertoken", user.getToken());
+      root.put("role", String.valueOf(user.getRole()));
+      root.put("oprole", String.valueOf(user.getOprole()));
+      root.put("page_num", String.valueOf(page));
+      root.put("operatorid", id);
+      root.put("starttime", startTime);
+      root.put("endtime", endTime);
+      root.put("orderid", orderId);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getOrderLog(requestBody);
   }
 
   private static class SingletonHolder {

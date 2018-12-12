@@ -2,6 +2,7 @@ package com.domain.operationrobot.http.data;
 
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.operationrobot.http.bean.ApplyInfo;
+import com.domain.operationrobot.http.bean.CommandBean;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.ImageFileBean;
@@ -230,4 +231,9 @@ public interface Api {
   @Headers({"Content-Type: application/json;charset=UTF-8"})
   @GET("/api/v1/message")
   Observable<String> getOffLineMsg(@Query("token") String token, @Query("companyid") String companyId, @Query("msgid") String msgid);
+
+
+  @Headers({"Content-Type: application/json;charset=UTF-8"})
+  @POST("/api/v1/operation/operation_log")
+  Observable<CommandBean> getOrderLog(@Body RequestBody requestBody);
 }

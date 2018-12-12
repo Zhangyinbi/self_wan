@@ -190,7 +190,7 @@ public class RefreshRecyclerView extends WrapRecyclerView {
       return;
     }
     int currentBottomMargin = ((ViewGroup.MarginLayoutParams) mLoadMoreView.getLayoutParams()).bottomMargin;
-    int finalBottomMargin = -mLoadMoreViewHeight + 1;
+    int finalBottomMargin = -mRefreshViewHeight + 1;
     if (mCurrentLoadStatus == REFRESH_STATUS_LOOSEN_REFRESHING) {
       finalBottomMargin = 0;
       mCurrentLoadStatus = REFRESH_STATUS_REFRESHING;
@@ -203,7 +203,9 @@ public class RefreshRecyclerView extends WrapRecyclerView {
     }
 
     int distance = currentBottomMargin - finalBottomMargin;
-
+    if (distance < 0) {
+      distance = 0;
+    }
     // 回弹到指定位置
     ValueAnimator animator = ObjectAnimator.ofFloat(currentBottomMargin, finalBottomMargin)
                                            .setDuration(distance);
@@ -275,6 +277,7 @@ public class RefreshRecyclerView extends WrapRecyclerView {
    * 是否滑动到底部或者顶部
    * canScrollVertically(1);返回false表示不能往上滑动，即代表到底部了；
    * canScrollVertically(-1);返回false表示不能往下滑动，即代表到顶部了；
+   *
    * @param direction direction
    * @return 是否滑动到底部或者顶部
    */
@@ -384,12 +387,10 @@ public class RefreshRecyclerView extends WrapRecyclerView {
         }
       }
       if (mLoadMoreView != null && mLoadMoreViewHeight <= 0) {
-        // 获取头部刷新View的高度
         mLoadMoreViewHeight = mLoadMoreView.getMeasuredHeight();
         mLoadMoreView.setTranslationZ(-1);
-        if (mLoadMoreViewHeight > 0) {
-          // 隐藏头部刷新的View  marginTop  多留出1px防止无法判断是不是滚动到头部问题
-          setLoadMoreViewMarginBottom(-mLoadMoreViewHeight + 1);
+        if (mRefreshViewHeight > 0) {
+          setLoadMoreViewMarginBottom(-mRefreshViewHeight + 1);
         }
       }
     }
@@ -397,7 +398,8 @@ public class RefreshRecyclerView extends WrapRecyclerView {
 
   /**
    * 设置加载更多View的marginBottom
-   * @param marginBottom  marginBottom
+   *
+   * @param marginBottom marginBottom
    */
   private void setLoadMoreViewMarginBottom(int marginBottom) {
     if (mLoadMoreView == null) {
@@ -405,8 +407,8 @@ public class RefreshRecyclerView extends WrapRecyclerView {
     }
 
     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLoadMoreView.getLayoutParams();
-    if (marginBottom < -mLoadMoreViewHeight + 1) {
-      marginBottom = -mLoadMoreViewHeight + 1;
+    if (marginBottom < -mRefreshViewHeight + 1) {
+      marginBottom = -mRefreshViewHeight + 1;
     }
     params.bottomMargin = marginBottom;
     mLoadMoreView.setLayoutParams(params);
@@ -414,7 +416,8 @@ public class RefreshRecyclerView extends WrapRecyclerView {
 
   /**
    * 设置刷新View的marginTop
-   * @param marginTop  marginTop
+   *
+   * @param marginTop marginTop
    */
   public void setRefreshViewMarginTop(int marginTop) {
     if (mRefreshView == null) {

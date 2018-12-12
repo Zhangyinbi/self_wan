@@ -15,4 +15,12 @@
 
   <string name="gallery_down_fail">保存失败</string>
   <string name="gallery_down_success">图片已保存至%1$s</string>
+
+
+  <string name="uikit_com_refresh_status_loosen_refreshing_hint_text">松开刷新</string>
+  <string name="uikit_com_refresh_status_loosen_load_hint_text">松开刷新</string>
+  <string name="uikit_com_refresh_status_refreshing_hint_text">正在刷新...</string>
+  <string name="uikit_com_refresh_status_load_hint_text">加载中...</string>
+  <string name="uikit_com_refresh_status_pull_refreshing_hint_text">下拉刷新</string>
+  <string name="uikit_com_refresh_status_pull_load_hint_text">上拉加载更多</string>
 </resources>

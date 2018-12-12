@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,7 +23,6 @@ import com.domain.library.ui.CommonDialog;
 import com.domain.library.ui.SureInterface;
 import com.domain.library.utils.App;
 import com.domain.library.utils.SpUtils;
-import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.company.ApplyActivity;
@@ -43,11 +41,8 @@ import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
-import com.domain.operationrobot.server.LocalService;
 import com.domain.operationrobot.util.TimeUtil;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -194,7 +189,8 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
 
   @Override
   protected void newInstancePresenter() {
-    MainChatRoom.getInstance().initAppSocket();
+    MainChatRoom.getInstance()
+                .initAppSocket();
   }
 
   @Override
@@ -229,8 +225,6 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     checkDefaultCompany();
     getSide();
     getServerMobile();
-    //守护进程
-    startService(new Intent(this, LocalService.class));
   }
 
   /**
@@ -383,6 +377,8 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     SpUtils.removeData(IS_LOGIN);
     SpUtils.removeData(USER_SP_KEY);
     startActivity(new Intent(MainActivity.this, LoginActivity.class));
+    MainChatRoom.getInstance()
+                .outSocket();
     finish();
   }
 
@@ -539,7 +535,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
       tv_company_name.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          if (mSideInfo.getRole() == 1||mSideInfo.getRole() == 3) {
+          if (mSideInfo.getRole() == 1 || mSideInfo.getRole() == 3) {
             openOrCloseDrawer();
             drawer.postDelayed(new Runnable() {
               @Override

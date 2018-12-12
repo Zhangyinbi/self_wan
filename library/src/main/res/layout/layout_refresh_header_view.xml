@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/iv_refresh_icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/uikit_com_pre_refresh_icon" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimens_10"
+        android:layout_toRightOf="@+id/iv_refresh_icon"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_refresh_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/uikit_com_refresh_status_pull_refreshing_hint_text"
+            android:textColor="@color/uiKit_com_refresh_text_color"
+            android:textSize="@dimen/uiKit_com_refresh_text_size" />
+
+        <TextView
+            android:id="@+id/tv_refresh_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimens_10"
+            android:text="更新时间：2018-12-23"
+            android:textColor="@color/uiKit_com_refresh_text_color"
+            android:textSize="@dimen/uiKit_com_refresh_text_size" />
+    </LinearLayout>
+</RelativeLayout>

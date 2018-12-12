@@ -5,7 +5,13 @@
     <dimen name="edit_bottom">@dimen/dimens_17</dimen>
     <dimen name="edit_top">@dimen/dimens_17</dimen>
     <dimen name="edit_size">@dimen/dimens_15sp</dimen>
-
+    <dimen name="uiKit_com_fillet_nio_app_blue_radius">@dimen/dimens_5</dimen>
+    <dimen name="uiKit_com_fillet_gray_radius">@dimen/dimens_5</dimen>
+    <dimen name="uiKit_com_round_radius">50dp</dimen>
+    <dimen name="uiKit_com_stroke_width">@dimen/dimens_1</dimen>
+    <dimen name="uiKit_com_stroke_radius">@dimen/dimens_24</dimen>
+    <dimen name="uiKit_com_box_radius">@dimen/dimens_8</dimen>
+    <dimen name="uiKit_com_refresh_text_size">16sp</dimen>
 
     <dimen name="dimens_0">0dp</dimen>
     <dimen name="dimens_1">1dp</dimen>

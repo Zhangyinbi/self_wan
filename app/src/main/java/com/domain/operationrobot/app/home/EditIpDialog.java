@@ -51,6 +51,9 @@ public class EditIpDialog extends AppCompatDialog {
     mBtnSend = findViewById(R.id.btn_send);
     TextView textView = findViewById(R.id.tv_action);
     textView.setText("申请 " + actionName);
+    if (type==10){
+      mEditText.setHint("请输入服务器IP(目前只支持IP进行重启)");
+    }
     mBtnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {

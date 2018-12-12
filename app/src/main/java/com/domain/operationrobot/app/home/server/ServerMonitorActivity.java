@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.domain.library.base.AbsActivity;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.library.utils.DisplaysUtil;
 import com.domain.library.utils.SoftInputUtil;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ServerInfo;
@@ -196,8 +198,8 @@ public class ServerMonitorActivity extends AbsActivity {
                 public void onSuss(ServerInfo serverInfo) {
                   mTv_title.setText("监控服务器（" + serverInfo.getInamount() + "/" + serverInfo.getTotalamount() + "）");
                   mInhosts = serverInfo.getInhosts();
-                  upDataIn(mInhosts);
                   mAllHosts = serverInfo.getTotalhosts();
+                  upDataIn(mInhosts);
                   upDataAll(mAllHosts);
                 }
 
@@ -215,6 +217,7 @@ public class ServerMonitorActivity extends AbsActivity {
 
   private void upDataIn(ArrayList<ServerMachineBean> inhosts) {
     mFl_view.removeView(view);
+    mTv_title.setText("监控服务器（" + inhosts.size() + "/" + mAllHosts.size() + "）");
     if (inhosts != null && inhosts.size() > 0) {
       mRlv_in.setVisibility(View.VISIBLE);
       mInAdapter.upData(inhosts);
@@ -222,6 +225,13 @@ public class ServerMonitorActivity extends AbsActivity {
       mFl_view.addView(view);
       mRlv_in.setVisibility(View.GONE);
     }
+    ViewGroup.LayoutParams lp = mRlv_in.getLayoutParams();
+    if (inhosts.size() > 4) {
+      lp.height = DisplaysUtil.dip2px(this,102 * 2);
+    } else {
+      lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+    }
+    mRlv_in.setLayoutParams(lp);
   }
 
   @Override

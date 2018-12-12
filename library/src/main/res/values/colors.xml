@@ -19,4 +19,12 @@
   <dimen name="image_browse_progress_bar_size">40dp</dimen>
   <dimen name="image_browse_save_margin_bottom">20dp</dimen>
   <dimen name="image_browse_save_margin_right">16dp</dimen>
+
+
+  <color name="uiKit_nio_blue">#00BEBE</color>
+  <color name="uiKit_fillet_bg_light_gray_color">#F7F7F8</color>
+  <color name="uiKit_com_gray_color">#FFCDCED4</color>
+  <color name="uiKit_com_refresh_text_color">#333333</color>
+  <color name="uiKit_com_list_item_divider">#FFCDCED4</color>
+
 </resources>

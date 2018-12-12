@@ -27,7 +27,7 @@ public interface RefreshViewCreator {
    *
    * @param currentDragHeight 当前拖动的高度
    * @param refreshViewHeight 总的刷新高度 即刷新view 的高度
-   * @param currentRefreshStatus 当前状态 {@link fd.nio.com.uikit.recycleview.RefreshRecyclerView}
+   * @param currentRefreshStatus 当前状态
    */
   void onPull(int currentDragHeight, int refreshViewHeight, int currentRefreshStatus);
 

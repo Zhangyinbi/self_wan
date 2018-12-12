@@ -47,4 +47,8 @@ public class MainChatRoom extends BaseChatRoom {
     AppSocket.init(builder)
              .connect();
   }
+
+  public void outSocket() {
+    AppSocket.getInstance().close();
+  }
 }

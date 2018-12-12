@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context=".app.home.server.ServerMonitorActivity"
     >
 
@@ -58,8 +58,8 @@
   <FrameLayout
       android:id="@+id/fl_view"
       android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="223"
+      android:layout_height="wrap_content"
+
       >
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv_in"
@@ -73,8 +73,7 @@
 
   <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="398"
+      android:layout_height="match_parent"
       android:background="@color/white"
       android:orientation="vertical"
       >
@@ -85,11 +84,11 @@
         android:layout_marginLeft="@dimen/dimens_10"
         android:layout_marginRight="@dimen/dimens_10"
         android:layout_marginTop="@dimen/dimens_15"
-        android:paddingRight="@dimen/dimens_5"
         android:background="@drawable/bg_gray_round"
         android:hint="输入关键字或者IP地址过滤服务器"
         android:paddingBottom="@dimen/dimens_11"
         android:paddingLeft="@dimen/dimens_15"
+        android:paddingRight="@dimen/dimens_5"
         android:paddingTop="@dimen/dimens_11"
         android:singleLine="true"
         android:textColor="@color/text_333"

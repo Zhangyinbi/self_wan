@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.domain.library.utils.SpUtils;
 import com.domain.library.utils.ToastUtils;
-import com.domain.library.widgets.loading.LoadingView;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.bean.NewMessage;
@@ -21,16 +20,12 @@ import com.domain.operationrobot.im.listener.IChatRoom;
 import com.domain.operationrobot.im.listener.IConstants;
 import com.domain.operationrobot.im.listener.IEventType;
 import com.domain.operationrobot.im.socket.AppSocket;
-import com.domain.operationrobot.server.LocalService;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
 import java.util.Observable;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -313,12 +308,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
       case Socket.EVENT_DISCONNECT:
         flag = true;
         Log.e(TAG, "EVENT_DISCONNECT");
-        BaseApplication.getInstance()
-                       .stopService(new Intent(BaseApplication.getInstance(), LocalService.class));
         break;
       // Socket连接错误
       case Socket.EVENT_ERROR:
-
+        flag = true;
         Log.e(TAG, "EVENT_ERROR");
         break;
 
@@ -330,7 +323,10 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         Log.e(TAG, "链接成功，发送一条消息 确认加入房间");
         AppSocket.getInstance()
                  .setConnSure();
-        getOffLinMsg();
+        if (flag) {
+          flag = false;
+          getOffLinMsg();
+        }
         break;
 
       case Socket.EVENT_RECONNECT_ATTEMPT:
@@ -355,7 +351,9 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     String msgid = SpUtils.getString("msgid" + BaseApplication.getInstance()
                                                               .getUser()
                                                               .getUserId());
-    if (TextUtils.isEmpty(msgid))return;
+    if (TextUtils.isEmpty(msgid)) {
+      return;
+    }
     RemoteMode.getInstance()
               .getOffLineMsg(msgid)
               .subscribe(new Observer<String>() {
@@ -383,7 +381,7 @@ public class BaseChatRoom extends Observable implements IChatRoom {
                         }
                         if (i == length - 1) {
                           handlerMsg(jsonObject1, false);
-                        }else {
+                        } else {
                           handlerMsg(jsonObject1, true);
                         }
                       }

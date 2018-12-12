@@ -33,6 +33,7 @@
         android:textSize="14sp"
         />
     <TextView
+        android:id="@+id/tv_order_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -74,14 +75,14 @@
         android:textSize="14sp"
         />
   </LinearLayout>
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/rlv_recycler_view"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@android:color/white"
-      android:overScrollMode="never"
-      android:paddingLeft="@dimen/dimens_17"
-      android:paddingRight="@dimen/dimens_17"
-      android:scrollbars="none"
-      />
+
+    <com.domain.library.recycleview.RefreshRecyclerView
+        android:id="@+id/rlv_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/dimens_17"
+        android:paddingRight="@dimen/dimens_17"
+        />
 </LinearLayout>

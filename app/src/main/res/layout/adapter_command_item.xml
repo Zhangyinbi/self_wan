@@ -4,15 +4,14 @@
     android:layout_height="wrap_content"
 
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dimens_10"
 
     android:paddingTop="@dimen/dimens_19"
     >
 
   <TextView
+      android:id="@+id/tv_msg"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:id="@+id/tv_msg"
       android:lineSpacingExtra="@dimen/dimens_3"
       android:text="执行命令  重启主机   温江机房大数据中心服务器（i
 p:201.20.103.36）"
@@ -28,11 +27,13 @@ p:201.20.103.36）"
       android:orientation="horizontal"
       >
     <com.domain.operationrobot.glide.CircleImageView
+        android:id="@+id/civ_user_img"
         android:layout_width="@dimen/dimens_35"
         android:layout_height="@dimen/dimens_35"
         android:src="@drawable/root_40"
         />
     <TextView
+        android:id="@+id/tv_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimens_11"
@@ -42,6 +43,7 @@ p:201.20.103.36）"
         android:textSize="@dimen/dimens_14sp"
         />
     <TextView
+        android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimens_11"
@@ -49,7 +51,11 @@ p:201.20.103.36）"
         android:textColor="#A6A6A6"
         android:textSize="13sp"
         />
-
-
   </LinearLayout>
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dimens_1"
+      android:layout_marginTop="@dimen/dimens_10"
+      android:background="@color/uiKit_com_gray_color"
+      />
 </LinearLayout>

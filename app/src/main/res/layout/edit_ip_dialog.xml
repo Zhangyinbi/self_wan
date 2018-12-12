@@ -28,7 +28,7 @@
       android:background="@drawable/blue_shape_gray"
       android:focusable="true"
       android:focusableInTouchMode="true"
-      android:hint="hostId / hostName / hostIp"
+      android:hint="请输入服务器id/服务器ip/服务器名称"
       android:paddingLeft="@dimen/dimens_12"
       android:textColor="@color/text_333"
       android:textColorHint="@color/color_69"
