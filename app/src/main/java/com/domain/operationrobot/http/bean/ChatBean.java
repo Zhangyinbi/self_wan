@@ -1,6 +1,7 @@
 package com.domain.operationrobot.http.bean;
 
 import com.domain.operationrobot.BaseApplication;
+import com.domain.operationrobot.im.bean.RootMessage12;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
@@ -171,5 +172,14 @@ public class ChatBean {
   @Override
   public String toString() {
     return "ChatBean{" + "userName='" + userName + '\'' + ", content='" + content + '\'' + '}';
+  }
+
+  ArrayList<RootMessage12.Action> actions12;
+  public void setActions12(ArrayList<RootMessage12.Action> actions) {
+    this.actions12 = actions;
+  }
+
+  public ArrayList<RootMessage12.Action> getActions12() {
+    return  actions12;
   }
 }

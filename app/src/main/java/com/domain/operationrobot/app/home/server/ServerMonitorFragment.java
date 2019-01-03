@@ -13,7 +13,9 @@ import com.domain.library.base.AbsFragment;
 import com.domain.library.http.consumer.BaseObserver;
 import com.domain.library.http.entry.BaseEntry;
 import com.domain.library.http.exception.BaseException;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
+import com.domain.operationrobot.app.home.MainActivity;
 import com.domain.operationrobot.http.bean.ServerBean;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.util.ToastU;
@@ -64,9 +66,9 @@ public class ServerMonitorFragment extends AbsFragment {
     mData = new ArrayList<>();
     mServerAdapter = new ServerAdapter(getActivity(), mData);
     rlv_recycler.setAdapter(mServerAdapter);
-    ArrayList<ServerBean.ServerList> result = new ArrayList<>();
-    result.add(new ServerBean.ServerList());
-    mData.addAll(result);
+    //ArrayList<ServerBean.ServerList> result = new ArrayList<>();
+    //result.add(new ServerBean.ServerList());
+    //mData.addAll(result);
   }
 
   @Override
@@ -76,7 +78,11 @@ public class ServerMonitorFragment extends AbsFragment {
   @Override
   public void onResume() {
     super.onResume();
-    getDataMonitorInfo();
+    MainActivity activity = (MainActivity) getActivity();
+    if (activity.getCurrentFragment() == activity.getFragments()
+                                                 .get(1)) {
+      getDataMonitorInfo();
+    }
   }
 
   private void getDataMonitorInfo() {
@@ -97,7 +103,13 @@ public class ServerMonitorFragment extends AbsFragment {
                   if (result == null) {
                     result = new ArrayList<>();
                   }
-                  result.add(new ServerBean.ServerList());
+                  if ("2".equals(BaseApplication.getInstance()
+                                                .getUser()
+                                                .getCompanyrole()) && BaseApplication.getInstance()
+                                                                                     .getUser()
+                                                                                     .getOprole() == 4) {
+                    result.add(new ServerBean.ServerList());
+                  }
                   mData.addAll(result);
                   mServerAdapter.notifyDataSetChanged();
                 }

@@ -30,7 +30,8 @@ import static com.domain.library.recycleview.decoration.DividerItemDecoration.HO
 import static com.domain.operationrobot.util.Constant.GET_TIME;
 
 public class CommandOperationActivity extends AbsActivity {
-  private static final int SELECTED_USER = 10293;
+  private static final int SELECTED_USER     = 10293;
+  private static final int SELECTED_ORDER_ID = 10294;
   private RefreshRecyclerView                mRecyclerView;
   private CommandAdapter                     mCommandAdapter;
   private String                             mStartTime;
@@ -68,8 +69,7 @@ public class CommandOperationActivity extends AbsActivity {
         mStartTime = "";
         mEndTime = "";
         mOrderId = "";
-        Intent intent = new Intent(CommandOperationActivity.this, SelectOperationActivity.class);
-        intent.putExtra("type", 1);
+        Intent intent = new Intent(CommandOperationActivity.this, SelectOrderOperationActivity.class);
         startActivityForResult(intent, SELECTED_USER);
       }
     });
@@ -80,6 +80,8 @@ public class CommandOperationActivity extends AbsActivity {
         mStartTime = "";
         mEndTime = "";
         mId = "";
+        Intent intent = new Intent(CommandOperationActivity.this, SelectOrderIdActivity.class);
+        startActivityForResult(intent, SELECTED_ORDER_ID);
       }
     });
 
@@ -119,10 +121,15 @@ public class CommandOperationActivity extends AbsActivity {
         case GET_TIME:
           mStartTime = data.getStringExtra("startTime");
           mEndTime = data.getStringExtra("endTime");
+          getData(false);
           break;
         case SELECTED_USER:
           mId = data.getStringExtra("id");
+          getData(false);
           break;
+        case SELECTED_ORDER_ID:
+          mOrderId = data.getStringExtra("id");
+          getData(false);
       }
     }
   }

@@ -12,6 +12,8 @@ import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.OperationList;
+import com.domain.operationrobot.http.bean.OrderIdBean;
+import com.domain.operationrobot.http.bean.OrderOperationBean;
 import com.domain.operationrobot.http.bean.ServerBean;
 import com.domain.operationrobot.http.bean.ServerInfo;
 import com.domain.operationrobot.http.bean.ServerMachineBean;
@@ -597,6 +599,9 @@ public class RemoteMode implements BaseMode {
       root.put("companyid", BaseApplication.getInstance()
                                            .getUser()
                                            .getCompanyid());
+      root.put("role", BaseApplication.getInstance()
+                                           .getUser()
+                                           .getRole()+"");
       root.put("usertoken", BaseApplication.getInstance()
                                            .getUser()
                                            .getToken());
@@ -620,7 +625,7 @@ public class RemoteMode implements BaseMode {
       root.put("usertoken", user.getToken());
       root.put("role", String.valueOf(user.getRole()));
       root.put("oprole", String.valueOf(user.getOprole()));
-      root.put("page_num", String.valueOf(page));
+      //root.put("page_num", String.valueOf(page));
       root.put("operatorid", id);
       root.put("starttime", startTime);
       root.put("endtime", endTime);
@@ -629,9 +634,53 @@ public class RemoteMode implements BaseMode {
       e.printStackTrace();
     }
     RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+
+    if(TextUtils.isEmpty(startTime)&&TextUtils.isEmpty(endTime)&&TextUtils.isEmpty(orderId)&&TextUtils.isEmpty(id)){
+      return RetrofitHelper.getInstance().create(Api.class).getAllOrderLog(requestBody);
+    }
     return RetrofitHelper.getInstance()
                          .create(Api.class)
                          .getOrderLog(requestBody);
+  }
+
+  public Observable<OrderOperationBean> getOrderOperationUser() {
+    JSONObject root = new JSONObject();
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    try {
+      root.put("companyid", user.getCompanyid());
+      root.put("usertoken", user.getToken());
+      root.put("role", String.valueOf(user.getRole()));
+      root.put("oprole", String.valueOf(user.getOprole()));
+      root.put("search_user", "0");
+      root.put("search_command", "1");
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getOrderOperationUser(requestBody);
+
+  }public Observable<OrderIdBean> getOrderOperationAction() {
+    JSONObject root = new JSONObject();
+    User user = BaseApplication.getInstance()
+                               .getUser();
+    try {
+      root.put("companyid", user.getCompanyid());
+      root.put("usertoken", user.getToken());
+      root.put("role", String.valueOf(user.getRole()));
+      root.put("oprole", String.valueOf(user.getOprole()));
+      root.put("search_command", "0");
+      root.put("search_user", "1");
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), root.toString());
+    return RetrofitHelper.getInstance()
+                         .create(Api.class)
+                         .getOrderOperationAction(requestBody);
+
   }
 
   private static class SingletonHolder {

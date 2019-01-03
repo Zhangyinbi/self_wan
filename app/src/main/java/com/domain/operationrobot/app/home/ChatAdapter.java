@@ -24,6 +24,7 @@ import com.domain.operationrobot.app.home.holder.ViewHolder11;
 import com.domain.operationrobot.http.bean.ChatBean;
 import com.domain.operationrobot.http.bean.ImageBean;
 import com.domain.operationrobot.http.bean.User;
+import com.domain.operationrobot.im.bean.RootMessage12;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
@@ -82,7 +83,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     } else if (type == 1) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_1, viewGroup, false);
-    } else if (type == 2 || type == 6 || type == 34 || type == 8) {
+    } else if (type == 2 || type == 6 || type == 34 || type == 8 || type == 12) {
       layout = LayoutInflater.from(viewGroup.getContext())
                              .inflate(R.layout.root_item_2, viewGroup, false);
     } else if (type == 11) {
@@ -179,15 +180,20 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       });
       ArrayList<RootMessage34.Action> actions = chatBean.getActions34();
       holder.rlv_recycler.setAdapter(new RootBean34Adapter(actions));
-    } else if (type == 8) {
+    } else if (type == 8 || type == 12) {
       holder.rlv_recycler.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()) {
         @Override
         public boolean canScrollVertically() {
           return false;
         }
       });
-      ArrayList<RootMessage8.Action> actions = chatBean.getActions8();
-      holder.rlv_recycler.setAdapter(new RootBean8Adapter(actions));
+      if (type == 8) {
+        ArrayList<RootMessage8.Action> actions = chatBean.getActions8();
+        holder.rlv_recycler.setAdapter(new RootBean8Adapter(actions));
+      }else {
+        ArrayList<RootMessage12.Action> actions = chatBean.getActions12();
+        holder.rlv_recycler.setAdapter(new RootBean12Adapter(actions));
+      }
     }
   }
 

@@ -36,6 +36,7 @@ import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 import com.domain.operationrobot.util.ToastU;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
 import static com.domain.operationrobot.util.Constant.PHONE_LENGTH;
@@ -110,6 +111,7 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
   @Override
   protected void onStart() {
     super.onStart();
+    BaseApplication.getInstance().initMiPush();
     if (SpUtils.getBoolean(IS_LOGIN, false)) {
       upDataUser();
       startActivity(new Intent(this, MainActivity.class));
@@ -201,6 +203,9 @@ public class LoginActivity extends AbsActivity implements LoginView<BasePresente
 
   @Override
   public void LoginSuss() {
+    MiPushClient.setUserAccount(this, BaseApplication.getInstance()
+                                                        .getUser()
+                                                        .getUserId(), null);
     ToastU.ToastLoginSussMessage(this, "登录成功");
     startActivity(new Intent(this, MainActivity.class));
     finish();

@@ -50,7 +50,7 @@ public class EditIpDialog extends AppCompatDialog {
     mEditText = findViewById(R.id.et_host);
     mBtnSend = findViewById(R.id.btn_send);
     TextView textView = findViewById(R.id.tv_action);
-    textView.setText("申请 " + actionName);
+    textView.setText("请执行  " + actionName+"  命令");
     if (type==10){
       mEditText.setHint("请输入服务器IP(目前只支持IP进行重启)");
     }
@@ -78,7 +78,7 @@ public class EditIpDialog extends AppCompatDialog {
           }
         } else {
           AppSocket.getInstance()
-                   .sendMessage(type, host);
+                   .sendMessage(type, host,null);
         }
         dismiss();
       }

@@ -55,7 +55,6 @@
         android:layout_marginTop="@dimen/dimens_6"
         android:background="@drawable/bg_indication"
         android:gravity="center"
-        android:visibility="gone"
         android:paddingBottom="@dimen/dimens_2"
         android:paddingLeft="@dimen/dimens_6"
         android:paddingRight="@dimen/dimens_6"

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+  <TextView
+      android:id="@+id/tv_group_item_name"
+      android:layout_width="match_parent"
+      android:layout_height="51dp"
+      android:background="#FFFFFF"
+      android:drawableLeft="@drawable/xzml_icon"
+      android:drawablePadding="12dp"
+      android:gravity="center_vertical"
+      android:paddingLeft="@dimen/dimens_18"
+      android:text="jiankong项目"
+      android:textColor="#0C0C0C"
+      android:textSize="14sp"
+      />
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="1px"
+      android:layout_marginLeft="@dimen/dimens_11"
+      android:layout_marginRight="@dimen/dimens_10"
+      android:background="#D6D6D6"
+      />
+
+</LinearLayout>

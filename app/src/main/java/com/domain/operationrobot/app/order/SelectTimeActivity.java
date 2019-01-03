@@ -30,7 +30,7 @@ public class SelectTimeActivity extends AbsActivity {
   private DatePickerView year_pv;
   private DatePickerView month_pv;
   private DatePickerView day_pv;
-  private Calendar       selectedCalender, startCalendar, endCalendar;
+  private Calendar       startCalendar, endCalendar;
   private int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
   private boolean spanYear, spanMon, spanDay, spanHour, spanMin;
   private ArrayList<String> year, month, day;
@@ -62,6 +62,12 @@ public class SelectTimeActivity extends AbsActivity {
             showToast("结束时间必须大于开始时间");
             return;
           }
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+          String now = sdf.format(new Date());
+          if (TimeUtil.getTime(endTime) - TimeUtil.getTime(now)>0){
+            showToast("不能超过当前时间");
+            return;
+          }
           Intent intent = new Intent();
           intent.putExtra("startTime", startTime);
           intent.putExtra("endTime", endTime);
@@ -83,7 +89,6 @@ public class SelectTimeActivity extends AbsActivity {
 
   @Override
   protected void newInstancePresenter() {
-    selectedCalender = Calendar.getInstance();
     startCalendar = Calendar.getInstance();
     endCalendar = Calendar.getInstance();
 
@@ -95,21 +100,20 @@ public class SelectTimeActivity extends AbsActivity {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-
-    startYear = startCalendar.get(Calendar.YEAR);
-    startMonth = startCalendar.get(Calendar.MONTH) + 1;
-    startDay = startCalendar.get(Calendar.DAY_OF_MONTH);
     endYear = endCalendar.get(Calendar.YEAR);
     endMonth = endCalendar.get(Calendar.MONTH) + 1;
     endDay = endCalendar.get(Calendar.DAY_OF_MONTH);
+
+    resetTime();
+  }
+
+  private void resetTime() {
+    startYear = startCalendar.get(Calendar.YEAR);
+    startMonth = startCalendar.get(Calendar.MONTH) + 1;
+    startDay = startCalendar.get(Calendar.DAY_OF_MONTH);
     spanYear = startYear != endYear;
     spanMon = (!spanYear) && (startMonth != endMonth);
     spanDay = (!spanMon) && (startDay != endDay);
-    try {
-      selectedCalender.setTime(sdf.parse(DEFAULT_TIME));
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
     initTimer();
   }
 

@@ -56,7 +56,16 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
   private static final String TAG = "------------";
   private Fragment mCurrentFragment;
   private ArrayList<Fragment> mFragments     = new ArrayList<>();
-  private boolean[]           mFragmentAdded = new boolean[] {false, false};
+
+  public ArrayList<Fragment> getFragments() {
+    return  mFragments;
+  }
+
+  public Fragment getCurrentFragment() {
+    return  mCurrentFragment;
+  }
+
+  private boolean[] mFragmentAdded = new boolean[] {false, false};
   private TextView       mTv_fragment1;
   private TextView       mTv_fragment2;
   private DrawerLayout   drawer;
@@ -191,6 +200,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
   protected void newInstancePresenter() {
     MainChatRoom.getInstance()
                 .initAppSocket();
+    BaseApplication.getInstance().initMiPush();
   }
 
   @Override
@@ -520,7 +530,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
       if ("1".equals(mSideInfo.getCompanyrole())) {
         tv_user_indication.setText("试用中");
       } else {
-        tv_user_indication.setVisibility(View.GONE);
+        tv_user_indication.setText("正式用户");
       }
       setSideUI(mSideInfo.getRole());
       if (TextUtils.isEmpty(mSideInfo.getCompanyname())) {
@@ -576,13 +586,13 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
 
   private void setSideUIUseUserInfo(int role) {
     if (role == 3) {
-      tv_user_indication.setVisibility(View.GONE);
+      //tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("您还未加入公司,点击加入/创建");
       tv_top.setText("加入/创建公司，享受一站式运维");
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
     } else if (role == 2) {
-      tv_user_indication.setVisibility(View.GONE);
+      //tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("(待审核)" + mUser.getCompanyname());
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
@@ -617,13 +627,13 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
 
   private void setSideUI(int role) {
     if (role == 3) {
-      tv_user_indication.setVisibility(View.GONE);
+      //tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("您还未加入公司,点击加入/创建");
       tv_top.setText("加入/创建公司，享受一站式运维");
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
     } else if (role == 2) {
-      tv_user_indication.setVisibility(View.GONE);
+      //tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("(待审核)" + mSideInfo.getCompanyname());
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);

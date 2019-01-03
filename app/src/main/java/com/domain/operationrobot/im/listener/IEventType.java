@@ -25,6 +25,9 @@ public interface IEventType {
   //重启服务器
   String ROOT_MESSAGE_TYPE_11 = "root_message_type_11";
 
+  //磁盘读写
+  String ROOT_MESSAGE_TYPE_12 = "root_message_type_12";
+
   /*** ****************    无效的    ***********************/
   String LOGIN       = "login";
   String ADD_USER    = "connTest";

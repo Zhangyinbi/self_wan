@@ -6,32 +6,47 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/dimens_5"
-    android:layout_marginRight="@dimen/dimens_5"
-    android:layout_marginTop="@dimen/dimens_10"
-    android:background="@drawable/fwqjk_bg"
+    android:layout_marginBottom="@dimen/dimens_10"
     android:orientation="vertical"
-    android:paddingLeft="11dp"
-    android:paddingRight="@dimen/dimens_6"
     >
 
-  <TextView
-      android:id="@+id/tv_host_name"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:layout_marginBottom="@dimen/dimens_20"
-      android:layout_marginTop="@dimen/dimens_10"
-      android:text="温江机房大数据中心001"
-      android:textColor="#333333"
-      android:textSize="@dimen/dimens_16sp"
+  <View
+      android:id="@+id/view"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dimens_10"
+      android:visibility="gone"
       />
   <LinearLayout
-      android:id="@+id/ll_content"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/dimens_5"
+      android:layout_marginRight="@dimen/dimens_5"
+      android:background="@drawable/fwqjk_bg"
+      android:gravity="center"
       android:orientation="vertical"
-      />
+      android:paddingLeft="11dp"
+      android:paddingRight="@dimen/dimens_6"
+      >
+
+
+    <TextView
+        android:id="@+id/tv_host_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dimens_20"
+        android:layout_marginTop="@dimen/dimens_10"
+        android:text="温江机房大数据中心001"
+        android:textColor="#333333"
+        android:textSize="@dimen/dimens_16sp"
+        />
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        />
+  </LinearLayout>
 </LinearLayout>
 
 

@@ -17,6 +17,7 @@ import com.domain.library.base.AbsActivity;
 import com.domain.library.recycleview.dapter.RecyclerComAdapter;
 import com.domain.library.recycleview.holder.ViewHolder;
 import com.domain.library.recycleview.interfaces.MultiTypeSupport;
+import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ServerBean;
 import java.util.List;
@@ -49,17 +50,23 @@ public class ServerAdapter extends RecyclerComAdapter<ServerBean.ServerList> {
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (position == getItemCount() - 1) {
+        if (itemData != null && itemData.getItem() != null) {
+
+        }else {
           (mContext).startActivity(new Intent(mContext, ServerMonitorActivity.class));
         }
       }
     });
-    if (position == getItemCount() - 1) {
+    if (position == 0||position==1) {
       holder.getView(R.id.view)
             .setVisibility(View.VISIBLE);
-      return;
+    } else {
+      holder.getView(R.id.view)
+            .setVisibility(View.GONE);
     }
-
+  if (getItemViewType(position)==R.layout.server_monitor_last_item){
+      return;
+  }
     LinearLayout ll = holder.getView(R.id.ll_content);
     holder.setText(R.id.tv_host_name, itemData.getHost());
     ll.removeAllViews();

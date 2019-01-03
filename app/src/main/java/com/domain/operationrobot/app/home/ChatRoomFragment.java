@@ -32,6 +32,7 @@ import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
 import com.domain.operationrobot.im.bean.RootMessage11;
+import com.domain.operationrobot.im.bean.RootMessage12;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
@@ -57,6 +58,7 @@ import java.util.Observer;
 
 import static android.app.Activity.RESULT_OK;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_1;
+import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_12;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_2;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_34;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_6;
@@ -83,6 +85,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   private ImageView    mImageView;
   private boolean      mSingle;
   private ArrayList<String> names = new ArrayList<>();
+  private ArrayList<String> ids   = new ArrayList<>();
 
   public static ChatRoomFragment newInstance() {
     ChatRoomFragment fragment = new ChatRoomFragment();
@@ -180,6 +183,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               if (last.equals(lastName)) {
                 int i = content.lastIndexOf(lastName);
                 names.remove(last);
+                ids.remove(ids.size() - 1);
                 mEtMsg.setText(content.substring(0, i - 1));
                 mEtMsg.setSelection(content.substring(0, i - 1)
                                            .length());
@@ -238,12 +242,14 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mAdapter.setOnViewClick(new ChatAdapter.OnViewClick() {
       @Override
       public void viewClick(View view, ChatBean chatBean, int position) {
-        String trim = mEtMsg.getText()
-                            .toString()
-                            .trim();
-        names.add(chatBean.getUserName());
-        trim += "@" + chatBean.getUserName();
-        mEtMsg.setText(trim);
+        //TODO 长按显示@  由于机器人原因不要了
+        //String trim = mEtMsg.getText()
+        //                    .toString()
+        //                    .trim();
+        //names.add(chatBean.getUserName());
+        //ids.add(chatBean.getTargetId());
+        //trim += "@" + chatBean.getUserName();
+        //mEtMsg.setText(trim);
       }
     });
     mAdapter.setHostMsg(msg -> ChatRoomFragment.this.sendMsg(msg));
@@ -311,20 +317,32 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     }
     if (!AppSocket.getInstance()
                   .isConnected()) {
-      MainChatRoom.getInstance().initAppSocket();
+      MainChatRoom.getInstance()
+                  .initAppSocket();
       return;
     }
 
     if (msg.contains("@机器人")) {
+
+      if (ids.contains("-1")) {
+        ids.remove("-1");
+      }
       AppSocket.getInstance()
-               .sendMessage(2, msg);
+               .sendMessage(2, msg,ids);
+      ids.clear();
+      names.clear();
       //if (user.getRole() == 1 || user.getRole() == 2) {
       //  ToastUtils.showToast("只有加入了公司才可以使用机器人功能");
       //  return;
       //}
     } else {
+      if (ids.contains("-1")) {
+        ids.remove("-1");
+      }
       AppSocket.getInstance()
-               .sendMessage(msg);
+               .sendMessage(msg,ids);
+      ids.clear();
+      names.clear();
     }
     //addBeanToRecycler(mUsername, url, msg, System.currentTimeMillis(), user.getUserId());
     mEtMsg.setText("");
@@ -340,7 +358,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     message.setUrl(url);
     message.setTime(l);
     message.setTargetId(targetId);
-    mAdapter.addBeanToEnd(message,flag);
+    mAdapter.addBeanToEnd(message, flag);
   }
 
   @Override
@@ -362,13 +380,13 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
    * 接收消息
    */
   @Override
-  public void update( Observable observable,  Object o) {
+  public void update(Observable observable, Object o) {
     getActivity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        if (observable instanceof BaseChatRoom  ) {
-          if (!(o instanceof ObserverModel)){
-            ToastU.ToastLoginSussMessage(getActivity(),"正在为您更新离线数据，请耐心等待！");
+        if (observable instanceof BaseChatRoom) {
+          if (!(o instanceof ObserverModel)) {
+            ToastU.ToastLoginSussMessage(getActivity(), "正在为您更新离线数据，请耐心等待！");
             return;
           }
           final ObserverModel model = (ObserverModel) o;
@@ -388,7 +406,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               String msg = newMessage.getMsg();
               long time = newMessage.getTime();
               String targetId = newMessage.getTargetId();
-              addBeanToRecycler(username, url, msg, time, targetId,model.getFlag());
+              addBeanToRecycler(username, url, msg, time, targetId, model.getFlag());
               break;
             case ROOT_MESSAGE_TYPE_1:
               rootMsg1(model);
@@ -404,6 +422,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
               break;
             case ROOT_MESSAGE_TYPE_8:
               rootMsg8(model);
+              break;
+            case ROOT_MESSAGE_TYPE_12:
+              rootMsg12(model);
               break;
             case IEventType.ROOT_MESSAGE_TYPE_11:
               rootMsg11(model);
@@ -437,7 +458,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     chatBean.setIp(rootMessage.getIp());
     chatBean.setMsgid(rootMessage.getMsgid());
-    mAdapter.addBeanToEnd(chatBean,model.getFlag());
+    mAdapter.addBeanToEnd(chatBean, model.getFlag());
   }
 
   private void rootMsg8(ObserverModel model) {
@@ -450,7 +471,22 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage8.Action> actions = rootMessage.getActions();
     chatBean.setActions8(actions);
-    mAdapter.addBeanToEnd(chatBean,model.getFlag());
+    mAdapter.addBeanToEnd(chatBean, model.getFlag());
+  }
+
+
+  //查看磁盘读写
+  private void rootMsg12(ObserverModel model) {
+    ChatBean chatBean = new ChatBean();
+    chatBean.setType(12);
+    RootMessage12 rootMessage = model.getNewMessage12();
+    chatBean.setUrl(rootMessage.getImageUrl());
+    chatBean.setUserName(rootMessage.getUsername());
+    chatBean.setTime(rootMessage.getTime());
+    chatBean.setContent(rootMessage.getMsg());
+    ArrayList<RootMessage12.Action> actions = rootMessage.getActions();
+    chatBean.setActions12(actions);
+    mAdapter.addBeanToEnd(chatBean, model.getFlag());
   }
 
   /**
@@ -466,7 +502,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage34.Action> actions = rootMessage.getActions();
     chatBean.setActions34(actions);
-    mAdapter.addBeanToEnd(chatBean,model.getFlag());
+    mAdapter.addBeanToEnd(chatBean, model.getFlag());
   }
 
   /**
@@ -482,7 +518,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage6.Action> actions = rootMessage.getActions();
     chatBean.setActions6(actions);
-    mAdapter.addBeanToEnd(chatBean,model.getFlag());
+    mAdapter.addBeanToEnd(chatBean, model.getFlag());
   }
 
   /**
@@ -498,7 +534,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setContent(rootMessage.getMsg());
     ArrayList<RootMessage2.Action> actions = rootMessage.getActions();
     chatBean.setActions(actions);
-    mAdapter.addBeanToEnd(chatBean,model.getFlag());
+    mAdapter.addBeanToEnd(chatBean, model.getFlag());
   }
 
   /**
@@ -512,7 +548,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     chatBean.setUrl(rootMessage.getImageUrl());
     chatBean.setTime(rootMessage.getTime());
     chatBean.setContent(rootMessage.getMsg());
-    mAdapter.addBeanToEnd(chatBean,model.getFlag());
+    mAdapter.addBeanToEnd(chatBean, model.getFlag());
   }
 
   @Override
@@ -528,8 +564,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
   public void onPause() {
     super.onPause();
   }
-
-
 
   /**
    * 接收选择图片回收的结果
@@ -551,7 +585,9 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
           break;
         case SELECT_OPERATION:
           String name = data.getStringExtra("name");
+          String id = data.getStringExtra("id");
           setMsgText(name);
+          ids.add(id);
           names.add(name);
           break;
       }
@@ -589,6 +625,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     String imgMsg = regex + realMsg + regex;
     //addBeanToRecycler(user.getUsername(), user.getImage(), imgMsg, System.currentTimeMillis(), user.getUserId());
     AppSocket.getInstance()
-             .sendMessage(imgMsg);
+             .sendMessage(imgMsg,null);
   }
 }

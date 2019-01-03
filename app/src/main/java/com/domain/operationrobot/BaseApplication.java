@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import android.renderscript.Allocation;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
@@ -78,7 +79,7 @@ public class BaseApplication extends Application {
     super.onCreate();
     BaseApplicationController.init(this, BuildConfig.DEBUG);
     SpUtils.init(this);
-    initMiPush();
+
     mInstance = this;
     initRetrofit();
     // 初始化文件目录
@@ -93,16 +94,17 @@ public class BaseApplication extends Application {
   /**
    * 注册小米推送
    */
-  private void initMiPush() {
+  public void initMiPush() {
     if (shouldInit()) {
       MiPushClient.registerPush(this, APP_ID, APP_KEY);
+
     }
     //打开Log
     LoggerInterface newLogger = new LoggerInterface() {
 
       @Override
       public void setTag(String tag) {
-        // ignore
+        //ignore
       }
 
       @Override

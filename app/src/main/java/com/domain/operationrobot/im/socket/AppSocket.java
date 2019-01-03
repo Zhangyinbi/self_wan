@@ -4,6 +4,9 @@ import android.text.TextUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.listener.IConstants;
+import com.google.gson.Gson;
+import java.util.ArrayList;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,16 +38,20 @@ public class AppSocket extends BaseSocket {
   /**
    * fasong机器人消息
    */
-  public void sendMessage(int type, String content) {
+  public void sendMessage(int type, String content, ArrayList<String> ids) {
     try {
       JSONObject jsonObject = new JSONObject();
       JSONObject jsonObject1 = new JSONObject();
-      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("msgid", String.valueOf(System.currentTimeMillis()));
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
       jsonObject.put("type", type);
       jsonObject.put("msg", content);
+      if (ids != null && ids.size() > 0) {
+        JSONArray jsonArray = new JSONArray(new Gson().toJson(ids));
+        jsonObject.put("ids", jsonArray);
+      }
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();
@@ -66,7 +73,7 @@ public class AppSocket extends BaseSocket {
       JSONObject jsonObject = new JSONObject();
       JSONObject jsonObject1 = new JSONObject();
       jsonObject.put("token", user.getToken());
-      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("msgid", String.valueOf(System.currentTimeMillis()));
       jsonObject.put("type", 11);
       JSONObject jsonObject2 = new JSONObject();
       jsonObject2.put("hostip", hosdip);
@@ -97,7 +104,7 @@ public class AppSocket extends BaseSocket {
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
-      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("msgid", String.valueOf(System.currentTimeMillis()));
       jsonObject.put("type", 10);
       JSONObject jsonObject2 = new JSONObject();
       jsonObject2.put("hostip", hosdip);
@@ -129,7 +136,7 @@ public class AppSocket extends BaseSocket {
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
-      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("msgid", String.valueOf(System.currentTimeMillis()));
       jsonObject.put("type", 10);
       JSONObject jsonObject2 = new JSONObject();
       jsonObject2.put("hostip", hosdip);
@@ -152,13 +159,18 @@ public class AppSocket extends BaseSocket {
   /**
    * 发送消息
    */
-  public void sendMessage(String content) {
+  public void sendMessage(String content, ArrayList<String> ids) {
+
     try {
       JSONObject jsonObject = new JSONObject();
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
-      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("msgid", String.valueOf(System.currentTimeMillis()));
+      if (ids != null && ids.size() > 0) {
+        JSONArray jsonArray = new JSONArray(new Gson().toJson(ids));
+        jsonObject.put("ids", jsonArray);
+      }
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();
@@ -186,7 +198,7 @@ public class AppSocket extends BaseSocket {
       jsonObject.put("token", BaseApplication.getInstance()
                                              .getUser()
                                              .getToken());
-      jsonObject.put("msgid",String.valueOf(System.currentTimeMillis()));
+      jsonObject.put("msgid", String.valueOf(System.currentTimeMillis()));
       String companyid = BaseApplication.getInstance()
                                         .getUser()
                                         .getCompanyid();

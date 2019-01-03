@@ -37,6 +37,7 @@ import com.domain.operationrobot.app.setting.UserInfoActivity;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import java.lang.ref.WeakReference;
 
 import static com.domain.operationrobot.util.Constant.IS_LOGIN;
@@ -239,6 +240,9 @@ public class AccountActivity extends AbsActivity implements AccountContract.Acco
     SpUtils.setObject(USER_SP_KEY, user);
     BaseApplication.getInstance()
                    .setUser(user);
+    MiPushClient.setUserAccount(this, BaseApplication.getInstance()
+                                                     .getUser()
+                                                     .getUserId(), null);
     //检查用户
     checkDefaultCompany();
   }

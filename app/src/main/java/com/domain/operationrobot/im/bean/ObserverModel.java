@@ -6,6 +6,7 @@ package com.domain.operationrobot.im.bean;
  * @description 观察者实体类
  */
 public class ObserverModel {
+  RootMessage12 newMessage12;
   private RootMessage11 mRootMessage11;
   //有效的
   private String        mEventType;
@@ -23,10 +24,10 @@ public class ObserverModel {
   private UserLeft      mUserLeft;
   private Typing        mTyping;
   private StopTyping    mStopTyping;
+  private boolean       flag;
+  private UpDataMsg     upDataMsg;
 
-  private boolean flag;
-
-  public boolean getFlag(){
+  public boolean getFlag() {
     return flag;
   }
 
@@ -34,10 +35,8 @@ public class ObserverModel {
     this.flag = flag;
   }
 
-  private UpDataMsg upDataMsg;
-
   public UpDataMsg getUpDataMsg() {
-    return  upDataMsg;
+    return upDataMsg;
   }
 
   public void setUpDataMsg(UpDataMsg upDataMsg) {
@@ -146,6 +145,14 @@ public class ObserverModel {
 
   public void setRootMessage6(RootMessage6 rootMessage6) {
     mRootMessage6 = rootMessage6;
+  }
+
+  public void setRootMessage12(RootMessage12 newMessage12) {
+    this.newMessage12 = newMessage12;
+  }
+
+  public RootMessage12 getNewMessage12() {
+    return newMessage12;
   }
 
   public static class Login {

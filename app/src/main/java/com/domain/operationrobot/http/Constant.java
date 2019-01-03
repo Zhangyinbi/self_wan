@@ -8,7 +8,7 @@ package com.domain.operationrobot.http;
  * Create at : 2018/10/11 21:58
  */
 public class Constant {
-    public static final String BASE_API = "61.139.64.108:18081/";
+    //public static final String BASE_API_QA = "61.139.64.108:18081/";
     public static final String BASE_API_QA = "61.139.64.108:18080/";
 
 

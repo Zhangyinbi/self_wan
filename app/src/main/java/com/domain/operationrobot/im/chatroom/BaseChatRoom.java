@@ -11,6 +11,7 @@ import com.domain.operationrobot.im.bean.NewMessage;
 import com.domain.operationrobot.im.bean.ObserverModel;
 import com.domain.operationrobot.im.bean.RootMessage1;
 import com.domain.operationrobot.im.bean.RootMessage11;
+import com.domain.operationrobot.im.bean.RootMessage12;
 import com.domain.operationrobot.im.bean.RootMessage2;
 import com.domain.operationrobot.im.bean.RootMessage34;
 import com.domain.operationrobot.im.bean.RootMessage6;
@@ -125,14 +126,20 @@ public class BaseChatRoom extends Observable implements IChatRoom {
         break;
       case 8:
         parse_type_8(rootBean, flag);
+        break;
       case 10:
         parse_type_10(rootBean, flag);
         break;
       case 11:
         parse_type_11(rootBean, flag);
         break;
+      case 12:
+        parse_type_12(rootBean, flag);
+        break;
     }
   }
+
+
 
   private void parse_type_10(JSONObject rootBean, boolean flag) {
     setChanged();
@@ -155,6 +162,16 @@ public class BaseChatRoom extends Observable implements IChatRoom {
     model.setFlag(flag);
     UpDataMsg upDataMsg = new UpDataMsg(action, msgId);
     model.setUpDataMsg(upDataMsg);
+    notifyObservers(model);
+  }
+
+  private void parse_type_12(JSONObject rootBean, boolean flag) {
+    ObserverModel model = new ObserverModel();
+    model.setEventType(IEventType.ROOT_MESSAGE_TYPE_12);
+    model.setFlag(flag);
+    RootMessage12 newMessage = mGson.fromJson(rootBean.toString(), RootMessage12.class);
+    newMessage.setTime(System.currentTimeMillis());
+    model.setRootMessage12(newMessage);
     notifyObservers(model);
   }
 

@@ -7,6 +7,8 @@ import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.CompanyList;
 import com.domain.operationrobot.http.bean.ImageFileBean;
 import com.domain.operationrobot.http.bean.OperationList;
+import com.domain.operationrobot.http.bean.OrderIdBean;
+import com.domain.operationrobot.http.bean.OrderOperationBean;
 import com.domain.operationrobot.http.bean.ServerBean;
 import com.domain.operationrobot.http.bean.ServerInfo;
 import com.domain.operationrobot.http.bean.ServerMachineBean;
@@ -232,8 +234,20 @@ public interface Api {
   @GET("/api/v1/message")
   Observable<String> getOffLineMsg(@Query("token") String token, @Query("companyid") String companyId, @Query("msgid") String msgid);
 
+  @Headers({"Content-Type: application/json;charset=UTF-8"})
+  @POST("/api/v1/operation/search_operation_log_condition")
+  Observable<CommandBean> getOrderLog(@Body RequestBody requestBody);
+
 
   @Headers({"Content-Type: application/json;charset=UTF-8"})
   @POST("/api/v1/operation/operation_log")
-  Observable<CommandBean> getOrderLog(@Body RequestBody requestBody);
+  Observable<CommandBean> getAllOrderLog(@Body RequestBody requestBody);
+
+  @Headers({"Content-Type: application/json;charset=UTF-8"})
+  @POST("/api/v1/operation/search_condition")
+  Observable<OrderOperationBean> getOrderOperationUser(@Body RequestBody requestBody);
+
+  @Headers({"Content-Type: application/json;charset=UTF-8"})
+  @POST("/api/v1/operation/search_condition")
+  Observable<OrderIdBean> getOrderOperationAction(@Body RequestBody requestBody);
 }

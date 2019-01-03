@@ -46,6 +46,7 @@ public class SelectOperationActivity extends AbsActivity {
     findViewById(R.id.include_robot).setOnClickListener(view -> {
       Intent intent = new Intent();
       intent.putExtra("name", "机器人");
+      intent.putExtra("id", "-1");
       setResult(RESULT_OK, intent);
       finish();
     });
