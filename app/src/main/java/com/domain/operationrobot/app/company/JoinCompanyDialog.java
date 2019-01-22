@@ -14,6 +14,8 @@ import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 
+import static com.domain.library.utils.ToastUtils.showToast;
+
 /**
  * Project Name : OperationRobot
  * description:null
@@ -37,10 +39,13 @@ public class JoinCompanyDialog extends AppCompatDialog {
         case R.id.btn_join:
           String inputValue = deAccountName.getInputValue();
           if (TextUtils.isEmpty(inputValue)) {
-            ToastUtils.showToast("请输入申请人姓名");
+            showToast("请输入申请人姓名");
             return;
           }
-
+          if (inputValue.length() > 20) {
+            showToast("名称应在20字以内");
+            return;
+          }
           dismiss();
           presenter.join(inputValue, company.getCompanyid());
           break;

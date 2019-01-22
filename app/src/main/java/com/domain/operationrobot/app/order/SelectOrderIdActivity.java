@@ -19,6 +19,7 @@ public class SelectOrderIdActivity extends AbsActivity {
   private RecyclerView                       mRecyclerView;
   private ArrayList<OrderIdBean.OrderIdInfo> result;
   private OrderIdAdapter                     mOrderIdAdapter;
+  private int source = 0;
 
   @Override
   protected int getLayoutId() {
@@ -27,7 +28,7 @@ public class SelectOrderIdActivity extends AbsActivity {
 
   @Override
   protected void newInstancePresenter() {
-
+    source = getIntent().getIntExtra("source", 0);
   }
 
   @Override
@@ -40,9 +41,11 @@ public class SelectOrderIdActivity extends AbsActivity {
     mRecyclerView.setAdapter(mOrderIdAdapter);
     mOrderIdAdapter.setOnItemClick(new OrderIdAdapter.OnItemClick() {
       @Override
-      public void OnItemClick(String orderId) {
+      public void OnItemClick(String orderId, String type, String name) {
         Intent intent = new Intent();
         intent.putExtra("id", orderId);
+        intent.putExtra("type", type);
+        intent.putExtra("name", name);
         setResult(RESULT_OK, intent);
         finish();
       }
@@ -66,6 +69,11 @@ public class SelectOrderIdActivity extends AbsActivity {
                   hideProgress();
                   if (orderIdBean != null && orderIdBean.getResult()
                                                         .size() > 0) {
+                    if (source == 1) {
+                      orderIdBean.getResult()
+                                 .remove(orderIdBean.getResult()
+                                                    .size() - 1);
+                    }
                     result.addAll(orderIdBean.getResult());
                     mOrderIdAdapter.notifyDataSetChanged();
                   }

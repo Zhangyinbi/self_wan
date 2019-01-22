@@ -71,6 +71,7 @@ public class ServerMonitorActivity extends AbsActivity {
                 @Override
                 public void onSuss(BaseEntry baseEntry) {
                   ToastU.ToastLoginSussMessage(ServerMonitorActivity.this, "保存成功");
+                  finish();
                 }
 
                 @Override

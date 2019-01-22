@@ -20,6 +20,7 @@ import com.domain.library.recycleview.interfaces.MultiTypeSupport;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.http.bean.ServerBean;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static com.domain.operationrobot.app.home.server.ServerMonitorFragment.REFRESH;
@@ -77,16 +78,24 @@ public class ServerAdapter extends RecyclerComAdapter<ServerBean.ServerList> {
       TextView tvRoate = inflate.findViewById(R.id.tv_roate);
       ProgressBar pbr = inflate.findViewById(R.id.pbr);
       tvKey.setText(monitorInfo.getKey());
-      int v = (int) (monitorInfo.getAvailable() * 100 / monitorInfo.getTotal());
+      float v = ((monitorInfo.getTotal()-monitorInfo.getAvailable()) * 100 / monitorInfo.getTotal());
+      DecimalFormat decimalFormat=new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+      String p=decimalFormat.format(v);
       if (v < 10) {
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.TRANSPARENT);
-        SpannableString spannableString = new SpannableString("0" + v + "%");
+        SpannableString spannableString = new SpannableString("00" + p + "%");
+        spannableString.setSpan(foregroundColorSpan, 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvRoate.setText(spannableString);
+      } else if (v < 100){
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.TRANSPARENT);
+        SpannableString spannableString = new SpannableString("0" + p + "%");
         spannableString.setSpan(foregroundColorSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvRoate.setText(spannableString);
-      } else {
-        tvRoate.setText(v + "%");
+        //tvRoate.setText(p + "%");
+      }else {
+        tvRoate.setText(p + "%");
       }
-      pbr.setProgress(v);
+      pbr.setProgress((int) v);
       if (v >= 90) {
         pbr.setProgressDrawable(mContext.getResources()
                                         .getDrawable(R.drawable.red));

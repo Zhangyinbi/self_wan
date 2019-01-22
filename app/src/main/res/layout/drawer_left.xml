@@ -50,6 +50,7 @@
         android:id="@+id/tv_user_indication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_alignLeft="@+id/tv_user_name"
         android:layout_below="@+id/tv_user_name"
         android:layout_marginTop="@dimen/dimens_6"

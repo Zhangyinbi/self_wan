@@ -23,9 +23,11 @@ import com.domain.library.ui.CommonDialog;
 import com.domain.library.utils.MyPermissionUtils;
 import com.domain.library.utils.SoftInputUtil;
 import com.domain.library.utils.SpUtils;
+import com.domain.library.utils.ToastUtils;
 import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.order.CommandOperationActivity;
+import com.domain.operationrobot.app.order.SelectOrderIdActivity;
 import com.domain.operationrobot.http.bean.ChatBean;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.im.bean.NewMessage;
@@ -57,6 +59,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import static android.app.Activity.RESULT_OK;
+import static com.domain.operationrobot.app.order.CommandOperationActivity.SELECTED_ORDER_ID;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_1;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_12;
 import static com.domain.operationrobot.im.listener.IEventType.ROOT_MESSAGE_TYPE_2;
@@ -151,7 +154,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
 
     view.findViewById(R.id.tv_demo)
         .setOnClickListener((v) -> {
-          startActivity(new Intent(getActivity(), CommandOperationActivity.class));
+          startActivityForResult(new Intent(getActivity(), SelectOrderIdActivity.class), SELECTED_ORDER_ID);
         });
 
     mIvRobot.setOnClickListener(new View.OnClickListener() {
@@ -328,7 +331,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         ids.remove("-1");
       }
       AppSocket.getInstance()
-               .sendMessage(2, msg,ids);
+               .sendMessage(2, msg, ids);
       ids.clear();
       names.clear();
       //if (user.getRole() == 1 || user.getRole() == 2) {
@@ -340,7 +343,7 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
         ids.remove("-1");
       }
       AppSocket.getInstance()
-               .sendMessage(msg,ids);
+               .sendMessage(msg, ids);
       ids.clear();
       names.clear();
     }
@@ -474,7 +477,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     mAdapter.addBeanToEnd(chatBean, model.getFlag());
   }
 
-
   //查看磁盘读写
   private void rootMsg12(ObserverModel model) {
     ChatBean chatBean = new ChatBean();
@@ -590,6 +592,25 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
           ids.add(id);
           names.add(name);
           break;
+        case SELECTED_ORDER_ID:
+          String type = data.getStringExtra("type");
+          String actionName = data.getStringExtra("name");
+          if (!TextUtils.isEmpty(type)) {
+            int i;
+            try {
+              i = Integer.parseInt(type);
+            } catch (Exception e) {
+              ToastUtils.showToast("类型错误");
+              return;
+            }
+            new EditIpDialog(getActivity(), i, new HostInterface() {
+              @Override
+              public void sendMsg(String msg) {
+                sendMsg(msg);
+              }
+            }, actionName).show();
+          }
+          break;
       }
     }
   }
@@ -625,6 +646,6 @@ public class ChatRoomFragment extends AbsFragment implements Observer {
     String imgMsg = regex + realMsg + regex;
     //addBeanToRecycler(user.getUsername(), user.getImage(), imgMsg, System.currentTimeMillis(), user.getUserId());
     AppSocket.getInstance()
-             .sendMessage(imgMsg,null);
+             .sendMessage(imgMsg, null);
   }
 }

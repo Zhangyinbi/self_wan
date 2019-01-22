@@ -27,6 +27,8 @@ import com.domain.operationrobot.http.bean.Company;
 import com.domain.operationrobot.http.bean.User;
 import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 
@@ -40,13 +42,21 @@ public class CreateCompanyActivity extends AbsActivity {
       switch (v.getId()) {
         case R.id.iv_back:
           finish();
+          startActivity(new Intent(CreateCompanyActivity.this, MainActivity.class));
           break;
         case R.id.btn_complete:
           String companyName = de_company_name.getValue();
           if (isEmpty(companyName)) {
             return;
           }
-
+          if (companyName.length() > 50) {
+            showToast("公司名称不能大于50个字");
+            return;
+          }
+          if (isSpecialChar(companyName)){
+            showToast("公司名称不可以输入特殊字符");
+            return;
+          }
           String email = de_email.getValue();
           if (isEmpty(email)) {
             return;
@@ -59,12 +69,22 @@ public class CreateCompanyActivity extends AbsActivity {
           if (isEmpty(name)) {
             return;
           }
+          if (name.length() > 20) {
+            showToast("名称应在20字以内");
+            return;
+          }
           createCompany(companyName, email, name);
           break;
       }
     }
   };
 
+  public static boolean isSpecialChar(String str) {
+    String regEx = "[ _`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]|\n|\r|\t";
+    Pattern p = Pattern.compile(regEx);
+    Matcher m = p.matcher(str);
+    return m.find();
+  }
   /**
    * 创建公司 TODO  创建公司成功 暂无api
    */

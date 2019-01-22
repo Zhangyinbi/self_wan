@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">OperationRobot</string>
+  <string name="app_name">运维机器人</string>
   <string name="login_phone_hint">请输入手机号码</string>
   <string name="login_phone_toast">请输入手机号码</string>
   <string name="login_pwd_hint">请输入登录密码</string>

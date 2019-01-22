@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:background="#ededed"
     android:orientation="vertical">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/srl_refresh"
+        >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv_recycler"
@@ -14,5 +19,7 @@
         android:background="@android:color/transparent"
         android:overScrollMode="never"
         android:scrollbars="none" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

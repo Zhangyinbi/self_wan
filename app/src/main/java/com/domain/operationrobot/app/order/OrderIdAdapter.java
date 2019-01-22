@@ -1,6 +1,7 @@
 package com.domain.operationrobot.app.order;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,7 +45,11 @@ public class OrderIdAdapter extends RecyclerComAdapter<OrderIdBean.OrderIdInfo> 
           @Override
           public void onClick(View view) {
             if (mOnItemClick != null) {
-              mOnItemClick.OnItemClick(action.getId());
+              if ("5".equals(action.getId())) {
+                mContext.startActivity(new Intent(mContext, CommandOperationActivity.class));
+              } else {
+                mOnItemClick.OnItemClick(action.getId(), action.getType(),action.getName());
+              }
             }
           }
         });
@@ -57,6 +62,6 @@ public class OrderIdAdapter extends RecyclerComAdapter<OrderIdBean.OrderIdInfo> 
   }
 
   public interface OnItemClick {
-    void OnItemClick(String orderId);
+    void OnItemClick(String orderId,String type,String name);
   }
 }

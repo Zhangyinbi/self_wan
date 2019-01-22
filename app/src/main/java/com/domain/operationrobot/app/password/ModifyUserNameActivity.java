@@ -33,6 +33,10 @@ public class ModifyUserNameActivity extends AbsActivity {
           if (isEmpty(name)) {
             return;
           }
+          if (name.length() > 20) {
+            showToast("名称应在20字以内");
+            return;
+          }
           modifyUserName(name);
           break;
       }
@@ -85,6 +89,7 @@ public class ModifyUserNameActivity extends AbsActivity {
     findViewById(R.id.iv_back).setOnClickListener(listener);
     findViewById(R.id.tv_complete).setOnClickListener(listener);
     de_user_name = findViewById(R.id.de_user_name);
+    de_user_name.setValue(BaseApplication.getInstance().getUser().getUsername());
   }
 
   @Override

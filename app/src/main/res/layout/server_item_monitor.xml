@@ -24,7 +24,7 @@
       android:layout_width="0dp"
       android:layout_height="@dimen/dimens_13"
       android:layout_marginLeft="3dp"
-      android:layout_marginRight="@dimen/dimens_7"
+      android:layout_marginRight="@dimen/dimens_3"
       android:layout_weight="15"
       android:progress="90"
       android:progressDrawable="@drawable/red"

@@ -1,7 +1,9 @@
 package com.domain.operationrobot.app.home.server;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -38,6 +40,7 @@ public class ServerMonitorFragment extends AbsFragment {
   public static final int REFRESH = 1000021;
   private ArrayList<ServerBean.ServerList> mData;
   private ServerAdapter                    mServerAdapter;
+  private SwipeRefreshLayout               mSrl_refresh;
 
   public static ServerMonitorFragment newInstance() {
     ServerMonitorFragment fragment = new ServerMonitorFragment();
@@ -69,6 +72,16 @@ public class ServerMonitorFragment extends AbsFragment {
     //ArrayList<ServerBean.ServerList> result = new ArrayList<>();
     //result.add(new ServerBean.ServerList());
     //mData.addAll(result);
+
+    mSrl_refresh = view.findViewById(R.id.srl_refresh);
+    mSrl_refresh.setColorSchemeColors(Color.RED, Color.BLUE, Color.GREEN);
+    mSrl_refresh.setRefreshing(true);
+    mSrl_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        getDataMonitorInfo();
+      }
+    });
   }
 
   @Override
@@ -79,10 +92,7 @@ public class ServerMonitorFragment extends AbsFragment {
   public void onResume() {
     super.onResume();
     MainActivity activity = (MainActivity) getActivity();
-    if (activity.getCurrentFragment() == activity.getFragments()
-                                                 .get(1)) {
-      getDataMonitorInfo();
-    }
+    getDataMonitorInfo();
   }
 
   private void getDataMonitorInfo() {
@@ -93,11 +103,16 @@ public class ServerMonitorFragment extends AbsFragment {
                 @Override
                 public void onError(BaseException e) {
                   hideProgress();
+                  if (mSrl_refresh.isRefreshing()) {
+                    mSrl_refresh.setRefreshing(false);
+                  }
                 }
 
                 @Override
                 public void onSuss(ServerBean serverBean) {
-
+                  if (mSrl_refresh.isRefreshing()) {
+                    mSrl_refresh.setRefreshing(false);
+                  }
                   mData.clear();
                   ArrayList<ServerBean.ServerList> result = serverBean.getResult();
                   if (result == null) {
@@ -117,6 +132,9 @@ public class ServerMonitorFragment extends AbsFragment {
                 @Override
                 public void onComplete() {
                   super.onComplete();
+                  if (mSrl_refresh.isRefreshing()) {
+                    mSrl_refresh.setRefreshing(false);
+                  }
                   hideProgress();
                 }
               });

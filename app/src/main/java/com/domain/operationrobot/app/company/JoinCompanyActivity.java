@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.domain.library.base.AbsActivity;
 import com.domain.library.base.BasePresenter;
 import com.domain.library.utils.ActivityStackManager;
+import com.domain.library.utils.ToastUtils;
 import com.domain.library.widgets.DeleteEdit;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.home.MainActivity;
@@ -99,7 +100,7 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
     targetName = autoSearchCompany.getValue();
     if (TextUtils.isEmpty(targetName)) {
       presenter.getCompanyList(targetName);
-    }else {
+    } else {
       presenter.getCompanyTargetList(targetName);
     }
   }
@@ -124,6 +125,8 @@ public class JoinCompanyActivity extends AbsActivity implements DeleteEdit.TextA
   @Override
   public void setCompanyList(ArrayList<Company> companyList) {
     if (companyList == null) {
+      this.companyList.clear();
+      adapter.updateData(this.companyList, targetName);
       return;
     }
     this.companyList = companyList;

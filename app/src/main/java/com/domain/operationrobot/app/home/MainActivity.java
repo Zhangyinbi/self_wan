@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import com.domain.operationrobot.BaseApplication;
 import com.domain.operationrobot.R;
 import com.domain.operationrobot.app.company.ApplyActivity;
 import com.domain.operationrobot.app.company.UserApplyActivity;
+import com.domain.operationrobot.app.home.server.ServerMonitorActivity;
 import com.domain.operationrobot.app.home.server.ServerMonitorFragment;
 import com.domain.operationrobot.app.login.ChoiceCompanyDialog;
 import com.domain.operationrobot.app.login.LoginActivity;
@@ -42,6 +44,7 @@ import com.domain.operationrobot.http.data.RemoteMode;
 import com.domain.operationrobot.im.chatroom.MainChatRoom;
 import com.domain.operationrobot.listener.ThrottleLastClickListener;
 import com.domain.operationrobot.util.TimeUtil;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -55,16 +58,7 @@ import static com.domain.operationrobot.util.Constant.USER_SP_KEY;
 public class MainActivity extends AbsActivity implements LoginContract.LoginView<BasePresenter> {
   private static final String TAG = "------------";
   private Fragment mCurrentFragment;
-  private ArrayList<Fragment> mFragments     = new ArrayList<>();
-
-  public ArrayList<Fragment> getFragments() {
-    return  mFragments;
-  }
-
-  public Fragment getCurrentFragment() {
-    return  mCurrentFragment;
-  }
-
+  private ArrayList<Fragment> mFragments = new ArrayList<>();
   private boolean[] mFragmentAdded = new boolean[] {false, false};
   private TextView       mTv_fragment1;
   private TextView       mTv_fragment2;
@@ -131,8 +125,12 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
           if (mRole == 1 || mRole == 3) {//游客
             startActivity(new Intent(MainActivity.this, ApplyActivity.class));
           } else if (mRole == 2) {
-            //申请等待同意
-            //new DelayDialog(MainActivity.this, new BigDecimal("987876756")).show();//测试代码
+            //new CommonDialog.Builder(MainActivity.this).setContent("取消申请").setCancelText("取消").setSureText("确定", new SureInterface() {
+            //  @Override
+            //  public void onSureClick() {
+            //    Log.e(TAG, "onSureClick: " );
+            //  }
+            //}).build().show();
           } else if (mRole == 0) {
 
             if ("1".equals(mUser.getCompanyrole())) {
@@ -170,6 +168,14 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
   private TextView            mTv_time;
   private ImageView           mIv_red_yuan;
 
+  public ArrayList<Fragment> getFragments() {
+    return mFragments;
+  }
+
+  public Fragment getCurrentFragment() {
+    return mCurrentFragment;
+  }
+
   private void openOrCloseDrawer() {
     if (drawer.isDrawerOpen(GravityCompat.START)) {
       drawer.closeDrawer(GravityCompat.START);
@@ -200,7 +206,8 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
   protected void newInstancePresenter() {
     MainChatRoom.getInstance()
                 .initAppSocket();
-    BaseApplication.getInstance().initMiPush();
+    BaseApplication.getInstance()
+                   .initMiPush();
   }
 
   @Override
@@ -231,6 +238,12 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     ll_forget.setOnClickListener(listener);
     ll_yunwei.setOnClickListener(listener);
     ll_sq.setOnClickListener(listener);
+    findViewById(R.id.left_drawer).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+      }
+    });
     showContent(0);
     checkDefaultCompany();
     getSide();
@@ -389,6 +402,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     startActivity(new Intent(MainActivity.this, LoginActivity.class));
     MainChatRoom.getInstance()
                 .outSocket();
+    MiPushClient.unsetUserAccount(MainActivity.this,BaseApplication.getInstance().getUser().getUserId(),"");
     finish();
   }
 
@@ -459,9 +473,14 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
         } else if ((mUser.getOprole() == 4 && "2".equals(mUser.getCompanyrole())) || (mUser.getOprole() != 4 && "2".equals(mUser.getCompanyrole()))) {
           try {
             BigDecimal time = new BigDecimal(mUser.getCompanyexpiredate()).subtract(new BigDecimal(System.currentTimeMillis() / 1000));
-            tv_top.setText("还有" + TimeUtil.getTimeDay(time) + "天就要过期了，请续费 >");
+            BigDecimal timeDay = TimeUtil.getTimeDay(time);
+            if (timeDay.compareTo(new BigDecimal("0")) == 1) {
+              tv_top.setText("还有" + timeDay + "天就要过期了，请续费 >");
+            }else {
+              tv_top.setVisibility(View.GONE);
+            }
           } catch (Exception e) {
-            tv_top.setText("即将过期，请续费 >");
+            tv_top.setVisibility(View.GONE);
           }
         }
         tv_company_name.setText(mUser.getCompany());
@@ -513,8 +532,22 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
     if (TextUtils.isEmpty(user.getCompanyexpiredate())) {
       mTv_time.setVisibility(View.GONE);
     } else {
-      mTv_time.setVisibility(View.VISIBLE);
-      mTv_time.setText("将于" + TimeUtil.strToDate(user.getCompanyexpiredate()) + "到期");
+      try {
+        mTv_time.setVisibility(View.VISIBLE);
+        Log.e(TAG, "setSideData: "+ mUser.getCompanyexpiredate());
+        BigDecimal time = new BigDecimal(mUser.getCompanyexpiredate()).subtract(new BigDecimal(System.currentTimeMillis() / 1000));
+        BigDecimal timeDay = TimeUtil.getTimeDay(time);
+        if (timeDay.compareTo(new BigDecimal("0")) == 1) {
+          mTv_time.setText("将于" + TimeUtil.strToDate(user.getCompanyexpiredate()) + "到期");
+        }else {
+          mTv_time.setText("已过期，请续费");
+        }
+      }catch (Exception e){
+        mTv_time.setVisibility(View.GONE);
+      }
+
+
+
     }
     if (mSideInfo != null) {
       user.setUsername(mSideInfo.getUsername());
@@ -526,11 +559,13 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
       } else {
         tv_user_role.setText(getRoleName(mSideInfo.getOprole()));
       }
-
+      tv_user_indication.setVisibility(View.VISIBLE);
       if ("1".equals(mSideInfo.getCompanyrole())) {
-        tv_user_indication.setText("试用中");
-      } else {
-        tv_user_indication.setText("正式用户");
+        tv_user_indication.setText("试用中公司");
+      } else if ("2".equals(mSideInfo.getCompanyrole())){
+        tv_user_indication.setText("正式公司");
+      }else {
+        tv_user_indication.setVisibility(View.GONE);
       }
       setSideUI(mSideInfo.getRole());
       if (TextUtils.isEmpty(mSideInfo.getCompanyname())) {
@@ -586,13 +621,13 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
 
   private void setSideUIUseUserInfo(int role) {
     if (role == 3) {
-      //tv_user_indication.setVisibility(View.GONE);
+      tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("您还未加入公司,点击加入/创建");
       tv_top.setText("加入/创建公司，享受一站式运维");
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
     } else if (role == 2) {
-      //tv_user_indication.setVisibility(View.GONE);
+      tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("(待审核)" + mUser.getCompanyname());
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
@@ -627,13 +662,13 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
 
   private void setSideUI(int role) {
     if (role == 3) {
-      //tv_user_indication.setVisibility(View.GONE);
+      tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("您还未加入公司,点击加入/创建");
       tv_top.setText("加入/创建公司，享受一站式运维");
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
     } else if (role == 2) {
-      //tv_user_indication.setVisibility(View.GONE);
+      tv_user_indication.setVisibility(View.GONE);
       tv_company_name.setText("(待审核)" + mSideInfo.getCompanyname());
       ll_yunwei.setVisibility(View.GONE);
       ll_sq.setVisibility(View.GONE);
@@ -677,7 +712,7 @@ public class MainActivity extends AbsActivity implements LoginContract.LoginView
         userRoleName = "申请待同意";
         break;
       case 3:
-        userRoleName = "运维用户";
+        userRoleName = "运维人员";
         break;
       case 4:
         userRoleName = "管理员,审核员";

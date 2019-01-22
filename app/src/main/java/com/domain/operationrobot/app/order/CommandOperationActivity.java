@@ -31,7 +31,7 @@ import static com.domain.operationrobot.util.Constant.GET_TIME;
 
 public class CommandOperationActivity extends AbsActivity {
   private static final int SELECTED_USER     = 10293;
-  private static final int SELECTED_ORDER_ID = 10294;
+  public static final int SELECTED_ORDER_ID = 10294;
   private RefreshRecyclerView                mRecyclerView;
   private CommandAdapter                     mCommandAdapter;
   private String                             mStartTime;
@@ -81,6 +81,7 @@ public class CommandOperationActivity extends AbsActivity {
         mEndTime = "";
         mId = "";
         Intent intent = new Intent(CommandOperationActivity.this, SelectOrderIdActivity.class);
+        intent.putExtra("source",1);
         startActivityForResult(intent, SELECTED_ORDER_ID);
       }
     });

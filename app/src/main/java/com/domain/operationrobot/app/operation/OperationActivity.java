@@ -62,6 +62,10 @@ public class OperationActivity extends AbsActivity {
           if (isEmpty(name)) {
             return;
           }
+          if (name.length() > 20) {
+            showToast("名称应在20字以内");
+            return;
+          }
           if (type == ADD_OPERATION) {
             addOperation(phone, name);
           } else {
@@ -82,17 +86,16 @@ public class OperationActivity extends AbsActivity {
             return;
           }
 
-
           new CommonDialog.Builder(OperationActivity.this).setContent("确定要删除此运维用户吗？")
-                                                     .setCancelText("取消", null)
-                                                     .setSureText("确定", new SureInterface() {
-                                                       @Override
-                                                       public void onSureClick() {
-                                                         delete(phone1, name1, operationBean.getUserId(), operationBean.getOpCompanyId());
-                                                       }
-                                                     })
-                                                     .build()
-                                                     .show();
+                                                          .setCancelText("取消", null)
+                                                          .setSureText("确定", new SureInterface() {
+                                                            @Override
+                                                            public void onSureClick() {
+                                                              delete(phone1, name1, operationBean.getUserId(), operationBean.getOpCompanyId());
+                                                            }
+                                                          })
+                                                          .build()
+                                                          .show();
 
           break;
       }

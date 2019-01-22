@@ -32,6 +32,7 @@ public class OrderIdBean extends BaseEntry {
     public class Action {
       private String name;
       private String orderId;
+      private String type;
 
       public String getName() {
         return name == null ? "" : name;
@@ -39,6 +40,10 @@ public class OrderIdBean extends BaseEntry {
 
       public String getId() {
         return orderId == null ? "" : orderId;
+      }
+
+      public String getType() {
+        return type == null ? "" : type;
       }
     }
   }
